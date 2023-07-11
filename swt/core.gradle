@@ -1,0 +1,19 @@
+repositories {
+    google();
+    jcenter();
+    maven {
+    	url "https://raw.githubusercontent.com/AsheraCordova/mvn-ashera-java-repo/master/"
+	}
+	
+	maven {
+    	url "https://raw.githubusercontent.com/AsheraCordova/mvn-ashera-swt-repo/master/"
+	}
+}
+
+dependencies {
+	def project_version = '1.0.0';
+	
+	implementation "com.ashera:AndroidXJCoordinatorLayout:${project_version}"
+	implementation "com.ashera:SWTCoordinatorLayoutPlugin:${project_version}"
+    
+}

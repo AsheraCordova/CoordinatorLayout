@@ -1,0 +1,10 @@
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$CoordinatorLayoutExt.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$CoordinatorLayoutParamsBean.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$CoordinatorLayoutCommandParamsBuilder.class
+com\ashera\coordinatorlayout\CoordinatorLayoutPlugin.class
+com\ashera\coordinatorlayout\CordovaCoordinatorLayoutPlugin.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$CoordinatorLayoutBean.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$DodgeInsetEdge.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$CoordinatorLayoutCommandBuilder.class
+com\ashera\coordinatorlayout\CoordinatorLayoutImpl$InsetEdge.class

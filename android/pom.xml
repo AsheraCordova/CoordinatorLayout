@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ashera</groupId>
+	<artifactId>coordinatorlayout-android</artifactId>
+	<version>1.0.0</version>
+	<parent>
+		<groupId>com.ashera</groupId>
+		<artifactId>androidparent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>converter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>widgetlibrary</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>htmlparser</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>androidx.core</groupId>
+			<artifactId>core-jar</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cordova</groupId>
+			<artifactId>framework-jar</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>androidx.appcompat</groupId>
+			<artifactId>appcompat-jar</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidLayouts</artifactId>
+		</dependency>
+	</dependencies>
+</project>

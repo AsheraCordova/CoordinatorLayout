@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ashera</groupId>
+	<artifactId>WebCoordinatorLayoutPlugin</artifactId>
+
+	<parent>
+		<groupId>com.ashera</groupId>
+		<artifactId>webparent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>converter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>widgetlibrary</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>CordovaAndroidJLib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>WebLayouts</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>htmlparser</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidJ</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidXJ</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.teavm</groupId>
+			<artifactId>teavm-jso-apis</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>teavm-classlib</artifactId>
+			<version>${teavm.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>WebLayouts</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidXJCoordinatorLayout</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

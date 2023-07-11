@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.ashera.coordinatorlayout"
+        version="1.0">
+
+  <name>CordovaCoordinatorLayout</name>
+
+  <engines>
+    <engine name="cordova" version=">=3.4.0"/>
+  </engines>
+  
+  <platform name="swt">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="CordovaCoordinatorLayout">
+        <param name="android-package" value="com.ashera.coordinatorlayout.CordovaCoordinatorLayout"/>
+        <param name="onload" value="true" />
+      </feature>
+      
+      <framework src="core.gradle" custom="true" type="gradleReference" />
+    </config-file>
+
+   	 <!-- start src -->
+     <!-- src end -->
+     <!-- start res -->
+     <!-- res end -->
+     <!-- start tsc -->
+     <!-- tsc end -->
+  </platform>
+
+
+</plugin>

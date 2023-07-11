@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.ashera.coordinatorlayout.ios"
+        version="1.0">
+
+  <name>CordovaCoordinatorLayout</name>
+
+  <engines>
+    <engine name="cordova" version=">=3.4.0"/>
+  </engines>
+  
+  <platform name="ios">
+    <config-file target="config.xml" parent="/widget">
+      <feature name="com.ashera.coordinatorlayout.ios">
+        	<param name="ios-package" value="CordovaCoordinatorLayoutPlugin" />
+         	<param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+   	 <!-- start ios -->
+     <header-file src="ios/src/CoordinatorLayoutImpl.h" target-dir="CoordinatorLayout/ios/src"/>
+     <source-file src="ios/src/CoordinatorLayoutImpl.m" target-dir="CoordinatorLayout/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
+     <header-file src="ios/src/CoordinatorLayoutPlugin.h" target-dir="CoordinatorLayout/ios/src"/>
+     <source-file src="ios/src/CoordinatorLayoutPlugin.m" target-dir="CoordinatorLayout/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
+     <header-file src="ios/src/CordovaCoordinatorLayoutPlugin.h" target-dir="CoordinatorLayout/ios/src"/>
+     <source-file src="ios/src/CordovaCoordinatorLayoutPlugin.m" target-dir="CoordinatorLayout/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
+     <!-- ios end -->
+     <!-- start AndroidXCoordinatorLayout -->
+     <header-file src="library/AndroidXCoordinatorLayout/src/CoordinatorLayout.h" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src"/>
+     <source-file src="library/AndroidXCoordinatorLayout/src/CoordinatorLayout.m" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src" compiler-flags="-fno-objc-arc"/>
+     <header-file src="library/AndroidXCoordinatorLayout/src/DirectedAcyclicGraph.h" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src"/>
+     <source-file src="library/AndroidXCoordinatorLayout/src/DirectedAcyclicGraph.m" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src" compiler-flags="-fno-objc-arc"/>
+     <!-- AndroidXCoordinatorLayout end -->
+     <!-- start tsc -->
+     <source-file src="tsc/src/ios/widget/CoordinatorLayoutImpl.ts" target-dir="tsc/src/ios/widget"/>
+     <!-- tsc end -->
+  </platform>
+
+</plugin>
