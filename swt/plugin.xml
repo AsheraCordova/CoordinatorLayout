@@ -12,7 +12,7 @@
   <platform name="swt">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CordovaCoordinatorLayout">
-        <param name="android-package" value="com.ashera.coordinatorlayout.CordovaCoordinatorLayout"/>
+        <param name="android-package" value="com.ashera.coordinatorlayout.CordovaCoordinatorLayoutPlugin"/>
         <param name="onload" value="true" />
       </feature>
     </config-file>
