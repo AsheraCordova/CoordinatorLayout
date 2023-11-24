@@ -454,6 +454,31 @@ return layoutParams.dodgeInsetEdges;			}
         	super.drawableStateChanged();
         	ViewImpl.drawableStateChanged(CoordinatorLayoutImpl.this);
         }
+        
+        	public void state0() {
+        		ViewImpl.state(CoordinatorLayoutImpl.this, 0);
+        	}
+        	public void state1() {
+        		ViewImpl.state(CoordinatorLayoutImpl.this, 1);
+        	}
+        	public void state2() {
+        		ViewImpl.state(CoordinatorLayoutImpl.this, 2);
+        	}
+        	public void state3() {
+        		ViewImpl.state(CoordinatorLayoutImpl.this, 3);
+        	}
+        	public void state4() {
+        		ViewImpl.state(CoordinatorLayoutImpl.this, 4);
+        	}
+                        
+        public void stateYes() {
+        	ViewImpl.stateYes(CoordinatorLayoutImpl.this);
+        	
+        }
+        
+        public void stateNo() {
+        	ViewImpl.stateNo(CoordinatorLayoutImpl.this);
+        }
 	}
 	@Override
 	public Class getViewClass() {
@@ -522,7 +547,7 @@ return layoutParams.dodgeInsetEdges;			}
 	public void setId(String id){
 		if (id != null && !id.equals("")){
 			super.setId(id);
-			coordinatorLayout.setId(IdGenerator.getId(id));
+			coordinatorLayout.setId((int) quickConvert(id, "id"));
 		}
 	}
 	
