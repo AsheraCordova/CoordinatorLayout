@@ -300,6 +300,9 @@ return layoutParams.dodgeInsetEdges;			}
 	public class CoordinatorLayoutExt extends androidx.coordinatorlayout.widget.CoordinatorLayout implements ILifeCycleDecorator, com.ashera.widget.IMaxDimension{
 		private MeasureEvent measureFinished = new MeasureEvent();
 		private OnLayoutEvent onLayoutEvent = new OnLayoutEvent();
+		public IWidget getWidget() {
+			return CoordinatorLayoutImpl.this;
+		}
 		private int mMaxWidth = -1;
 		private int mMaxHeight = -1;
 		@Override
