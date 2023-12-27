@@ -291,6 +291,16 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_DodgeInsetEdge)
 - (void)setMyAttributeWithNSString:(NSString *)name
                             withId:(id)value;
 
+- (void)setState0WithId:(id)value;
+
+- (void)setState1WithId:(id)value;
+
+- (void)setState2WithId:(id)value;
+
+- (void)setState3WithId:(id)value;
+
+- (void)setState4WithId:(id)value;
+
 - (void)setVisibilityWithInt:(jint)visibility;
 
 - (void)state0;
@@ -358,6 +368,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)addModelWithId:(id)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)animatorXmlWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)endAnimator;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)executeWithBoolean:(jboolean)setter;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)invalidate;
@@ -405,6 +419,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setCustomErrorMessageValuesWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setDuplicateParentStateWithBoolean:(jboolean)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setElevationWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setEnabledWithBoolean:(jboolean)arg0;
 
@@ -526,6 +542,14 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setModelUiToPojoWithNSString:(NSString *)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnAnimationCancelWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnAnimationEndWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnAnimationRepeatWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnAnimationStartWithNSString:(NSString *)arg0;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnChildViewAddedWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setOnChildViewRemovedWithNSString:(NSString *)arg0;
@@ -611,6 +635,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setVisibilityWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setZIndexWithInt:(jint)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)startAnimator;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetAddStatesFromChildren;
 
