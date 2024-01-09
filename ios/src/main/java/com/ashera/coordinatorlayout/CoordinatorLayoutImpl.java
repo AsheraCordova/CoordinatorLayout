@@ -158,7 +158,7 @@ public class CoordinatorLayoutImpl extends BaseHasWidgets {
         }    
         return remove;
     }
-	
+
 	private void nativeRemoveView(IWidget widget) {
 		r.android.animation.LayoutTransition layoutTransition = coordinatorLayout.getLayoutTransition();
 		if (layoutTransition != null && (
