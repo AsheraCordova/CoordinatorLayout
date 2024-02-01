@@ -76,6 +76,8 @@
 
 - (void)setMyKeyLinesWithIntArray:(IOSIntArray *)keyLines;
 
+- (void)onChildViewsChanged;
+
 @end
 
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, uiView_, id)
@@ -98,6 +100,8 @@ __attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorWithADXCo
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setKeyLinesWithId_(ASCoordinatorLayoutImpl *self, id objValue);
 
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(ASCoordinatorLayoutImpl *self, IOSIntArray *keyLines);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_onChildViewsChanged(ASCoordinatorLayoutImpl *self);
 
 @interface ASCoordinatorLayoutImpl_InsetEdge () {
  @public
@@ -181,6 +185,7 @@ NSString *ASCoordinatorLayoutImpl_GROUP_NAME = @"androidx.coordinatorlayout.widg
 - (void)loadAttributesWithNSString:(NSString *)localName {
   ASViewGroupImpl_register__WithNSString_(localName);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"keylines"])) withTypeWithNSString:@"array"])) withArrayTypeWithNSString:@"int"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"childViewsChanged"])) withTypeWithNSString:@"nil"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_gravity"])) withTypeWithNSString:@"gravity"])) forChild]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior"])) withTypeWithNSString:@"string"])) forChild]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_anchor"])) withTypeWithNSString:@"id"])) forChild]);
@@ -382,10 +387,15 @@ J2OBJC_IGNORE_DESIGNATED_END
                 withASILifeCycleDecorator:(id<ASILifeCycleDecorator>)decorator {
   ASViewGroupImpl_setAttributeWithASIWidget_withASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
   id nativeWidget = [self asNativeWidget];
-  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"keylines" }, 1)) {
+  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"keylines", @"childViewsChanged" }, 2)) {
     case 0:
     {
       ASCoordinatorLayoutImpl_setKeyLinesWithId_(self, objValue);
+    }
+    break;
+    case 1:
+    {
+      ASCoordinatorLayoutImpl_onChildViewsChanged(self);
     }
     break;
     default:
@@ -442,6 +452,10 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 - (void)setMyKeyLinesWithIntArray:(IOSIntArray *)keyLines {
   ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(self, keyLines);
+}
+
+- (void)onChildViewsChanged {
+  ASCoordinatorLayoutImpl_onChildViewsChanged(self);
 }
 
 - (void)setIdWithNSString:(NSString *)id_ {
@@ -516,6 +530,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, 27, 28, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 29, 30, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 31, 32, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 33, 1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 34, 35, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 36, 1, -1, -1, -1, -1 },
@@ -554,13 +569,14 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[24].selector = @selector(setBehaviorWithADXCoordinatorLayout_LayoutParams:withId:);
   methods[25].selector = @selector(setKeyLinesWithId:);
   methods[26].selector = @selector(setMyKeyLinesWithIntArray:);
-  methods[27].selector = @selector(setIdWithNSString:);
-  methods[28].selector = @selector(setVisibleWithBoolean:);
-  methods[29].selector = @selector(getPluginWithNSString:);
-  methods[30].selector = @selector(getBean);
-  methods[31].selector = @selector(getBuilder);
-  methods[32].selector = @selector(getParamsBean);
-  methods[33].selector = @selector(getParamsBuilder);
+  methods[27].selector = @selector(onChildViewsChanged);
+  methods[28].selector = @selector(setIdWithNSString:);
+  methods[29].selector = @selector(setVisibleWithBoolean:);
+  methods[30].selector = @selector(getPluginWithNSString:);
+  methods[31].selector = @selector(getBean);
+  methods[32].selector = @selector(getBuilder);
+  methods[33].selector = @selector(getParamsBean);
+  methods[34].selector = @selector(getParamsBuilder);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -573,7 +589,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "paramsBean_", "LASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setBehavior", "LADXCoordinatorLayout_LayoutParams;LNSObject;", "setKeyLines", "LNSObject;", "setMyKeyLines", "[I", "setId", "setVisible", "Z", "getPlugin", &ASCoordinatorLayoutImpl_LOCAL_NAME, &ASCoordinatorLayoutImpl_GROUP_NAME, "LASCoordinatorLayoutImpl_InsetEdge;LASCoordinatorLayoutImpl_DodgeInsetEdge;LASCoordinatorLayoutImpl_CoordinatorLayoutExt;LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;LASCoordinatorLayoutImpl_CoordinatorLayoutBean;LASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 34, 8, -1, 39, -1, -1, -1 };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 35, 8, -1, 39, -1, -1, -1 };
   return &_ASCoordinatorLayoutImpl;
 }
 
@@ -666,6 +682,10 @@ void ASCoordinatorLayoutImpl_setKeyLinesWithId_(ASCoordinatorLayoutImpl *self, i
 
 void ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(ASCoordinatorLayoutImpl *self, IOSIntArray *keyLines) {
   [((ADXCoordinatorLayout *) nil_chk(self->coordinatorLayout_)) setKeyLinesWithIntArray:keyLines];
+}
+
+void ASCoordinatorLayoutImpl_onChildViewsChanged(ASCoordinatorLayoutImpl *self) {
+  [((ADXCoordinatorLayout *) nil_chk(self->coordinatorLayout_)) onChildViewsChangedWithInt:0];
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl)
@@ -917,7 +937,9 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
 }
 
 - (void)remeasure {
-  [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
+  if ([this$0_ getFragment] != nil) {
+    [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
+  }
 }
 
 - (void)removeFromParent {
@@ -1186,11 +1208,20 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
   return self;
 }
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)childViewsChanged {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"childViewsChanged"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  return self;
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
     { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, 1, 2, -1, -1, -1, -1 },
     { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, 3, 4, -1, -1, -1, -1 },
+    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1198,12 +1229,13 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
   methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
   methods[1].selector = @selector(executeWithBoolean:);
   methods[2].selector = @selector(setKeylinesWithNSString:);
+  methods[3].selector = @selector(childViewsChanged);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASCoordinatorLayoutImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "execute", "Z", "setKeylines", "LNSString;", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/coordinatorlayout/CoordinatorLayoutImpl$CoordinatorLayoutCommandBuilder;>;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder = { "CoordinatorLayoutCommandBuilder", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 3, 1, 0, -1, -1, 5, -1 };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder = { "CoordinatorLayoutCommandBuilder", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 4, 1, 0, -1, -1, 5, -1 };
   return &_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;
 }
 
@@ -1235,22 +1267,28 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutComman
   (void) [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setKeylinesWithNSString:value])) executeWithBoolean:true];
 }
 
+- (void)childViewsChanged {
+  (void) [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) childViewsChanged])) executeWithBoolean:true];
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 1, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
   #pragma clang diagnostic ignored "-Wundeclared-selector"
   methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
   methods[1].selector = @selector(setKeylinesWithNSString:);
+  methods[2].selector = @selector(childViewsChanged);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASCoordinatorLayoutImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "setKeylines", "LNSString;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutBean = { "CoordinatorLayoutBean", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 2, 1, 0, -1, -1, -1, -1 };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutBean = { "CoordinatorLayoutBean", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 3, 1, 0, -1, -1, -1, -1 };
   return &_ASCoordinatorLayoutImpl_CoordinatorLayoutBean;
 }
 

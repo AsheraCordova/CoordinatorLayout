@@ -372,6 +372,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)animatorXmlWithNSString:(NSString *)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)childViewsChanged;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)endAnimator;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)executeWithBoolean:(jboolean)setter;
@@ -394,6 +396,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setAlphaWithFloat:(jfloat)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setAnimateLayoutChangesWithBoolean:(jboolean)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setAnimateParentHierarchyWithBoolean:(jboolean)arg0;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setAsDragSourceWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setAttributeUnderTestWithNSString:(NSString *)arg0;
@@ -405,6 +411,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setBackgroundTintWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setBackgroundWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setBottomWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setChildXmlWithNSString:(NSString *)arg0;
 
@@ -514,6 +522,12 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setLayoutModeWithNSString:(NSString *)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setLayoutTransitionDurationWithInt:(jint)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setLayoutTransitionWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setLeftWithNSString:(NSString *)arg0;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setListitemWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setLongClickableWithBoolean:(jboolean)arg0;
@@ -588,6 +602,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setPaddingWithNSString:(NSString *)arg0;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setRightWithNSString:(NSString *)arg0;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setRotationWithFloat:(jfloat)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setRotationXWithFloat:(jfloat)arg0;
@@ -605,6 +621,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setTextAlignmentWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setTextDirectionWithNSString:(NSString *)arg0;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setTopWithNSString:(NSString *)arg0;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setTransformPivotXWithNSString:(NSString *)arg0;
 
@@ -649,6 +667,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetBackgroundTint;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetBackgroundTintMode;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetBottom;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetClickable;
 
@@ -736,6 +756,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetLayoutMode;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetLeft;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetLongClickable;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetMaxHeight;
@@ -770,6 +792,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetPaddingTop;
 
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetRight;
+
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetRotation;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetRotationX;
@@ -785,6 +809,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetTextAlignment;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetTextDirection;
+
+- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetTop;
 
 - (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)tryGetTransformPivotX;
 
@@ -838,6 +864,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuild
 #pragma mark Public
 
 - (instancetype)initWithASCoordinatorLayoutImpl:(ASCoordinatorLayoutImpl *)outer$;
+
+- (void)childViewsChanged;
 
 - (void)setKeylinesWithNSString:(NSString *)value;
 

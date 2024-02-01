@@ -85,6 +85,7 @@ public class CoordinatorLayoutImpl extends BaseHasWidgets {
 		ViewGroupImpl.register(localName);
 
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("keylines").withType("array").withArrayType("int"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("childViewsChanged").withType("nil"));
 	
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_gravity").withType("gravity").forChild());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior").withType("string").forChild());
@@ -430,7 +431,9 @@ return layoutParams.dodgeInsetEdges;			}
         
     	@Override
 		public void remeasure() {
-			getFragment().remeasure();
+    		if (getFragment() != null) {
+    			getFragment().remeasure();
+    		}
 		}
     	
         @Override
@@ -566,6 +569,15 @@ return layoutParams.dodgeInsetEdges;			}
 
 			}
 			break;
+			case "childViewsChanged": {
+
+
+		 onChildViewsChanged();
+
+
+
+			}
+			break;
 		default:
 			break;
 		}
@@ -639,6 +651,10 @@ return layoutParams.dodgeInsetEdges;			}
 		coordinatorLayout.setKeyLines(keyLines);
 	}
 	
+	private void onChildViewsChanged() {
+		coordinatorLayout.onChildViewsChanged(0); 
+	}
+	
 
 
 	@Override
@@ -695,6 +711,14 @@ public CoordinatorLayoutCommandBuilder setKeylines(String value) {
 
 	attrs.put("value", value);
 return this;}
+public CoordinatorLayoutCommandBuilder childViewsChanged() {
+	Map<String, Object> attrs = initCommand("childViewsChanged");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	
+return this;}
 }
 public class CoordinatorLayoutBean extends com.ashera.layout.ViewGroupImpl.ViewGroupBean{
 		public CoordinatorLayoutBean() {
@@ -702,6 +726,10 @@ public class CoordinatorLayoutBean extends com.ashera.layout.ViewGroupImpl.ViewG
 		}
 public void setKeylines(String value) {
 	getBuilder().reset().setKeylines(value).execute(true);
+}
+
+public void childViewsChanged() {
+	getBuilder().reset().childViewsChanged().execute(true);
 }
 
 }

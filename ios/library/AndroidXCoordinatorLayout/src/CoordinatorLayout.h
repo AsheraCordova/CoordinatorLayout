@@ -20,13 +20,21 @@
 #define INCLUDE_ADViewGroup 1
 #include "ViewGroup.h"
 
+#define RESTRICT_NestedScrollingParent2 1
+#define INCLUDE_ADXNestedScrollingParent2 1
+#include "NestedScrollingParent2.h"
+
+#define RESTRICT_NestedScrollingParent3 1
+#define INCLUDE_ADXNestedScrollingParent3 1
+#include "NestedScrollingParent3.h"
+
 @class ADRect;
 @class ADView;
 @class ADXCoordinatorLayout_LayoutParams;
 @class IOSIntArray;
 @protocol JavaUtilList;
 
-@interface ADXCoordinatorLayout : ADViewGroup
+@interface ADXCoordinatorLayout : ADViewGroup < ADXNestedScrollingParent2, ADXNestedScrollingParent3 >
 
 #pragma mark Public
 
@@ -35,6 +43,8 @@
 - (void)dispatchDependentViewsChangedWithADView:(ADView *)view;
 
 - (id<JavaUtilList>)getDependenciesWithADView:(ADView *)child;
+
+- (jint)getNestedScrollAxes;
 
 - (void)onChildViewsChangedWithInt:(jint)type;
 
@@ -46,6 +56,70 @@
                          withInt:(jint)widthUsed
                          withInt:(jint)parentHeightMeasureSpec
                          withInt:(jint)heightUsed;
+
+- (jboolean)onNestedFlingWithADView:(ADView *)target
+                          withFloat:(jfloat)velocityX
+                          withFloat:(jfloat)velocityY
+                        withBoolean:(jboolean)consumed;
+
+- (jboolean)onNestedPreFlingWithADView:(ADView *)target
+                             withFloat:(jfloat)velocityX
+                             withFloat:(jfloat)velocityY;
+
+- (void)onNestedPreScrollWithADView:(ADView *)target
+                            withInt:(jint)dx
+                            withInt:(jint)dy
+                       withIntArray:(IOSIntArray *)consumed;
+
+- (void)onNestedPreScrollWithADView:(ADView *)target
+                            withInt:(jint)dx
+                            withInt:(jint)dy
+                       withIntArray:(IOSIntArray *)consumed
+                            withInt:(jint)type;
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed;
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed
+                         withInt:(jint)type;
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed
+                         withInt:(jint)type
+                    withIntArray:(IOSIntArray *)consumed;
+
+- (void)onNestedScrollAcceptedWithADView:(ADView *)child
+                              withADView:(ADView *)target
+                                 withInt:(jint)axes;
+
+- (void)onNestedScrollAcceptedWithADView:(ADView *)child
+                              withADView:(ADView *)target
+                                 withInt:(jint)axes
+                                 withInt:(jint)type;
+
+- (jboolean)onStartNestedScrollWithADView:(ADView *)child
+                               withADView:(ADView *)target
+                                  withInt:(jint)nestedScrollAxes;
+
+- (jboolean)onStartNestedScrollWithADView:(ADView *)child
+                               withADView:(ADView *)target
+                                  withInt:(jint)axes
+                                  withInt:(jint)type;
+
+- (void)onStopNestedScrollWithADView:(ADView *)target;
+
+- (void)onStopNestedScrollWithADView:(ADView *)target
+                             withInt:(jint)type;
 
 - (void)setKeyLinesWithIntArray:(IOSIntArray *)keyLines;
 
@@ -124,6 +198,23 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXCoordinatorLayout)
 
 #endif
 
+#if !defined (ADXCoordinatorLayout_AttachedBehavior_) && (INCLUDE_ALL_CoordinatorLayout || defined(INCLUDE_ADXCoordinatorLayout_AttachedBehavior))
+#define ADXCoordinatorLayout_AttachedBehavior_
+
+@class ADXCoordinatorLayout_Behavior;
+
+@protocol ADXCoordinatorLayout_AttachedBehavior < JavaObject >
+
+- (ADXCoordinatorLayout_Behavior *)getBehavior;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ADXCoordinatorLayout_AttachedBehavior)
+
+J2OBJC_TYPE_LITERAL_HEADER(ADXCoordinatorLayout_AttachedBehavior)
+
+#endif
+
 #if !defined (ADXCoordinatorLayout_Behavior_) && (INCLUDE_ALL_CoordinatorLayout || defined(INCLUDE_ADXCoordinatorLayout_Behavior))
 #define ADXCoordinatorLayout_Behavior_
 
@@ -131,6 +222,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXCoordinatorLayout)
 @class ADView;
 @class ADXCoordinatorLayout;
 @class ADXCoordinatorLayout_LayoutParams;
+@class IOSIntArray;
 
 @interface ADXCoordinatorLayout_Behavior : NSObject
 
@@ -168,6 +260,96 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXCoordinatorLayout)
                                            withInt:(jint)widthUsed
                                            withInt:(jint)parentHeightMeasureSpec
                                            withInt:(jint)heightUsed;
+
+- (jboolean)onNestedFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                        withFloat:(jfloat)velocityX
+                                        withFloat:(jfloat)velocityY
+                                      withBoolean:(jboolean)consumed;
+
+- (jboolean)onNestedPreFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                          withADView:(ADView *)child
+                                          withADView:(ADView *)target
+                                           withFloat:(jfloat)velocityX
+                                           withFloat:(jfloat)velocityY;
+
+- (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                          withInt:(jint)dx
+                                          withInt:(jint)dy
+                                     withIntArray:(IOSIntArray *)consumed;
+
+- (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                          withInt:(jint)dx
+                                          withInt:(jint)dy
+                                     withIntArray:(IOSIntArray *)consumed
+                                          withInt:(jint)type;
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed;
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed
+                                       withInt:(jint)type;
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed
+                                       withInt:(jint)type
+                                  withIntArray:(IOSIntArray *)consumed;
+
+- (void)onNestedScrollAcceptedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                            withADView:(ADView *)child
+                                            withADView:(ADView *)directTargetChild
+                                            withADView:(ADView *)target
+                                               withInt:(jint)axes;
+
+- (void)onNestedScrollAcceptedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                            withADView:(ADView *)child
+                                            withADView:(ADView *)directTargetChild
+                                            withADView:(ADView *)target
+                                               withInt:(jint)axes
+                                               withInt:(jint)type;
+
+- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                             withADView:(ADView *)child
+                                             withADView:(ADView *)directTargetChild
+                                             withADView:(ADView *)target
+                                                withInt:(jint)axes;
+
+- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                             withADView:(ADView *)child
+                                             withADView:(ADView *)directTargetChild
+                                             withADView:(ADView *)target
+                                                withInt:(jint)axes
+                                                withInt:(jint)type;
+
+- (void)onStopNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                        withADView:(ADView *)child
+                                        withADView:(ADView *)target;
+
+- (void)onStopNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                        withADView:(ADView *)child
+                                        withADView:(ADView *)target
+                                           withInt:(jint)type;
 
 @end
 
@@ -244,11 +426,18 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXCoordinatorLayout_Behavior)
 
 - (void)invalidateAnchor;
 
+- (jboolean)isNestedScrollAcceptedWithInt:(jint)type;
+
 - (void)resetChangedAfterNestedScroll;
+
+- (void)resetNestedScrollWithInt:(jint)type;
 
 - (void)setChangedAfterNestedScrollWithBoolean:(jboolean)changed;
 
 - (void)setLastChildRectWithADRect:(ADRect *)r;
+
+- (void)setNestedScrollAcceptedWithInt:(jint)type
+                           withBoolean:(jboolean)accept;
 
 // Disallowed inherited constructors, do not use.
 

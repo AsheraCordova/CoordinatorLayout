@@ -7,9 +7,11 @@
 #include "DirectedAcyclicGraph.h"
 #include "Gravity.h"
 #include "GravityCompat.h"
+#include "IOSClass.h"
 #include "IOSPrimitiveArray.h"
 #include "J2ObjC_source.h"
 #include "Log.h"
+#include "NestedScrollingParentHelper.h"
 #include "Pools.h"
 #include "Rect.h"
 #include "Resources.h"
@@ -31,12 +33,16 @@
  @public
   id<JavaUtilList> mDependencySortedChildren_;
   ADXDirectedAcyclicGraph *mChildDag_;
+  IOSIntArray *mBehaviorConsumed_;
+  IOSIntArray *mNestedScrollingV2ConsumedCompat_;
   jboolean mDisallowInterceptReset_;
   jboolean mIsAttachedToWindow_;
   IOSIntArray *mKeylines_;
+  ADView *mNestedScrollingTarget_;
   jboolean mNeedsPreDrawListener_;
   ADXCoordinatorLayout_WindowInsetsCompat *mLastInsets_;
   jboolean mDrawStatusBarBackground_;
+  ADXNestedScrollingParentHelper *mNestedScrollingParentHelper_;
 }
 
 + (ADRect *)acquireTempRect;
@@ -92,8 +98,12 @@
 
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mDependencySortedChildren_, id<JavaUtilList>)
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mChildDag_, ADXDirectedAcyclicGraph *)
+J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mBehaviorConsumed_, IOSIntArray *)
+J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mNestedScrollingV2ConsumedCompat_, IOSIntArray *)
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mKeylines_, IOSIntArray *)
+J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mNestedScrollingTarget_, ADView *)
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mLastInsets_, ADXCoordinatorLayout_WindowInsetsCompat *)
+J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mNestedScrollingParentHelper_, ADXNestedScrollingParentHelper *)
 
 inline jint ADXCoordinatorLayout_get_TYPE_ON_INTERCEPT(void);
 #define ADXCoordinatorLayout_TYPE_ON_INTERCEPT 0
@@ -131,6 +141,8 @@ __attribute__((unused)) static jint ADXCoordinatorLayout_resolveKeylineGravityWi
 
 __attribute__((unused)) static jint ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(jint gravity);
 
+__attribute__((unused)) static void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, jint type);
+
 __attribute__((unused)) static void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, jint layoutDirection);
 
 __attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetX);
@@ -138,6 +150,10 @@ __attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetXWithADVi
 __attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetY);
 
 __attribute__((unused)) static jboolean ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *self, ADView *child);
+
+@interface ADXCoordinatorLayout_AttachedBehavior : NSObject
+
+@end
 
 @interface ADXCoordinatorLayout_LayoutParams () {
  @public
@@ -386,81 +402,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)onChildViewsChangedWithInt:(jint)type {
-  jint layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
-  jint childCount = [((id<JavaUtilList>) nil_chk(mDependencySortedChildren_)) size];
-  ADRect *inset = ADXCoordinatorLayout_acquireTempRect();
-  ADRect *drawRect = ADXCoordinatorLayout_acquireTempRect();
-  ADRect *lastDrawRect = ADXCoordinatorLayout_acquireTempRect();
-  for (jint i = 0; i < childCount; i++) {
-    ADView *child = [mDependencySortedChildren_ getWithInt:i];
-    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-    if (type == ADXCoordinatorLayout_EVENT_PRE_DRAW && [child getVisibility] == ADView_GONE) {
-      continue;
-    }
-    for (jint j = 0; j < i; j++) {
-      ADView *checkChild = [mDependencySortedChildren_ getWithInt:j];
-      if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mAnchorDirectChild_ == checkChild) {
-        [self offsetChildToAnchorWithADView:child withInt:layoutDirection];
-      }
-    }
-    [self getChildRectWithADView:child withBoolean:true withADRect:drawRect];
-    if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->insetEdge_ != ADGravity_NO_GRAVITY && ![((ADRect *) nil_chk(drawRect)) isEmpty]) {
-      jint absInsetEdge = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->insetEdge_, layoutDirection);
-      switch (absInsetEdge & ADGravity_VERTICAL_GRAVITY_MASK) {
-        case ADGravity_TOP:
-        ((ADRect *) nil_chk(inset))->top_ = JavaLangMath_maxWithInt_withInt_(inset->top_, ((ADRect *) nil_chk(drawRect))->bottom_);
-        break;
-        case ADGravity_BOTTOM:
-        ((ADRect *) nil_chk(inset))->bottom_ = JavaLangMath_maxWithInt_withInt_(inset->bottom_, [self getHeight] - ((ADRect *) nil_chk(drawRect))->top_);
-        break;
-      }
-      switch (absInsetEdge & ADGravity_HORIZONTAL_GRAVITY_MASK) {
-        case ADGravity_LEFT:
-        ((ADRect *) nil_chk(inset))->left_ = JavaLangMath_maxWithInt_withInt_(inset->left_, ((ADRect *) nil_chk(drawRect))->right_);
-        break;
-        case ADGravity_RIGHT:
-        ((ADRect *) nil_chk(inset))->right_ = JavaLangMath_maxWithInt_withInt_(inset->right_, [self getWidth] - ((ADRect *) nil_chk(drawRect))->left_);
-        break;
-      }
-    }
-    if (lp->dodgeInsetEdges_ != ADGravity_NO_GRAVITY && [child getVisibility] == ADView_VISIBLE) {
-      ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(self, child, inset, layoutDirection);
-    }
-    if (type != ADXCoordinatorLayout_EVENT_VIEW_REMOVED) {
-      [self getLastChildRectWithADView:child withADRect:lastDrawRect];
-      if ([((ADRect *) nil_chk(lastDrawRect)) isEqual:drawRect]) {
-        continue;
-      }
-      [self recordLastChildRectWithADView:child withADRect:drawRect];
-    }
-    for (jint j = i + 1; j < childCount; j++) {
-      ADView *checkChild = [mDependencySortedChildren_ getWithInt:j];
-      ADXCoordinatorLayout_LayoutParams *checkLp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(checkChild)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-      ADXCoordinatorLayout_Behavior *b = [((ADXCoordinatorLayout_LayoutParams *) nil_chk(checkLp)) getBehavior];
-      if (b != nil && [b layoutDependsOnWithADXCoordinatorLayout:self withADView:checkChild withADView:child]) {
-        if (type == ADXCoordinatorLayout_EVENT_PRE_DRAW && [checkLp getChangedAfterNestedScroll]) {
-          [checkLp resetChangedAfterNestedScroll];
-          continue;
-        }
-        jboolean handled;
-        switch (type) {
-          case ADXCoordinatorLayout_EVENT_VIEW_REMOVED:
-          [b onDependentViewRemovedWithADXCoordinatorLayout:self withADView:checkChild withADView:child];
-          handled = true;
-          break;
-          default:
-          handled = [b onDependentViewChangedWithADXCoordinatorLayout:self withADView:checkChild withADView:child];
-          break;
-        }
-        if (type == ADXCoordinatorLayout_EVENT_NESTED_SCROLL) {
-          [checkLp setChangedAfterNestedScrollWithBoolean:handled];
-        }
-      }
-    }
-  }
-  ADXCoordinatorLayout_releaseTempRectWithADRect_(inset);
-  ADXCoordinatorLayout_releaseTempRectWithADRect_(drawRect);
-  ADXCoordinatorLayout_releaseTempRectWithADRect_(lastDrawRect);
+  ADXCoordinatorLayout_onChildViewsChangedWithInt_(self, type);
 }
 
 - (void)offsetChildByInsetWithADView:(ADView *)child
@@ -556,13 +498,252 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
+- (jboolean)onStartNestedScrollWithADView:(ADView *)child
+                               withADView:(ADView *)target
+                                  withInt:(jint)nestedScrollAxes {
+  return [self onStartNestedScrollWithADView:child withADView:target withInt:nestedScrollAxes withInt:ADXViewCompat_TYPE_TOUCH];
+}
+
+- (jboolean)onStartNestedScrollWithADView:(ADView *)child
+                               withADView:(ADView *)target
+                                  withInt:(jint)axes
+                                  withInt:(jint)type {
+  jboolean handled = false;
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
+      continue;
+    }
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    ADXCoordinatorLayout_Behavior *viewBehavior = [((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) getBehavior];
+    if (viewBehavior != nil) {
+      jboolean accepted = [viewBehavior onStartNestedScrollWithADXCoordinatorLayout:self withADView:view withADView:child withADView:target withInt:axes withInt:type];
+      handled |= accepted;
+      [lp setNestedScrollAcceptedWithInt:type withBoolean:accepted];
+    }
+    else {
+      [lp setNestedScrollAcceptedWithInt:type withBoolean:false];
+    }
+  }
+  return handled;
+}
+
+- (void)onNestedScrollAcceptedWithADView:(ADView *)child
+                              withADView:(ADView *)target
+                                 withInt:(jint)axes {
+  [self onNestedScrollAcceptedWithADView:child withADView:target withInt:axes withInt:ADXViewCompat_TYPE_TOUCH];
+}
+
+- (void)onNestedScrollAcceptedWithADView:(ADView *)child
+                              withADView:(ADView *)target
+                                 withInt:(jint)axes
+                                 withInt:(jint)type {
+  [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) onNestedScrollAcceptedWithADView:child withADView:target withInt:axes withInt:type];
+  JreStrongAssign(&mNestedScrollingTarget_, target);
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(view)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      [viewBehavior onNestedScrollAcceptedWithADXCoordinatorLayout:self withADView:view withADView:child withADView:target withInt:axes withInt:type];
+    }
+  }
+}
+
+- (void)onStopNestedScrollWithADView:(ADView *)target {
+  [self onStopNestedScrollWithADView:target withInt:ADXViewCompat_TYPE_TOUCH];
+}
+
+- (void)onStopNestedScrollWithADView:(ADView *)target
+                             withInt:(jint)type {
+  [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) onStopNestedScrollWithADView:target withInt:type];
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(view)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      [viewBehavior onStopNestedScrollWithADXCoordinatorLayout:self withADView:view withADView:target withInt:type];
+    }
+    [lp resetNestedScrollWithInt:type];
+    [lp resetChangedAfterNestedScroll];
+  }
+  JreStrongAssign(&mNestedScrollingTarget_, nil);
+}
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed {
+  [self onNestedScrollWithADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:ADXViewCompat_TYPE_TOUCH];
+}
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed
+                         withInt:(jint)type {
+  [self onNestedScrollWithADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:ADXViewCompat_TYPE_TOUCH withIntArray:mNestedScrollingV2ConsumedCompat_];
+}
+
+- (void)onNestedScrollWithADView:(ADView *)target
+                         withInt:(jint)dxConsumed
+                         withInt:(jint)dyConsumed
+                         withInt:(jint)dxUnconsumed
+                         withInt:(jint)dyUnconsumed
+                         withInt:(jint)type
+                    withIntArray:(IOSIntArray *)consumed {
+  jint childCount = [self getChildCount];
+  jboolean accepted = false;
+  jint xConsumed = 0;
+  jint yConsumed = 0;
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
+      continue;
+    }
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      *IOSIntArray_GetRef(nil_chk(mBehaviorConsumed_), 0) = 0;
+      *IOSIntArray_GetRef(mBehaviorConsumed_, 1) = 0;
+      [viewBehavior onNestedScrollWithADXCoordinatorLayout:self withADView:view withADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:type withIntArray:mBehaviorConsumed_];
+      xConsumed = dxUnconsumed > 0 ? JavaLangMath_maxWithInt_withInt_(xConsumed, IOSIntArray_Get(mBehaviorConsumed_, 0)) : JavaLangMath_minWithInt_withInt_(xConsumed, IOSIntArray_Get(mBehaviorConsumed_, 0));
+      yConsumed = dyUnconsumed > 0 ? JavaLangMath_maxWithInt_withInt_(yConsumed, IOSIntArray_Get(mBehaviorConsumed_, 1)) : JavaLangMath_minWithInt_withInt_(yConsumed, IOSIntArray_Get(mBehaviorConsumed_, 1));
+      accepted = true;
+    }
+  }
+  *IOSIntArray_GetRef(nil_chk(consumed), 0) += xConsumed;
+  *IOSIntArray_GetRef(consumed, 1) += yConsumed;
+  if (accepted) {
+    ADXCoordinatorLayout_onChildViewsChangedWithInt_(self, ADXCoordinatorLayout_EVENT_NESTED_SCROLL);
+  }
+}
+
+- (void)onNestedPreScrollWithADView:(ADView *)target
+                            withInt:(jint)dx
+                            withInt:(jint)dy
+                       withIntArray:(IOSIntArray *)consumed {
+  [self onNestedPreScrollWithADView:target withInt:dx withInt:dy withIntArray:consumed withInt:ADXViewCompat_TYPE_TOUCH];
+}
+
+- (void)onNestedPreScrollWithADView:(ADView *)target
+                            withInt:(jint)dx
+                            withInt:(jint)dy
+                       withIntArray:(IOSIntArray *)consumed
+                            withInt:(jint)type {
+  jint xConsumed = 0;
+  jint yConsumed = 0;
+  jboolean accepted = false;
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
+      continue;
+    }
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      *IOSIntArray_GetRef(nil_chk(mBehaviorConsumed_), 0) = 0;
+      *IOSIntArray_GetRef(mBehaviorConsumed_, 1) = 0;
+      [viewBehavior onNestedPreScrollWithADXCoordinatorLayout:self withADView:view withADView:target withInt:dx withInt:dy withIntArray:mBehaviorConsumed_ withInt:type];
+      xConsumed = dx > 0 ? JavaLangMath_maxWithInt_withInt_(xConsumed, IOSIntArray_Get(mBehaviorConsumed_, 0)) : JavaLangMath_minWithInt_withInt_(xConsumed, IOSIntArray_Get(mBehaviorConsumed_, 0));
+      yConsumed = dy > 0 ? JavaLangMath_maxWithInt_withInt_(yConsumed, IOSIntArray_Get(mBehaviorConsumed_, 1)) : JavaLangMath_minWithInt_withInt_(yConsumed, IOSIntArray_Get(mBehaviorConsumed_, 1));
+      accepted = true;
+    }
+  }
+  *IOSIntArray_GetRef(nil_chk(consumed), 0) = xConsumed;
+  *IOSIntArray_GetRef(consumed, 1) = yConsumed;
+  if (accepted) {
+    ADXCoordinatorLayout_onChildViewsChangedWithInt_(self, ADXCoordinatorLayout_EVENT_NESTED_SCROLL);
+  }
+}
+
+- (jboolean)onNestedFlingWithADView:(ADView *)target
+                          withFloat:(jfloat)velocityX
+                          withFloat:(jfloat)velocityY
+                        withBoolean:(jboolean)consumed {
+  jboolean handled = false;
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
+      continue;
+    }
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:ADXViewCompat_TYPE_TOUCH]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      handled |= [viewBehavior onNestedFlingWithADXCoordinatorLayout:self withADView:view withADView:target withFloat:velocityX withFloat:velocityY withBoolean:consumed];
+    }
+  }
+  if (handled) {
+    ADXCoordinatorLayout_onChildViewsChangedWithInt_(self, ADXCoordinatorLayout_EVENT_NESTED_SCROLL);
+  }
+  return handled;
+}
+
+- (jboolean)onNestedPreFlingWithADView:(ADView *)target
+                             withFloat:(jfloat)velocityX
+                             withFloat:(jfloat)velocityY {
+  jboolean handled = false;
+  jint childCount = [self getChildCount];
+  for (jint i = 0; i < childCount; i++) {
+    ADView *view = [self getChildAtWithInt:i];
+    if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
+      continue;
+    }
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:ADXViewCompat_TYPE_TOUCH]) {
+      continue;
+    }
+    ADXCoordinatorLayout_Behavior *viewBehavior = [lp getBehavior];
+    if (viewBehavior != nil) {
+      handled |= [viewBehavior onNestedPreFlingWithADXCoordinatorLayout:self withADView:view withADView:target withFloat:velocityX withFloat:velocityY];
+    }
+  }
+  return handled;
+}
+
+- (jint)getNestedScrollAxes {
+  return [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) getNestedScrollAxes];
+}
+
 - (void)setKeyLinesWithIntArray:(IOSIntArray *)keyLines {
   JreStrongAssign(&mKeylines_, keyLines);
 }
 
 - (ADXCoordinatorLayout_LayoutParams *)getResolvedLayoutParamsWithADView:(ADView *)child {
   ADXCoordinatorLayout_LayoutParams *result = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-  ((ADXCoordinatorLayout_LayoutParams *) nil_chk(result))->mBehaviorResolved_ = true;
+  if (!((ADXCoordinatorLayout_LayoutParams *) nil_chk(result))->mBehaviorResolved_) {
+    if ([ADXCoordinatorLayout_AttachedBehavior_class_() isInstance:child]) {
+      ADXCoordinatorLayout_Behavior *attachedBehavior = JreRetainedLocalValue([((id<ADXCoordinatorLayout_AttachedBehavior>) cast_check(child, ADXCoordinatorLayout_AttachedBehavior_class_())) getBehavior]);
+      if (attachedBehavior == nil) {
+        ADLog_eWithNSString_withNSString_(ADXCoordinatorLayout_TAG, @"Attached behavior class is null");
+      }
+      [result setBehaviorWithADXCoordinatorLayout_Behavior:attachedBehavior];
+      result->mBehaviorResolved_ = true;
+    }
+  }
+  result->mBehaviorResolved_ = true;
   return result;
 }
 
@@ -575,8 +756,12 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)dealloc {
   RELEASE_(mDependencySortedChildren_);
   RELEASE_(mChildDag_);
+  RELEASE_(mBehaviorConsumed_);
+  RELEASE_(mNestedScrollingV2ConsumedCompat_);
   RELEASE_(mKeylines_);
+  RELEASE_(mNestedScrollingTarget_);
   RELEASE_(mLastInsets_);
+  RELEASE_(mNestedScrollingParentHelper_);
   [super dealloc];
 }
 
@@ -613,8 +798,22 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x0, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, 41, 38, -1, -1, -1, -1 },
     { NULL, "V", 0x0, 42, 11, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 43, 44, -1, -1, -1, -1 },
-    { NULL, "LADXCoordinatorLayout_LayoutParams;", 0x0, 45, 38, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 43, 25, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 43, 44, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 45, 25, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 45, 44, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 46, 38, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 46, 11, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 47, 7, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 47, 48, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 47, 49, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 50, 51, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 50, 52, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 53, 54, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 55, 56, -1, -1, -1, -1 },
+    { NULL, "I", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 57, 58, -1, -1, -1, -1 },
+    { NULL, "LADXCoordinatorLayout_LayoutParams;", 0x0, 59, 38, -1, -1, -1, -1 },
     { NULL, "V", 0x0, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x0, -1, -1, -1, -1, -1, -1 },
   };
@@ -652,30 +851,48 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[28].selector = @selector(ensurePreDrawListener);
   methods[29].selector = @selector(hasDependenciesWithADView:);
   methods[30].selector = @selector(offsetChildToAnchorWithADView:withInt:);
-  methods[31].selector = @selector(setKeyLinesWithIntArray:);
-  methods[32].selector = @selector(getResolvedLayoutParamsWithADView:);
-  methods[33].selector = @selector(addPreDrawListener);
-  methods[34].selector = @selector(removePreDrawListener);
+  methods[31].selector = @selector(onStartNestedScrollWithADView:withADView:withInt:);
+  methods[32].selector = @selector(onStartNestedScrollWithADView:withADView:withInt:withInt:);
+  methods[33].selector = @selector(onNestedScrollAcceptedWithADView:withADView:withInt:);
+  methods[34].selector = @selector(onNestedScrollAcceptedWithADView:withADView:withInt:withInt:);
+  methods[35].selector = @selector(onStopNestedScrollWithADView:);
+  methods[36].selector = @selector(onStopNestedScrollWithADView:withInt:);
+  methods[37].selector = @selector(onNestedScrollWithADView:withInt:withInt:withInt:withInt:);
+  methods[38].selector = @selector(onNestedScrollWithADView:withInt:withInt:withInt:withInt:withInt:);
+  methods[39].selector = @selector(onNestedScrollWithADView:withInt:withInt:withInt:withInt:withInt:withIntArray:);
+  methods[40].selector = @selector(onNestedPreScrollWithADView:withInt:withInt:withIntArray:);
+  methods[41].selector = @selector(onNestedPreScrollWithADView:withInt:withInt:withIntArray:withInt:);
+  methods[42].selector = @selector(onNestedFlingWithADView:withFloat:withFloat:withBoolean:);
+  methods[43].selector = @selector(onNestedPreFlingWithADView:withFloat:withFloat:);
+  methods[44].selector = @selector(getNestedScrollAxes);
+  methods[45].selector = @selector(setKeyLinesWithIntArray:);
+  methods[46].selector = @selector(getResolvedLayoutParamsWithADView:);
+  methods[47].selector = @selector(addPreDrawListener);
+  methods[48].selector = @selector(removePreDrawListener);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
-    { "TAG", "LNSString;", .constantValue.asLong = 0, 0x18, -1, 46, -1, -1 },
+    { "TAG", "LNSString;", .constantValue.asLong = 0, 0x18, -1, 60, -1, -1 },
     { "TYPE_ON_INTERCEPT", "I", .constantValue.asInt = ADXCoordinatorLayout_TYPE_ON_INTERCEPT, 0x1a, -1, -1, -1, -1 },
     { "TYPE_ON_TOUCH", "I", .constantValue.asInt = ADXCoordinatorLayout_TYPE_ON_TOUCH, 0x1a, -1, -1, -1, -1 },
     { "EVENT_PRE_DRAW", "I", .constantValue.asInt = ADXCoordinatorLayout_EVENT_PRE_DRAW, 0x18, -1, -1, -1, -1 },
     { "EVENT_NESTED_SCROLL", "I", .constantValue.asInt = ADXCoordinatorLayout_EVENT_NESTED_SCROLL, 0x18, -1, -1, -1, -1 },
     { "EVENT_VIEW_REMOVED", "I", .constantValue.asInt = ADXCoordinatorLayout_EVENT_VIEW_REMOVED, 0x18, -1, -1, -1, -1 },
-    { "sRectPool", "LADPools_Pool;", .constantValue.asLong = 0, 0x1a, -1, 47, 48, -1 },
-    { "mDependencySortedChildren_", "LJavaUtilList;", .constantValue.asLong = 0, 0x12, -1, -1, 49, -1 },
-    { "mChildDag_", "LADXDirectedAcyclicGraph;", .constantValue.asLong = 0, 0x12, -1, -1, 50, -1 },
+    { "sRectPool", "LADPools_Pool;", .constantValue.asLong = 0, 0x1a, -1, 61, 62, -1 },
+    { "mDependencySortedChildren_", "LJavaUtilList;", .constantValue.asLong = 0, 0x12, -1, -1, 63, -1 },
+    { "mChildDag_", "LADXDirectedAcyclicGraph;", .constantValue.asLong = 0, 0x12, -1, -1, 64, -1 },
+    { "mBehaviorConsumed_", "[I", .constantValue.asLong = 0, 0x12, -1, -1, -1, -1 },
+    { "mNestedScrollingV2ConsumedCompat_", "[I", .constantValue.asLong = 0, 0x12, -1, -1, -1, -1 },
     { "mDisallowInterceptReset_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mIsAttachedToWindow_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mKeylines_", "[I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "mNestedScrollingTarget_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mNeedsPreDrawListener_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mLastInsets_", "LADXCoordinatorLayout_WindowInsetsCompat;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mDrawStatusBarBackground_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "mNestedScrollingParentHelper_", "LADXNestedScrollingParentHelper;", .constantValue.asLong = 0, 0x12, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "releaseTempRect", "LADRect;", "getKeyline", "I", "getDescendantRect", "LADView;LADRect;", "onMeasureChild", "LADView;IIII", "onMeasure", "II", "onLayoutChild", "LADView;I", "onLayout", "ZIIII", "recordLastChildRect", "getLastChildRect", "getChildRect", "LADView;ZLADRect;", "getDesiredAnchoredChildRectWithoutConstraints", "ILADRect;LADRect;LADXCoordinatorLayout_LayoutParams;II", "constrainChildRect", "LADXCoordinatorLayout_LayoutParams;LADRect;II", "getDesiredAnchoredChildRect", "LADView;ILADRect;LADRect;", "layoutChildWithAnchor", "LADView;LADView;I", "layoutChildWithKeyline", "LADView;II", "layoutChild", "resolveGravity", "resolveKeylineGravity", "resolveAnchoredChildGravity", "onChildViewsChanged", "offsetChildByInset", "LADView;LADRect;I", "setInsetOffsetX", "setInsetOffsetY", "dispatchDependentViewsChanged", "LADView;", "getDependencies", "(Lr/android/view/View;)Ljava/util/List<Lr/android/view/View;>;", "hasDependencies", "offsetChildToAnchor", "setKeyLines", "[I", "getResolvedLayoutParams", &ADXCoordinatorLayout_TAG, &ADXCoordinatorLayout_sRectPool, "Lr/android/util/Pools$Pool<Lr/android/graphics/Rect;>;", "Ljava/util/List<Lr/android/view/View;>;", "Landroidx/coordinatorlayout/widget/DirectedAcyclicGraph<Lr/android/view/View;>;", "LADXCoordinatorLayout_Behavior;LADXCoordinatorLayout_LayoutParams;LADXCoordinatorLayout_WindowInsetsCompat;LADXCoordinatorLayout_ViewGroupUtils;" };
-  static const J2ObjcClassInfo _ADXCoordinatorLayout = { "CoordinatorLayout", "androidx.coordinatorlayout.widget", ptrTable, methods, fields, 7, 0x1, 35, 15, -1, 51, -1, -1, -1 };
+  static const void *ptrTable[] = { "releaseTempRect", "LADRect;", "getKeyline", "I", "getDescendantRect", "LADView;LADRect;", "onMeasureChild", "LADView;IIII", "onMeasure", "II", "onLayoutChild", "LADView;I", "onLayout", "ZIIII", "recordLastChildRect", "getLastChildRect", "getChildRect", "LADView;ZLADRect;", "getDesiredAnchoredChildRectWithoutConstraints", "ILADRect;LADRect;LADXCoordinatorLayout_LayoutParams;II", "constrainChildRect", "LADXCoordinatorLayout_LayoutParams;LADRect;II", "getDesiredAnchoredChildRect", "LADView;ILADRect;LADRect;", "layoutChildWithAnchor", "LADView;LADView;I", "layoutChildWithKeyline", "LADView;II", "layoutChild", "resolveGravity", "resolveKeylineGravity", "resolveAnchoredChildGravity", "onChildViewsChanged", "offsetChildByInset", "LADView;LADRect;I", "setInsetOffsetX", "setInsetOffsetY", "dispatchDependentViewsChanged", "LADView;", "getDependencies", "(Lr/android/view/View;)Ljava/util/List<Lr/android/view/View;>;", "hasDependencies", "offsetChildToAnchor", "onStartNestedScroll", "LADView;LADView;II", "onNestedScrollAccepted", "onStopNestedScroll", "onNestedScroll", "LADView;IIIII", "LADView;IIIII[I", "onNestedPreScroll", "LADView;II[I", "LADView;II[II", "onNestedFling", "LADView;FFZ", "onNestedPreFling", "LADView;FF", "setKeyLines", "[I", "getResolvedLayoutParams", &ADXCoordinatorLayout_TAG, &ADXCoordinatorLayout_sRectPool, "Lr/android/util/Pools$Pool<Lr/android/graphics/Rect;>;", "Ljava/util/List<Lr/android/view/View;>;", "Landroidx/coordinatorlayout/widget/DirectedAcyclicGraph<Lr/android/view/View;>;", "LADXCoordinatorLayout_AttachedBehavior;LADXCoordinatorLayout_Behavior;LADXCoordinatorLayout_LayoutParams;LADXCoordinatorLayout_WindowInsetsCompat;LADXCoordinatorLayout_ViewGroupUtils;" };
+  static const J2ObjcClassInfo _ADXCoordinatorLayout = { "CoordinatorLayout", "androidx.coordinatorlayout.widget", ptrTable, methods, fields, 7, 0x1, 49, 19, -1, 65, -1, -1, -1 };
   return &_ADXCoordinatorLayout;
 }
 
@@ -692,6 +909,9 @@ void ADXCoordinatorLayout_init(ADXCoordinatorLayout *self) {
   ADViewGroup_init(self);
   JreStrongAssignAndConsume(&self->mDependencySortedChildren_, new_JavaUtilArrayList_init());
   JreStrongAssignAndConsume(&self->mChildDag_, new_ADXDirectedAcyclicGraph_init());
+  JreStrongAssignAndConsume(&self->mBehaviorConsumed_, [IOSIntArray newArrayWithLength:2]);
+  JreStrongAssignAndConsume(&self->mNestedScrollingV2ConsumedCompat_, [IOSIntArray newArrayWithLength:2]);
+  JreStrongAssignAndConsume(&self->mNestedScrollingParentHelper_, new_ADXNestedScrollingParentHelper_initWithADViewGroup_(self));
 }
 
 ADXCoordinatorLayout *new_ADXCoordinatorLayout_init() {
@@ -913,6 +1133,84 @@ jint ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(jint gravity) {
   return gravity == ADGravity_NO_GRAVITY ? ADGravity_CENTER : gravity;
 }
 
+void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, jint type) {
+  jint layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
+  jint childCount = [((id<JavaUtilList>) nil_chk(self->mDependencySortedChildren_)) size];
+  ADRect *inset = ADXCoordinatorLayout_acquireTempRect();
+  ADRect *drawRect = ADXCoordinatorLayout_acquireTempRect();
+  ADRect *lastDrawRect = ADXCoordinatorLayout_acquireTempRect();
+  for (jint i = 0; i < childCount; i++) {
+    ADView *child = [self->mDependencySortedChildren_ getWithInt:i];
+    ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+    if (type == ADXCoordinatorLayout_EVENT_PRE_DRAW && [child getVisibility] == ADView_GONE) {
+      continue;
+    }
+    for (jint j = 0; j < i; j++) {
+      ADView *checkChild = [self->mDependencySortedChildren_ getWithInt:j];
+      if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mAnchorDirectChild_ == checkChild) {
+        [self offsetChildToAnchorWithADView:child withInt:layoutDirection];
+      }
+    }
+    [self getChildRectWithADView:child withBoolean:true withADRect:drawRect];
+    if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->insetEdge_ != ADGravity_NO_GRAVITY && ![((ADRect *) nil_chk(drawRect)) isEmpty]) {
+      jint absInsetEdge = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->insetEdge_, layoutDirection);
+      switch (absInsetEdge & ADGravity_VERTICAL_GRAVITY_MASK) {
+        case ADGravity_TOP:
+        ((ADRect *) nil_chk(inset))->top_ = JavaLangMath_maxWithInt_withInt_(inset->top_, ((ADRect *) nil_chk(drawRect))->bottom_);
+        break;
+        case ADGravity_BOTTOM:
+        ((ADRect *) nil_chk(inset))->bottom_ = JavaLangMath_maxWithInt_withInt_(inset->bottom_, [self getHeight] - ((ADRect *) nil_chk(drawRect))->top_);
+        break;
+      }
+      switch (absInsetEdge & ADGravity_HORIZONTAL_GRAVITY_MASK) {
+        case ADGravity_LEFT:
+        ((ADRect *) nil_chk(inset))->left_ = JavaLangMath_maxWithInt_withInt_(inset->left_, ((ADRect *) nil_chk(drawRect))->right_);
+        break;
+        case ADGravity_RIGHT:
+        ((ADRect *) nil_chk(inset))->right_ = JavaLangMath_maxWithInt_withInt_(inset->right_, [self getWidth] - ((ADRect *) nil_chk(drawRect))->left_);
+        break;
+      }
+    }
+    if (lp->dodgeInsetEdges_ != ADGravity_NO_GRAVITY && [child getVisibility] == ADView_VISIBLE) {
+      ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(self, child, inset, layoutDirection);
+    }
+    if (type != ADXCoordinatorLayout_EVENT_VIEW_REMOVED) {
+      [self getLastChildRectWithADView:child withADRect:lastDrawRect];
+      if ([((ADRect *) nil_chk(lastDrawRect)) isEqual:drawRect]) {
+        continue;
+      }
+      [self recordLastChildRectWithADView:child withADRect:drawRect];
+    }
+    for (jint j = i + 1; j < childCount; j++) {
+      ADView *checkChild = [self->mDependencySortedChildren_ getWithInt:j];
+      ADXCoordinatorLayout_LayoutParams *checkLp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(checkChild)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
+      ADXCoordinatorLayout_Behavior *b = [((ADXCoordinatorLayout_LayoutParams *) nil_chk(checkLp)) getBehavior];
+      if (b != nil && [b layoutDependsOnWithADXCoordinatorLayout:self withADView:checkChild withADView:child]) {
+        if (type == ADXCoordinatorLayout_EVENT_PRE_DRAW && [checkLp getChangedAfterNestedScroll]) {
+          [checkLp resetChangedAfterNestedScroll];
+          continue;
+        }
+        jboolean handled;
+        switch (type) {
+          case ADXCoordinatorLayout_EVENT_VIEW_REMOVED:
+          [b onDependentViewRemovedWithADXCoordinatorLayout:self withADView:checkChild withADView:child];
+          handled = true;
+          break;
+          default:
+          handled = [b onDependentViewChangedWithADXCoordinatorLayout:self withADView:checkChild withADView:child];
+          break;
+        }
+        if (type == ADXCoordinatorLayout_EVENT_NESTED_SCROLL) {
+          [checkLp setChangedAfterNestedScrollWithBoolean:handled];
+        }
+      }
+    }
+  }
+  ADXCoordinatorLayout_releaseTempRectWithADRect_(inset);
+  ADXCoordinatorLayout_releaseTempRectWithADRect_(drawRect);
+  ADXCoordinatorLayout_releaseTempRectWithADRect_(lastDrawRect);
+}
+
 void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, jint layoutDirection) {
   if (!ADXViewCompat_isLaidOutWithADView_(child)) {
     return;
@@ -1002,6 +1300,26 @@ jboolean ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *s
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout)
 
+@implementation ADXCoordinatorLayout_AttachedBehavior
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, "LADXCoordinatorLayout_Behavior;", 0x401, -1, -1, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(getBehavior);
+  #pragma clang diagnostic pop
+  static const void *ptrTable[] = { "LADXCoordinatorLayout;" };
+  static const J2ObjcClassInfo _ADXCoordinatorLayout_AttachedBehavior = { "AttachedBehavior", "androidx.coordinatorlayout.widget", ptrTable, methods, NULL, 7, 0x609, 1, 0, 0, -1, -1, -1, -1 };
+  return &_ADXCoordinatorLayout_AttachedBehavior;
+}
+
+@end
+
+J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_AttachedBehavior)
+
 @implementation ADXCoordinatorLayout_Behavior
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -1049,6 +1367,131 @@ J2OBJC_IGNORE_DESIGNATED_END
   return false;
 }
 
+- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                             withADView:(ADView *)child
+                                             withADView:(ADView *)directTargetChild
+                                             withADView:(ADView *)target
+                                                withInt:(jint)axes {
+  return false;
+}
+
+- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                             withADView:(ADView *)child
+                                             withADView:(ADView *)directTargetChild
+                                             withADView:(ADView *)target
+                                                withInt:(jint)axes
+                                                withInt:(jint)type {
+  if (type == ADXViewCompat_TYPE_TOUCH) {
+    return [self onStartNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:directTargetChild withADView:target withInt:axes];
+  }
+  return false;
+}
+
+- (void)onNestedScrollAcceptedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                            withADView:(ADView *)child
+                                            withADView:(ADView *)directTargetChild
+                                            withADView:(ADView *)target
+                                               withInt:(jint)axes {
+}
+
+- (void)onNestedScrollAcceptedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                            withADView:(ADView *)child
+                                            withADView:(ADView *)directTargetChild
+                                            withADView:(ADView *)target
+                                               withInt:(jint)axes
+                                               withInt:(jint)type {
+  if (type == ADXViewCompat_TYPE_TOUCH) {
+    [self onNestedScrollAcceptedWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:directTargetChild withADView:target withInt:axes];
+  }
+}
+
+- (void)onStopNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                        withADView:(ADView *)child
+                                        withADView:(ADView *)target {
+}
+
+- (void)onStopNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                        withADView:(ADView *)child
+                                        withADView:(ADView *)target
+                                           withInt:(jint)type {
+  if (type == ADXViewCompat_TYPE_TOUCH) {
+    [self onStopNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target];
+  }
+}
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed {
+}
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed
+                                       withInt:(jint)type {
+  if (type == ADXViewCompat_TYPE_TOUCH) {
+    [self onNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed];
+  }
+}
+
+- (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                    withADView:(ADView *)child
+                                    withADView:(ADView *)target
+                                       withInt:(jint)dxConsumed
+                                       withInt:(jint)dyConsumed
+                                       withInt:(jint)dxUnconsumed
+                                       withInt:(jint)dyUnconsumed
+                                       withInt:(jint)type
+                                  withIntArray:(IOSIntArray *)consumed {
+  *IOSIntArray_GetRef(nil_chk(consumed), 0) += dxUnconsumed;
+  *IOSIntArray_GetRef(consumed, 1) += dyUnconsumed;
+  [self onNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:type];
+}
+
+- (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                          withInt:(jint)dx
+                                          withInt:(jint)dy
+                                     withIntArray:(IOSIntArray *)consumed {
+}
+
+- (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                          withInt:(jint)dx
+                                          withInt:(jint)dy
+                                     withIntArray:(IOSIntArray *)consumed
+                                          withInt:(jint)type {
+  if (type == ADXViewCompat_TYPE_TOUCH) {
+    [self onNestedPreScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target withInt:dx withInt:dy withIntArray:consumed];
+  }
+}
+
+- (jboolean)onNestedFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                       withADView:(ADView *)child
+                                       withADView:(ADView *)target
+                                        withFloat:(jfloat)velocityX
+                                        withFloat:(jfloat)velocityY
+                                      withBoolean:(jboolean)consumed {
+  return false;
+}
+
+- (jboolean)onNestedPreFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                          withADView:(ADView *)child
+                                          withADView:(ADView *)target
+                                           withFloat:(jfloat)velocityX
+                                           withFloat:(jfloat)velocityY {
+  return false;
+}
+
 - (jboolean)getInsetDodgeRectWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
                                            withADView:(ADView *)child
                                            withADRect:(ADRect *)rect {
@@ -1066,6 +1509,19 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "Z", 0x1, 8, 9, -1, 10, -1, -1 },
     { NULL, "Z", 0x1, 11, 12, -1, 13, -1, -1 },
     { NULL, "Z", 0x1, 14, 15, -1, 16, -1, -1 },
+    { NULL, "Z", 0x1, 14, 17, -1, 18, -1, -1 },
+    { NULL, "V", 0x1, 19, 15, -1, 20, -1, -1 },
+    { NULL, "V", 0x1, 19, 17, -1, 21, -1, -1 },
+    { NULL, "V", 0x1, 22, 3, -1, 7, -1, -1 },
+    { NULL, "V", 0x1, 22, 23, -1, 24, -1, -1 },
+    { NULL, "V", 0x1, 25, 26, -1, 27, -1, -1 },
+    { NULL, "V", 0x1, 25, 28, -1, 29, -1, -1 },
+    { NULL, "V", 0x1, 25, 30, -1, 31, -1, -1 },
+    { NULL, "V", 0x1, 32, 33, -1, 34, -1, -1 },
+    { NULL, "V", 0x1, 32, 35, -1, 36, -1, -1 },
+    { NULL, "Z", 0x1, 37, 38, -1, 39, -1, -1 },
+    { NULL, "Z", 0x1, 40, 41, -1, 42, -1, -1 },
+    { NULL, "Z", 0x1, 43, 44, -1, 45, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1078,10 +1534,23 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[5].selector = @selector(onDependentViewRemovedWithADXCoordinatorLayout:withADView:withADView:);
   methods[6].selector = @selector(onMeasureChildWithADXCoordinatorLayout:withADView:withInt:withInt:withInt:withInt:);
   methods[7].selector = @selector(onLayoutChildWithADXCoordinatorLayout:withADView:withInt:);
-  methods[8].selector = @selector(getInsetDodgeRectWithADXCoordinatorLayout:withADView:withADRect:);
+  methods[8].selector = @selector(onStartNestedScrollWithADXCoordinatorLayout:withADView:withADView:withADView:withInt:);
+  methods[9].selector = @selector(onStartNestedScrollWithADXCoordinatorLayout:withADView:withADView:withADView:withInt:withInt:);
+  methods[10].selector = @selector(onNestedScrollAcceptedWithADXCoordinatorLayout:withADView:withADView:withADView:withInt:);
+  methods[11].selector = @selector(onNestedScrollAcceptedWithADXCoordinatorLayout:withADView:withADView:withADView:withInt:withInt:);
+  methods[12].selector = @selector(onStopNestedScrollWithADXCoordinatorLayout:withADView:withADView:);
+  methods[13].selector = @selector(onStopNestedScrollWithADXCoordinatorLayout:withADView:withADView:withInt:);
+  methods[14].selector = @selector(onNestedScrollWithADXCoordinatorLayout:withADView:withADView:withInt:withInt:withInt:withInt:);
+  methods[15].selector = @selector(onNestedScrollWithADXCoordinatorLayout:withADView:withADView:withInt:withInt:withInt:withInt:withInt:);
+  methods[16].selector = @selector(onNestedScrollWithADXCoordinatorLayout:withADView:withADView:withInt:withInt:withInt:withInt:withInt:withIntArray:);
+  methods[17].selector = @selector(onNestedPreScrollWithADXCoordinatorLayout:withADView:withADView:withInt:withInt:withIntArray:);
+  methods[18].selector = @selector(onNestedPreScrollWithADXCoordinatorLayout:withADView:withADView:withInt:withInt:withIntArray:withInt:);
+  methods[19].selector = @selector(onNestedFlingWithADXCoordinatorLayout:withADView:withADView:withFloat:withFloat:withBoolean:);
+  methods[20].selector = @selector(onNestedPreFlingWithADXCoordinatorLayout:withADView:withADView:withFloat:withFloat:);
+  methods[21].selector = @selector(getInsetDodgeRectWithADXCoordinatorLayout:withADView:withADRect:);
   #pragma clang diagnostic pop
-  static const void *ptrTable[] = { "onAttachedToLayoutParams", "LADXCoordinatorLayout_LayoutParams;", "layoutDependsOn", "LADXCoordinatorLayout;LADView;LADView;", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;)Z", "onDependentViewChanged", "onDependentViewRemoved", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;)V", "onMeasureChild", "LADXCoordinatorLayout;LADView;IIII", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;IIII)Z", "onLayoutChild", "LADXCoordinatorLayout;LADView;I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;I)Z", "getInsetDodgeRect", "LADXCoordinatorLayout;LADView;LADRect;", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/graphics/Rect;)Z", "LADXCoordinatorLayout;", "<V:Lr/android/view/View;>Ljava/lang/Object;" };
-  static const J2ObjcClassInfo _ADXCoordinatorLayout_Behavior = { "Behavior", "androidx.coordinatorlayout.widget", ptrTable, methods, NULL, 7, 0x409, 9, 0, 17, -1, -1, 18, -1 };
+  static const void *ptrTable[] = { "onAttachedToLayoutParams", "LADXCoordinatorLayout_LayoutParams;", "layoutDependsOn", "LADXCoordinatorLayout;LADView;LADView;", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;)Z", "onDependentViewChanged", "onDependentViewRemoved", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;)V", "onMeasureChild", "LADXCoordinatorLayout;LADView;IIII", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;IIII)Z", "onLayoutChild", "LADXCoordinatorLayout;LADView;I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;I)Z", "onStartNestedScroll", "LADXCoordinatorLayout;LADView;LADView;LADView;I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;Lr/android/view/View;I)Z", "LADXCoordinatorLayout;LADView;LADView;LADView;II", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;Lr/android/view/View;II)Z", "onNestedScrollAccepted", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;Lr/android/view/View;I)V", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;Lr/android/view/View;II)V", "onStopNestedScroll", "LADXCoordinatorLayout;LADView;LADView;I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;I)V", "onNestedScroll", "LADXCoordinatorLayout;LADView;LADView;IIII", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;IIII)V", "LADXCoordinatorLayout;LADView;LADView;IIIII", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;IIIII)V", "LADXCoordinatorLayout;LADView;LADView;IIIII[I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;IIIII[I)V", "onNestedPreScroll", "LADXCoordinatorLayout;LADView;LADView;II[I", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;II[I)V", "LADXCoordinatorLayout;LADView;LADView;II[II", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;II[II)V", "onNestedFling", "LADXCoordinatorLayout;LADView;LADView;FFZ", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;FFZ)Z", "onNestedPreFling", "LADXCoordinatorLayout;LADView;LADView;FF", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/view/View;FF)Z", "getInsetDodgeRect", "LADXCoordinatorLayout;LADView;LADRect;", "(Landroidx/coordinatorlayout/widget/CoordinatorLayout;TV;Lr/android/graphics/Rect;)Z", "LADXCoordinatorLayout;", "<V:Lr/android/view/View;>Ljava/lang/Object;" };
+  static const J2ObjcClassInfo _ADXCoordinatorLayout_Behavior = { "Behavior", "androidx.coordinatorlayout.widget", ptrTable, methods, NULL, 7, 0x409, 22, 0, 46, -1, -1, 47, -1 };
   return &_ADXCoordinatorLayout_Behavior;
 }
 
@@ -1148,6 +1617,32 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
 
 - (jboolean)checkAnchorChanged {
   return mAnchorView_ == nil && mAnchorId_ != ADView_NO_ID;
+}
+
+- (void)resetNestedScrollWithInt:(jint)type {
+  [self setNestedScrollAcceptedWithInt:type withBoolean:false];
+}
+
+- (void)setNestedScrollAcceptedWithInt:(jint)type
+                           withBoolean:(jboolean)accept {
+  switch (type) {
+    case ADXViewCompat_TYPE_TOUCH:
+    mDidAcceptNestedScrollTouch_ = accept;
+    break;
+    case ADXViewCompat_TYPE_NON_TOUCH:
+    mDidAcceptNestedScrollNonTouch_ = accept;
+    break;
+  }
+}
+
+- (jboolean)isNestedScrollAcceptedWithInt:(jint)type {
+  switch (type) {
+    case ADXViewCompat_TYPE_TOUCH:
+    return mDidAcceptNestedScrollTouch_;
+    case ADXViewCompat_TYPE_NON_TOUCH:
+    return mDidAcceptNestedScrollNonTouch_;
+  }
+  return false;
 }
 
 - (jboolean)getChangedAfterNestedScroll {
@@ -1220,15 +1715,18 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
     { NULL, "V", 0x0, 7, 8, -1, -1, -1, -1 },
     { NULL, "LADRect;", 0x0, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x0, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x0, 9, 4, -1, -1, -1, -1 },
+    { NULL, "V", 0x0, 10, 11, -1, -1, -1, -1 },
+    { NULL, "Z", 0x0, 12, 4, -1, -1, -1, -1 },
     { NULL, "Z", 0x0, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x0, 9, 10, -1, -1, -1, -1 },
+    { NULL, "V", 0x0, 13, 14, -1, -1, -1, -1 },
     { NULL, "V", 0x0, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x0, 11, 12, -1, -1, -1, -1 },
+    { NULL, "Z", 0x0, 15, 16, -1, -1, -1, -1 },
     { NULL, "V", 0x0, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LADView;", 0x0, 13, 14, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 15, 16, -1, -1, -1, -1 },
-    { NULL, "Z", 0x2, 17, 16, -1, -1, -1, -1 },
-    { NULL, "Z", 0x2, 18, 19, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x0, 17, 18, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 19, 20, -1, -1, -1, -1 },
+    { NULL, "Z", 0x2, 21, 20, -1, -1, -1, -1 },
+    { NULL, "Z", 0x2, 22, 23, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1243,15 +1741,18 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   methods[7].selector = @selector(setLastChildRectWithADRect:);
   methods[8].selector = @selector(getLastChildRect);
   methods[9].selector = @selector(checkAnchorChanged);
-  methods[10].selector = @selector(getChangedAfterNestedScroll);
-  methods[11].selector = @selector(setChangedAfterNestedScrollWithBoolean:);
-  methods[12].selector = @selector(resetChangedAfterNestedScroll);
-  methods[13].selector = @selector(dependsOnWithADXCoordinatorLayout:withADView:withADView:);
-  methods[14].selector = @selector(invalidateAnchor);
-  methods[15].selector = @selector(findAnchorViewWithADXCoordinatorLayout:withADView:);
-  methods[16].selector = @selector(resolveAnchorViewWithADView:withADXCoordinatorLayout:);
-  methods[17].selector = @selector(verifyAnchorViewWithADView:withADXCoordinatorLayout:);
-  methods[18].selector = @selector(shouldDodgeWithADView:withInt:);
+  methods[10].selector = @selector(resetNestedScrollWithInt:);
+  methods[11].selector = @selector(setNestedScrollAcceptedWithInt:withBoolean:);
+  methods[12].selector = @selector(isNestedScrollAcceptedWithInt:);
+  methods[13].selector = @selector(getChangedAfterNestedScroll);
+  methods[14].selector = @selector(setChangedAfterNestedScrollWithBoolean:);
+  methods[15].selector = @selector(resetChangedAfterNestedScroll);
+  methods[16].selector = @selector(dependsOnWithADXCoordinatorLayout:withADView:withADView:);
+  methods[17].selector = @selector(invalidateAnchor);
+  methods[18].selector = @selector(findAnchorViewWithADXCoordinatorLayout:withADView:);
+  methods[19].selector = @selector(resolveAnchorViewWithADView:withADXCoordinatorLayout:);
+  methods[20].selector = @selector(verifyAnchorViewWithADView:withADXCoordinatorLayout:);
+  methods[21].selector = @selector(shouldDodgeWithADView:withInt:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "mBehavior_", "LADXCoordinatorLayout_Behavior;", .constantValue.asLong = 0, 0x0, -1, -1, -1, -1 },
@@ -1273,8 +1774,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
     { "mLastChildRect_", "LADRect;", .constantValue.asLong = 0, 0x10, -1, -1, -1, -1 },
     { "mBehaviorTag_", "LNSObject;", .constantValue.asLong = 0, 0x0, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "II", "LADXCoordinatorLayout_LayoutParams;", "LADViewGroup_LayoutParams;", "setAnchorId", "I", "setBehavior", "LADXCoordinatorLayout_Behavior;", "setLastChildRect", "LADRect;", "setChangedAfterNestedScroll", "Z", "dependsOn", "LADXCoordinatorLayout;LADView;LADView;", "findAnchorView", "LADXCoordinatorLayout;LADView;", "resolveAnchorView", "LADView;LADXCoordinatorLayout;", "verifyAnchorView", "shouldDodge", "LADView;I", "LADXCoordinatorLayout;" };
-  static const J2ObjcClassInfo _ADXCoordinatorLayout_LayoutParams = { "LayoutParams", "androidx.coordinatorlayout.widget", ptrTable, methods, fields, 7, 0x9, 19, 18, 20, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "II", "LADXCoordinatorLayout_LayoutParams;", "LADViewGroup_LayoutParams;", "setAnchorId", "I", "setBehavior", "LADXCoordinatorLayout_Behavior;", "setLastChildRect", "LADRect;", "resetNestedScroll", "setNestedScrollAccepted", "IZ", "isNestedScrollAccepted", "setChangedAfterNestedScroll", "Z", "dependsOn", "LADXCoordinatorLayout;LADView;LADView;", "findAnchorView", "LADXCoordinatorLayout;LADView;", "resolveAnchorView", "LADView;LADXCoordinatorLayout;", "verifyAnchorView", "shouldDodge", "LADView;I", "LADXCoordinatorLayout;" };
+  static const J2ObjcClassInfo _ADXCoordinatorLayout_LayoutParams = { "LayoutParams", "androidx.coordinatorlayout.widget", ptrTable, methods, fields, 7, 0x9, 22, 18, 24, -1, -1, -1, -1 };
   return &_ADXCoordinatorLayout_LayoutParams;
 }
 

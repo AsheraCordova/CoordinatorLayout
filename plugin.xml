@@ -69,6 +69,7 @@
      <!-- start res -->
      <!-- res end -->
      <!-- start tsc -->
+     <source-file src="browser/tsc/src/web/widget/CoordinatorLayoutImpl.ts" target-dir="tsc/src/web/widget"/>
      <!-- tsc end -->
   </platform>
   <platform name="swt">
@@ -85,6 +86,7 @@
      <!-- start res -->
      <!-- res end -->
      <!-- start tsc -->
+     <source-file src="swt/tsc/src/swt/widget/CoordinatorLayoutImpl.ts" target-dir="tsc/src/swt/widget"/>
      <!-- tsc end -->
   </platform>
 

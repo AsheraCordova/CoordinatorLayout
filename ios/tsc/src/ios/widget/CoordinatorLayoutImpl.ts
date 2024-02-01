@@ -40,6 +40,7 @@ import { ScopedObject } from '../../app/ScopedObject';
 
 
 
+
 export class DodgeInsetEdgeTransformer implements ITranform {
     transform(value: any, obj: any, type: number) : any{
         if (type == 1) {
@@ -93,6 +94,9 @@ export abstract class CoordinatorLayoutImpl<T> extends ViewGroupImpl<T>{
 	@Type(() => CommandAttr)
 	@Expose({ name: "keylines" })
 	keylines!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "childViewsChanged" })
+	childViewsChanged_!:CommandAttr<void>| undefined;
 
 	@Exclude()
 	protected thisPointer: T;	
@@ -100,6 +104,7 @@ export abstract class CoordinatorLayoutImpl<T> extends ViewGroupImpl<T>{
 	reset() : T {	
 		super.reset();
 		this.keylines = undefined;
+		this.childViewsChanged_ = undefined;
 		return this.thisPointer;
 	}
 	constructor(id: string, path: string[], event:  string) {
@@ -118,6 +123,20 @@ export abstract class CoordinatorLayoutImpl<T> extends ViewGroupImpl<T>{
 		this.keylines.setValue(value);
 		this.orderSet++;
 		this.keylines.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public childViewsChanged() : T {
+		this.resetIfRequired();
+		if (this.childViewsChanged_ == null || this.childViewsChanged_ == undefined) {
+			this.childViewsChanged_ = new CommandAttr<void>();
+		}
+		
+		this.childViewsChanged_.setSetter(true);
+		
+		this.orderSet++;
+		this.childViewsChanged_.setOrderSet(this.orderSet);
 		return this.thisPointer;
 	}
 		
