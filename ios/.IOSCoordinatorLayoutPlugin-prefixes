@@ -120,6 +120,7 @@ com.ashera.drawerlayout=AS
 com.ashera.recycleview=AS
 androidx.recyclerview.widget=ADX
 com.xwray.groupie=ADX
+androidx.appcompat.view=ADX
 androidx.appcompat.view.menu=ADX
 androidx.appcompat.widget=ADX
 com.ashera.toolbar=AS

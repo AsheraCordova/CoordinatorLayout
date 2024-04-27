@@ -31,6 +31,7 @@ import {MotionEvent} from '../../app/MotionEvent';
 import {DragEvent} from '../../app/DragEvent';
 import {KeyEvent} from '../../app/KeyEvent';
 import { ScopedObject } from '../../app/ScopedObject';
+import { Mixin, decorate } from 'ts-mixer';
 
 
 
@@ -91,14 +92,14 @@ export abstract class CoordinatorLayoutImpl<T> extends ViewGroupImpl<T>{
 	static initialize() {
 		TransformerFactory.getInstance().register("dodgeInsetEdge", new DodgeInsetEdgeTransformer());
     }	
-	@Type(() => CommandAttr)
-	@Expose({ name: "keylines" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "keylines" }))
 	keylines!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "childViewsChanged" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "childViewsChanged" }))
 	childViewsChanged_!:CommandAttr<void>| undefined;
 
-	@Exclude()
+	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
@@ -146,28 +147,28 @@ export abstract class CoordinatorLayoutImpl<T> extends ViewGroupImpl<T>{
 	
 //start - staticinit
 export abstract class CoordinatorLayoutImpl_LayoutParams<T> extends ViewGroupImpl_LayoutParams<T> {
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_gravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_gravity" }))
 	layout_gravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_behavior" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior" }))
 	layout_behavior!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_anchor" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_anchor" }))
 	layout_anchor!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_keyline" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_keyline" }))
 	layout_keyline!:CommandAttr<number>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_anchorGravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_anchorGravity" }))
 	layout_anchorGravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_insetEdge" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_insetEdge" }))
 	layout_insetEdge!:CommandAttr<InsetEdge>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_dodgeInsetEdges" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_dodgeInsetEdges" }))
 	layout_dodgeInsetEdges!:CommandAttr<DodgeInsetEdge[]>| undefined;
-	@Exclude()
+	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
