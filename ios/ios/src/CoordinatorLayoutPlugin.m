@@ -5,9 +5,27 @@
 
 #include "CoordinatorLayoutImpl.h"
 #include "CoordinatorLayoutPlugin.h"
+#include "HideBottomViewOnScrollBehavior.h"
+#include "IBehavior.h"
 #include "J2ObjC_source.h"
 #include "WidgetFactory.h"
 
+
+@interface ASCoordinatorLayoutPlugin_1 : NSObject < ASIBehavior >
+
+- (instancetype)init;
+
+- (id)newInstance OBJC_METHOD_FAMILY_NONE;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASCoordinatorLayoutPlugin_1)
+
+__attribute__((unused)) static void ASCoordinatorLayoutPlugin_1_init(ASCoordinatorLayoutPlugin_1 *self);
+
+__attribute__((unused)) static ASCoordinatorLayoutPlugin_1 *new_ASCoordinatorLayoutPlugin_1_init(void) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASCoordinatorLayoutPlugin_1 *create_ASCoordinatorLayoutPlugin_1_init(void);
 
 @implementation ASCoordinatorLayoutPlugin
 
@@ -54,6 +72,50 @@ ASCoordinatorLayoutPlugin *create_ASCoordinatorLayoutPlugin_init() {
 void ASCoordinatorLayoutPlugin_initPlugin() {
   ASCoordinatorLayoutPlugin_initialize();
   ASWidgetFactory_register__WithASIWidget_(new_ASCoordinatorLayoutImpl_init());
+  ASWidgetFactory_registerBehaviorWithNSString_withASIBehavior_(@"com.google.android.material.behavior.HideBottomViewOnScrollBehavior", new_ASCoordinatorLayoutPlugin_1_init());
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutPlugin)
+
+@implementation ASCoordinatorLayoutPlugin_1
+
+J2OBJC_IGNORE_DESIGNATED_BEGIN
+- (instancetype)init {
+  ASCoordinatorLayoutPlugin_1_init(self);
+  return self;
+}
+J2OBJC_IGNORE_DESIGNATED_END
+
+- (id)newInstance {
+  return new_ADXHideBottomViewOnScrollBehavior_init();
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, NULL, 0x0, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(init);
+  methods[1].selector = @selector(newInstance);
+  #pragma clang diagnostic pop
+  static const void *ptrTable[] = { "LASCoordinatorLayoutPlugin;", "initPlugin" };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutPlugin_1 = { "", "com.ashera.coordinatorlayout", ptrTable, methods, NULL, 7, 0x8018, 2, 0, 0, -1, 1, -1, -1 };
+  return &_ASCoordinatorLayoutPlugin_1;
+}
+
+@end
+
+void ASCoordinatorLayoutPlugin_1_init(ASCoordinatorLayoutPlugin_1 *self) {
+  NSObject_init(self);
+}
+
+ASCoordinatorLayoutPlugin_1 *new_ASCoordinatorLayoutPlugin_1_init() {
+  J2OBJC_NEW_IMPL(ASCoordinatorLayoutPlugin_1, init)
+}
+
+ASCoordinatorLayoutPlugin_1 *create_ASCoordinatorLayoutPlugin_1_init() {
+  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutPlugin_1, init)
+}

@@ -313,6 +313,7 @@ return layoutParams.dodgeInsetEdges;			}
 	public class CoordinatorLayoutExt extends androidx.coordinatorlayout.widget.CoordinatorLayout implements ILifeCycleDecorator, com.ashera.widget.IMaxDimension{
 		private MeasureEvent measureFinished = new MeasureEvent();
 		private OnLayoutEvent onLayoutEvent = new OnLayoutEvent();
+		private List<IWidget> overlays;
 		public IWidget getWidget() {
 			return CoordinatorLayoutImpl.this;
 		}
@@ -364,9 +365,12 @@ return layoutParams.dodgeInsetEdges;			}
 		protected void onLayout(boolean changed, int l, int t, int r, int b) {
 			super.onLayout(changed, l, t, r, b);
 			ViewImpl.setDrawableBounds(CoordinatorLayoutImpl.this, l, t, r, b);
+			if (!isOverlay()) {
 			ViewImpl.nativeMakeFrame(asNativeWidget(), l, t, r, b);
+			}
 			replayBufferedEvents();
 	        ViewImpl.redrawDrawables(CoordinatorLayoutImpl.this);
+	        overlays = ViewImpl.drawOverlay(CoordinatorLayoutImpl.this, overlays);
 			
 			IWidgetLifeCycleListener listener = (IWidgetLifeCycleListener) getListener();
 			if (listener != null) {
@@ -495,7 +499,7 @@ return layoutParams.dodgeInsetEdges;			}
 				setState4(value);
 				return;
 			}
-			CoordinatorLayoutImpl.this.setAttribute(name, value, true);
+			CoordinatorLayoutImpl.this.setAttribute(name, value, !(value instanceof String));
 		}
         @Override
         public void setVisibility(int visibility) {

@@ -69,5 +69,11 @@
 			<artifactId>AndroidXJCoordinatorLayout</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidJMaterial</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -70,5 +70,11 @@
 			<groupId>com.ashera</groupId>
 			<artifactId>AndroidLayouts</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.ashera</groupId>
+			<artifactId>AndroidJMaterial</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
 	def project_version = '1.0.0';
-	
+	implementation "com.ashera:AndroidJMaterial:${project_version}"
 	implementation "com.ashera:AndroidXJCoordinatorLayout:${project_version}"
 	implementation "com.ashera:WebCoordinatorLayoutPlugin:${project_version}"
     
