@@ -30,6 +30,8 @@
      <source-file src="library/AndroidXCoordinatorLayout/src/CoordinatorLayout.m" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidXCoordinatorLayout/src/DirectedAcyclicGraph.h" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src"/>
      <source-file src="library/AndroidXCoordinatorLayout/src/DirectedAcyclicGraph.m" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src" compiler-flags="-fno-objc-arc"/>
+     <header-file src="library/AndroidXCoordinatorLayout/src/HideBottomViewOnScrollBehavior.h" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src"/>
+     <source-file src="library/AndroidXCoordinatorLayout/src/HideBottomViewOnScrollBehavior.m" target-dir="CoordinatorLayout/AndroidXCoordinatorLayout/src" compiler-flags="-fno-objc-arc"/>
      <!-- AndroidXCoordinatorLayout end -->
      <!-- start tsc -->
      <source-file src="tsc/src/ios/widget/CoordinatorLayoutImpl.ts" target-dir="tsc/src/ios/widget"/>

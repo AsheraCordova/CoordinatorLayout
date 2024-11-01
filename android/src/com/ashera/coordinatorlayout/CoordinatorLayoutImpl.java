@@ -158,7 +158,7 @@ Context context = (Context) fragment.getRootActivity();
 	}
 
 	@Override
-	public boolean remove(IWidget w) {		
+	public boolean remove(IWidget w) {
 		boolean remove = super.remove(w);
 		coordinatorLayout.removeView((View) w.asWidget());
 		return remove;
@@ -460,7 +460,9 @@ return layoutParams.dodgeInsetEdges;			}
         @Override
         public void drawableStateChanged() {
         	super.drawableStateChanged();
-        	ViewImpl.drawableStateChanged(CoordinatorLayoutImpl.this);
+        	if (!isWidgetDisposed()) {
+        		ViewImpl.drawableStateChanged(CoordinatorLayoutImpl.this);
+        	}
         }
         
     	public void setState0(float value) {
@@ -598,6 +600,7 @@ return layoutParams.dodgeInsetEdges;			}
         	ViewImpl.stateNo(CoordinatorLayoutImpl.this);
         }
      
+	
 	}
 	@Override
 	public Class getViewClass() {
