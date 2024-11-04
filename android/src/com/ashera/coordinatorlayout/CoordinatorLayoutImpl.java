@@ -1027,7 +1027,7 @@ return this;}
 	
 	
 	private void onChildViewsChanged() {
-		invokePrivateMethodUsingReflection(coordinatorLayout, "onChildViewsChanged", 1); 
+		invokePrivateMethodUsingReflection(coordinatorLayout, "onChildViewsChanged", new Class[] {int.class}, 1); 
 	}
 
 }
