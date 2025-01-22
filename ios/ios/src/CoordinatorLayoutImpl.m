@@ -12,7 +12,6 @@
 #include "CoordinatorLayoutImpl.h"
 #include "DisplayMetrics.h"
 #include "HasWidgets.h"
-#include "IAttributable.h"
 #include "IFragment.h"
 #include "ILifeCycleDecorator.h"
 #include "IOSClass.h"
@@ -32,7 +31,6 @@
 #include "ViewImpl.h"
 #include "WidgetAttribute.h"
 #include "WidgetFactory.h"
-#include "java/lang/Boolean.h"
 #include "java/lang/Integer.h"
 #include "java/lang/Runnable.h"
 #include "java/lang/RuntimeException.h"
@@ -50,16 +48,11 @@
 
 
 #pragma clang diagnostic ignored "-Wprotocol"
-#pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @interface ASCoordinatorLayoutImpl () {
  @public
   id uiView_;
   ADXCoordinatorLayout *coordinatorLayout_;
-  ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *builder_;
-  ASCoordinatorLayoutImpl_CoordinatorLayoutBean *bean_;
-  ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *paramsBuilder_;
-  ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *paramsBean_;
 }
 
 - (void)setWidgetOnNativeClass;
@@ -83,10 +76,6 @@
 
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, uiView_, id)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, coordinatorLayout_, ADXCoordinatorLayout *)
-J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, builder_, ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)
-J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, bean_, ASCoordinatorLayoutImpl_CoordinatorLayoutBean *)
-J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, paramsBuilder_, ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)
-J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, paramsBean_, ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *)
 
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setWidgetOnNativeClass(ASCoordinatorLayoutImpl *self);
 
@@ -139,27 +128,6 @@ J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, measureFinishe
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, onLayoutEvent_, ASOnLayoutEvent *)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, overlays_, id<JavaUtilList>)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, templates_, id<JavaUtilMap>)
-
-@interface ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder () {
- @public
-  ASCoordinatorLayoutImpl *this$0_;
-}
-
-@end
-
-@interface ASCoordinatorLayoutImpl_CoordinatorLayoutBean () {
- @public
-  ASCoordinatorLayoutImpl *this$0_;
-}
-
-@end
-
-@interface ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean () {
- @public
-  ASCoordinatorLayoutImpl *this$0_;
-}
-
-@end
 
 @interface ASCoordinatorLayoutImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
  @public
@@ -472,38 +440,6 @@ J2OBJC_IGNORE_DESIGNATED_END
   [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
-- (id)getPluginWithNSString:(NSString *)plugin {
-  return [((id<ASIAttributable>) nil_chk(ASWidgetFactory_getAttributableWithNSString_(plugin))) newInstanceWithASIWidget:self];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutBean *)getBean {
-  if (bean_ == nil) {
-    bean_ = new_ASCoordinatorLayoutImpl_CoordinatorLayoutBean_initWithASCoordinatorLayoutImpl_(self);
-  }
-  return bean_;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)getBuilder {
-  if (builder_ == nil) {
-    builder_ = new_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder_initWithASCoordinatorLayoutImpl_(self);
-  }
-  return builder_;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *)getParamsBean {
-  if (paramsBean_ == nil) {
-    paramsBean_ = new_ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean_initWithASCoordinatorLayoutImpl_(self);
-  }
-  return paramsBean_;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)getParamsBuilder {
-  if (paramsBuilder_ == nil) {
-    paramsBuilder_ = new_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder_initWithASCoordinatorLayoutImpl_(self);
-  }
-  return paramsBuilder_;
-}
-
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, "V", 0x1, 0, 1, -1, -1, -1, -1 },
@@ -536,11 +472,6 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 33, 1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 34, 35, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 36, 1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutBean;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -575,24 +506,15 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[27].selector = @selector(onChildViewsChanged);
   methods[28].selector = @selector(setIdWithNSString:);
   methods[29].selector = @selector(setVisibleWithBoolean:);
-  methods[30].selector = @selector(getPluginWithNSString:);
-  methods[31].selector = @selector(getBean);
-  methods[32].selector = @selector(getBuilder);
-  methods[33].selector = @selector(getParamsBean);
-  methods[34].selector = @selector(getParamsBuilder);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 37, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 38, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 36, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 37, -1, -1 },
     { "coordinatorLayout_", "LADXCoordinatorLayout;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "builder_", "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "bean_", "LASCoordinatorLayoutImpl_CoordinatorLayoutBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "paramsBuilder_", "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "paramsBean_", "LASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setBehavior", "LADXCoordinatorLayout_LayoutParams;LNSObject;", "setKeyLines", "LNSObject;", "setMyKeyLines", "[I", "setId", "setVisible", "Z", "getPlugin", &ASCoordinatorLayoutImpl_LOCAL_NAME, &ASCoordinatorLayoutImpl_GROUP_NAME, "LASCoordinatorLayoutImpl_InsetEdge;LASCoordinatorLayoutImpl_DodgeInsetEdge;LASCoordinatorLayoutImpl_CoordinatorLayoutExt;LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;LASCoordinatorLayoutImpl_CoordinatorLayoutBean;LASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 35, 8, -1, 39, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setBehavior", "LADXCoordinatorLayout_LayoutParams;LNSObject;", "setKeyLines", "LNSObject;", "setMyKeyLines", "[I", "setId", "setVisible", "Z", &ASCoordinatorLayoutImpl_LOCAL_NAME, &ASCoordinatorLayoutImpl_GROUP_NAME, "LASCoordinatorLayoutImpl_InsetEdge;LASCoordinatorLayoutImpl_DodgeInsetEdge;LASCoordinatorLayoutImpl_CoordinatorLayoutExt;" };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 30, 4, -1, 38, -1, -1, -1 };
   return &_ASCoordinatorLayoutImpl;
 }
 
@@ -1191,519 +1113,6 @@ ASCoordinatorLayoutImpl_CoordinatorLayoutExt *create_ASCoordinatorLayoutImpl_Coo
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
-
-@implementation ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder
-
-- (instancetype)initWithASCoordinatorLayoutImpl:(ASCoordinatorLayoutImpl *)outer$ {
-  ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder_initWithASCoordinatorLayoutImpl_(self, outer$);
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)executeWithBoolean:(jboolean)setter {
-  if (setter) {
-    [this$0_ executeCommandWithJavaUtilMap:command_ withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-    [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
-  }
-  [this$0_ executeCommandWithJavaUtilMap:command_ withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)setKeylinesWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"keylines"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *)childViewsChanged {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"childViewsChanged"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  return self;
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, 3, 4, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
-  methods[1].selector = @selector(executeWithBoolean:);
-  methods[2].selector = @selector(setKeylinesWithNSString:);
-  methods[3].selector = @selector(childViewsChanged);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "this$0_", "LASCoordinatorLayoutImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
-  };
-  static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "execute", "Z", "setKeylines", "LNSString;", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/coordinatorlayout/CoordinatorLayoutImpl$CoordinatorLayoutCommandBuilder;>;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder = { "CoordinatorLayoutCommandBuilder", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 4, 1, 0, -1, -1, 5, -1 };
-  return &_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder;
-}
-
-@end
-
-void ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *self, ASCoordinatorLayoutImpl *outer$) {
-  self->this$0_ = outer$;
-  ASViewGroupImpl_ViewGroupCommandBuilder_init(self);
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *new_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *create_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder)
-
-@implementation ASCoordinatorLayoutImpl_CoordinatorLayoutBean
-
-- (instancetype)initWithASCoordinatorLayoutImpl:(ASCoordinatorLayoutImpl *)outer$ {
-  ASCoordinatorLayoutImpl_CoordinatorLayoutBean_initWithASCoordinatorLayoutImpl_(self, outer$);
-  return self;
-}
-
-- (void)setKeylinesWithNSString:(NSString *)value {
-  (void) [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setKeylinesWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)childViewsChanged {
-  (void) [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) childViewsChanged])) executeWithBoolean:true];
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
-  methods[1].selector = @selector(setKeylinesWithNSString:);
-  methods[2].selector = @selector(childViewsChanged);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "this$0_", "LASCoordinatorLayoutImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
-  };
-  static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "setKeylines", "LNSString;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutBean = { "CoordinatorLayoutBean", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 3, 1, 0, -1, -1, -1, -1 };
-  return &_ASCoordinatorLayoutImpl_CoordinatorLayoutBean;
-}
-
-@end
-
-void ASCoordinatorLayoutImpl_CoordinatorLayoutBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl_CoordinatorLayoutBean *self, ASCoordinatorLayoutImpl *outer$) {
-  self->this$0_ = outer$;
-  ASViewGroupImpl_ViewGroupBean_initWithASIWidget_(self, outer$);
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutBean *new_ASCoordinatorLayoutImpl_CoordinatorLayoutBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutBean, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutBean *create_ASCoordinatorLayoutImpl_CoordinatorLayoutBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutBean, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutBean)
-
-@implementation ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean
-
-- (instancetype)initWithASCoordinatorLayoutImpl:(ASCoordinatorLayoutImpl *)outer$ {
-  ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean_initWithASCoordinatorLayoutImpl_(self, outer$);
-  return self;
-}
-
-- (id)getLayoutGravityWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutGravity])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutGravity];
-}
-
-- (void)setLayoutGravityWithASIWidget:(id<ASIWidget>)w
-                         withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutGravityWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (void)setLayoutBehaviorWithASIWidget:(id<ASIWidget>)w
-                          withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutBehaviorWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (id)getLayoutAnchorWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutAnchor])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutAnchor];
-}
-
-- (void)setLayoutAnchorWithASIWidget:(id<ASIWidget>)w
-                        withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutAnchorWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (id)getLayoutKeylineWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutKeyline])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutKeyline];
-}
-
-- (void)setLayoutKeylineWithASIWidget:(id<ASIWidget>)w
-                              withInt:(jint)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutKeylineWithInt:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (id)getLayoutAnchorGravityWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutAnchorGravity])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutAnchorGravity];
-}
-
-- (void)setLayoutAnchorGravityWithASIWidget:(id<ASIWidget>)w
-                               withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutAnchorGravityWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (id)getLayoutInsetEdgeWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutInsetEdge])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutInsetEdge];
-}
-
-- (void)setLayoutInsetEdgeWithASIWidget:(id<ASIWidget>)w
-                           withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutInsetEdgeWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-- (id)getLayoutDodgeInsetEdgesWithASIWidget:(id<ASIWidget>)w {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  id<JavaUtilMap> command = [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) tryGetLayoutDodgeInsetEdges])) getCommand];
-  (void) [layoutParams putWithId:@"layoutParams" withId:command];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return [((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) getLayoutDodgeInsetEdges];
-}
-
-- (void)setLayoutDodgeInsetEdgesWithASIWidget:(id<ASIWidget>)w
-                                 withNSString:(NSString *)value {
-  id<JavaUtilMap> layoutParams = new_JavaUtilHashMap_init();
-  (void) [layoutParams putWithId:@"layoutParams" withId:[((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([((ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *) nil_chk([this$0_ getParamsBuilder])) reset])) setLayoutDodgeInsetEdgesWithNSString:value])) getCommand]];
-  [((id<ASIWidget>) nil_chk(w)) executeCommandWithJavaUtilMap:layoutParams withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-  [((id<ASIFragment>) nil_chk([w getFragment])) remeasure];
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 3, 4, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 5, 4, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 6, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 7, 4, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 8, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 9, 10, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 11, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 12, 4, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 13, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 14, 4, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 15, 2, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 16, 4, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
-  methods[1].selector = @selector(getLayoutGravityWithASIWidget:);
-  methods[2].selector = @selector(setLayoutGravityWithASIWidget:withNSString:);
-  methods[3].selector = @selector(setLayoutBehaviorWithASIWidget:withNSString:);
-  methods[4].selector = @selector(getLayoutAnchorWithASIWidget:);
-  methods[5].selector = @selector(setLayoutAnchorWithASIWidget:withNSString:);
-  methods[6].selector = @selector(getLayoutKeylineWithASIWidget:);
-  methods[7].selector = @selector(setLayoutKeylineWithASIWidget:withInt:);
-  methods[8].selector = @selector(getLayoutAnchorGravityWithASIWidget:);
-  methods[9].selector = @selector(setLayoutAnchorGravityWithASIWidget:withNSString:);
-  methods[10].selector = @selector(getLayoutInsetEdgeWithASIWidget:);
-  methods[11].selector = @selector(setLayoutInsetEdgeWithASIWidget:withNSString:);
-  methods[12].selector = @selector(getLayoutDodgeInsetEdgesWithASIWidget:);
-  methods[13].selector = @selector(setLayoutDodgeInsetEdgesWithASIWidget:withNSString:);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "this$0_", "LASCoordinatorLayoutImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
-  };
-  static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "getLayoutGravity", "LASIWidget;", "setLayoutGravity", "LASIWidget;LNSString;", "setLayoutBehavior", "getLayoutAnchor", "setLayoutAnchor", "getLayoutKeyline", "setLayoutKeyline", "LASIWidget;I", "getLayoutAnchorGravity", "setLayoutAnchorGravity", "getLayoutInsetEdge", "setLayoutInsetEdge", "getLayoutDodgeInsetEdges", "setLayoutDodgeInsetEdges" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean = { "CoordinatorLayoutParamsBean", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 14, 1, 0, -1, -1, -1, -1 };
-  return &_ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean;
-}
-
-@end
-
-void ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *self, ASCoordinatorLayoutImpl *outer$) {
-  self->this$0_ = outer$;
-  ASViewGroupImpl_ViewGroupParamsBean_init(self);
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *new_ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean *create_ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutParamsBean)
-
-@implementation ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder
-
-- (instancetype)initWithASCoordinatorLayoutImpl:(ASCoordinatorLayoutImpl *)outer$ {
-  ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder_initWithASCoordinatorLayoutImpl_(self, outer$);
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutGravity {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_gravity"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutGravity {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_gravity"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutGravityWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_gravity"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutBehaviorWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_behavior"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutAnchor {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchor"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutAnchor {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchor"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutAnchorWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchor"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutKeyline {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_keyline"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutKeyline {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_keyline"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutKeylineWithInt:(jint)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_keyline"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:JavaLangInteger_valueOfWithInt_(value)];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutAnchorGravity {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchorGravity"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutAnchorGravity {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchorGravity"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutAnchorGravityWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_anchorGravity"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutInsetEdge {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_insetEdge"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutInsetEdge {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_insetEdge"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutInsetEdgeWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_insetEdge"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)tryGetLayoutDodgeInsetEdges {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_dodgeInsetEdges"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"getter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderGet" withId:JavaLangInteger_valueOfWithInt_(++orderGet_)];
-  return self;
-}
-
-- (id)getLayoutDodgeInsetEdges {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_dodgeInsetEdges"];
-  return [((id<JavaUtilMap>) nil_chk(attrs)) getWithId:@"commandReturnValue"];
-}
-
-- (ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *)setLayoutDodgeInsetEdgesWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"layout_dodgeInsetEdges"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 3, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 4, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 5, 6, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 7, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 8, 2, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;", 0x1, 9, 2, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASCoordinatorLayoutImpl:);
-  methods[1].selector = @selector(tryGetLayoutGravity);
-  methods[2].selector = @selector(getLayoutGravity);
-  methods[3].selector = @selector(setLayoutGravityWithNSString:);
-  methods[4].selector = @selector(setLayoutBehaviorWithNSString:);
-  methods[5].selector = @selector(tryGetLayoutAnchor);
-  methods[6].selector = @selector(getLayoutAnchor);
-  methods[7].selector = @selector(setLayoutAnchorWithNSString:);
-  methods[8].selector = @selector(tryGetLayoutKeyline);
-  methods[9].selector = @selector(getLayoutKeyline);
-  methods[10].selector = @selector(setLayoutKeylineWithInt:);
-  methods[11].selector = @selector(tryGetLayoutAnchorGravity);
-  methods[12].selector = @selector(getLayoutAnchorGravity);
-  methods[13].selector = @selector(setLayoutAnchorGravityWithNSString:);
-  methods[14].selector = @selector(tryGetLayoutInsetEdge);
-  methods[15].selector = @selector(getLayoutInsetEdge);
-  methods[16].selector = @selector(setLayoutInsetEdgeWithNSString:);
-  methods[17].selector = @selector(tryGetLayoutDodgeInsetEdges);
-  methods[18].selector = @selector(getLayoutDodgeInsetEdges);
-  methods[19].selector = @selector(setLayoutDodgeInsetEdgesWithNSString:);
-  #pragma clang diagnostic pop
-  static const void *ptrTable[] = { "LASCoordinatorLayoutImpl;", "setLayoutGravity", "LNSString;", "setLayoutBehavior", "setLayoutAnchor", "setLayoutKeyline", "I", "setLayoutAnchorGravity", "setLayoutInsetEdge", "setLayoutDodgeInsetEdges", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandParamsBuilder<Lcom/ashera/coordinatorlayout/CoordinatorLayoutImpl$CoordinatorLayoutCommandParamsBuilder;>;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder = { "CoordinatorLayoutCommandParamsBuilder", "com.ashera.coordinatorlayout", ptrTable, methods, NULL, 7, 0x1, 20, 0, 0, -1, -1, 10, -1 };
-  return &_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder;
-}
-
-@end
-
-void ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *self, ASCoordinatorLayoutImpl *outer$) {
-  ASViewGroupImpl_ViewGroupCommandParamsBuilder_init(self);
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *new_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder *create_ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder_initWithASCoordinatorLayoutImpl_(ASCoordinatorLayoutImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder, initWithASCoordinatorLayoutImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutCommandParamsBuilder)
 
 @implementation ASCoordinatorLayoutImpl_$Lambda$1
 
