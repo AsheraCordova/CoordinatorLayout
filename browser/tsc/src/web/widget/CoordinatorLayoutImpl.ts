@@ -23,7 +23,6 @@ import CommandAttr from '../../widget/CommandAttr';
 import IWidget from '../../widget/IWidget';
 import ILayoutParam from '../../widget/ILayoutParam';
 import {plainToClass, Type, Exclude, Expose, Transform} from "class-transformer";
-import 'babel-polyfill';
 import {Gravity} from '../../widget/TypeConstants';
 import {ITranform, TransformerFactory} from '../../widget/TransformerFactory';
 import {Event} from '../../app/Event';
