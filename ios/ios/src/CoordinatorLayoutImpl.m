@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-ios-widgets\IOSCoordinatorLayoutPlugin\src\main\java\com\ashera\coordinatorlayout\CoordinatorLayoutImpl.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "AbstractBitFlagConverter.h"
 #include "AbstractEnumToIntConverter.h"
 #include "BaseHasWidgets.h"
@@ -31,6 +36,8 @@
 #include "ViewImpl.h"
 #include "WidgetAttribute.h"
 #include "WidgetFactory.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Float.h"
 #include "java/lang/Integer.h"
 #include "java/lang/Runnable.h"
 #include "java/lang/RuntimeException.h"
@@ -43,8 +50,11 @@
 #include "ASUIView.h"
 #include "HasLifeCycleDecorators.h"
 
-@protocol JavaUtilList;
-@protocol JavaUtilMap;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 #pragma clang diagnostic ignored "-Wprotocol"
@@ -113,12 +123,12 @@ J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_DodgeInsetEdge, mapping_, id<JavaUti
 
 @interface ASCoordinatorLayoutImpl_CoordinatorLayoutExt () {
  @public
-  __unsafe_unretained ASCoordinatorLayoutImpl *this$0_;
+  WEAK_ ASCoordinatorLayoutImpl *this$0_;
   ASMeasureEvent *measureFinished_;
   ASOnLayoutEvent *onLayoutEvent_;
   id<JavaUtilList> overlays_;
-  jint mMaxWidth_;
-  jint mMaxHeight_;
+  int32_t mMaxWidth_;
+  int32_t mMaxHeight_;
   id<JavaUtilMap> templates_;
 }
 
@@ -145,6 +155,7 @@ __attribute__((unused)) static void ASCoordinatorLayoutImpl_$Lambda$1_initWithAS
 __attribute__((unused)) static ASCoordinatorLayoutImpl_$Lambda$1 *new_ASCoordinatorLayoutImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASCoordinatorLayoutImpl_$Lambda$1 *create_ASCoordinatorLayoutImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0);
+
 
 NSString *ASCoordinatorLayoutImpl_LOCAL_NAME = @"androidx.coordinatorlayout.widget.CoordinatorLayout";
 NSString *ASCoordinatorLayoutImpl_GROUP_NAME = @"androidx.coordinatorlayout.widget.CoordinatorLayout";
@@ -207,16 +218,16 @@ J2OBJC_IGNORE_DESIGNATED_END
   return coordinatorLayout_;
 }
 
-- (jboolean)removeWithASIWidget:(id<ASIWidget>)w {
-  jboolean remove = [super removeWithASIWidget:w];
+- (bool)removeWithASIWidget:(id<ASIWidget>)w {
+  bool remove = [super removeWithASIWidget:w];
   [((ADXCoordinatorLayout *) nil_chk(coordinatorLayout_)) removeViewWithADView:(ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class])];
   ASCoordinatorLayoutImpl_nativeRemoveViewWithASIWidget_(self, w);
   return remove;
 }
 
-- (jboolean)removeWithInt:(jint)index {
+- (bool)removeWithInt:(int32_t)index {
   id<ASIWidget> widget = [((id<JavaUtilList>) nil_chk(widgets_)) getWithInt:index];
-  jboolean remove = [super removeWithInt:index];
+  bool remove = [super removeWithInt:index];
   if (index + 1 <= [((ADXCoordinatorLayout *) nil_chk(coordinatorLayout_)) getChildCount]) {
     [((ADXCoordinatorLayout *) nil_chk(coordinatorLayout_)) removeViewAtWithInt:index];
     ASCoordinatorLayoutImpl_nativeRemoveViewWithASIWidget_(self, widget);
@@ -229,7 +240,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
-                 withInt:(jint)index {
+                 withInt:(int32_t)index {
   if (index != -2) {
     ADView *view = (ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class]);
     ASCoordinatorLayoutImpl_createLayoutParamsWithADView_(self, view);
@@ -390,7 +401,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   return uiView_;
 }
 
-- (jboolean)checkIosVersionWithNSString:(NSString *)v {
+- (bool)checkIosVersionWithNSString:(NSString *)v {
   return ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending);
 }
 
@@ -436,7 +447,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (void)setVisibleWithBoolean:(jboolean)b {
+- (void)setVisibleWithBoolean:(bool)b {
   [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
@@ -598,8 +609,8 @@ void ASCoordinatorLayoutImpl_setBehaviorWithADXCoordinatorLayout_LayoutParams_wi
 void ASCoordinatorLayoutImpl_setKeyLinesWithId_(ASCoordinatorLayoutImpl *self, id objValue) {
   id<JavaUtilList> values = (id<JavaUtilList>) cast_check(objValue, JavaUtilList_class_());
   IOSIntArray *keyLines = [IOSIntArray newArrayWithLength:[((id<JavaUtilList>) nil_chk(values)) size]];
-  for (jint i = 0; i < [values size]; i++) {
-    jint obj = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([values getWithInt:i], [JavaLangInteger class]))) intValue];
+  for (int32_t i = 0; i < [values size]; i++) {
+    int32_t obj = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([values getWithInt:i], [JavaLangInteger class]))) intValue];
     *IOSIntArray_GetRef(keyLines, i) = JreFpToInt((obj * ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([((ADContext *) nil_chk([((ADXCoordinatorLayout *) nil_chk(self->coordinatorLayout_)) getContext])) getResources])) getDisplayMetrics]))->density_));
   }
   ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(self, keyLines);
@@ -614,6 +625,8 @@ void ASCoordinatorLayoutImpl_onChildViewsChanged(ASCoordinatorLayoutImpl *self) 
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl)
+
+J2OBJC_NAME_MAPPING(ASCoordinatorLayoutImpl, "com.ashera.coordinatorlayout", "AS")
 
 @implementation ASCoordinatorLayoutImpl_InsetEdge
 
@@ -659,13 +672,13 @@ void ASCoordinatorLayoutImpl_InsetEdge_init(ASCoordinatorLayoutImpl_InsetEdge *s
   ASAbstractEnumToIntConverter_init(self);
   self->mapping_ = new_JavaUtilHashMap_init();
   {
-    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"top" withId:JavaLangInteger_valueOfWithInt_((jint) 0x30)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"bottom" withId:JavaLangInteger_valueOfWithInt_((jint) 0x50)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"left" withId:JavaLangInteger_valueOfWithInt_((jint) 0x03)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"right" withId:JavaLangInteger_valueOfWithInt_((jint) 0x05)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"start" withId:JavaLangInteger_valueOfWithInt_((jint) 0x00800003)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((jint) 0x00800005)];
+    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"top" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x30)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"bottom" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x50)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"left" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x03)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"right" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x05)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"start" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x00800003)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x00800005)];
   }
 }
 
@@ -723,14 +736,14 @@ void ASCoordinatorLayoutImpl_DodgeInsetEdge_init(ASCoordinatorLayoutImpl_DodgeIn
   ASAbstractBitFlagConverter_init(self);
   self->mapping_ = new_JavaUtilHashMap_init();
   {
-    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"top" withId:JavaLangInteger_valueOfWithInt_((jint) 0x30)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"bottom" withId:JavaLangInteger_valueOfWithInt_((jint) 0x50)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"left" withId:JavaLangInteger_valueOfWithInt_((jint) 0x03)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"right" withId:JavaLangInteger_valueOfWithInt_((jint) 0x05)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"start" withId:JavaLangInteger_valueOfWithInt_((jint) 0x00800003)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((jint) 0x00800005)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"all" withId:JavaLangInteger_valueOfWithInt_((jint) 0x77)];
+    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"top" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x30)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"bottom" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x50)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"left" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x03)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"right" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x05)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"start" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x00800003)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x00800005)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"all" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x77)];
   }
 }
 
@@ -750,19 +763,19 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
   return this$0_;
 }
 
-- (void)setMaxWidthWithInt:(jint)width {
+- (void)setMaxWidthWithInt:(int32_t)width {
   mMaxWidth_ = width;
 }
 
-- (void)setMaxHeightWithInt:(jint)height {
+- (void)setMaxHeightWithInt:(int32_t)height {
   mMaxHeight_ = height;
 }
 
-- (jint)getMaxWidth {
+- (int32_t)getMaxWidth {
   return mMaxWidth_;
 }
 
-- (jint)getMaxHeight {
+- (int32_t)getMaxHeight {
   return mMaxHeight_;
 }
 
@@ -771,8 +784,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
   return self;
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
   if (mMaxWidth_ > 0) {
     widthMeasureSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(mMaxWidth_, ADView_MeasureSpec_AT_MOST);
   }
@@ -788,11 +801,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
   }
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b {
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b {
   [super onLayoutWithBoolean:changed withInt:l withInt:t withInt:r withInt:b];
   ASViewImpl_setDrawableBoundsWithASIWidget_withInt_withInt_withInt_withInt_(this$0_, l, t, r, b);
   if (![self isOverlay]) {
@@ -819,8 +832,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
           withNSObjectArray:(IOSObjectArray *)canvas {
 }
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height {
+- (void)updateMeasuredDimensionWithInt:(int32_t)width
+                               withInt:(int32_t)height {
   [self setMeasuredDimensionWithInt:width withInt:height];
 }
 
@@ -888,12 +901,12 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
   displayFrame->bottom_ = displayFrame->top_ + [self getHeight];
 }
 
-- (void)offsetTopAndBottomWithInt:(jint)offset {
+- (void)offsetTopAndBottomWithInt:(int32_t)offset {
   [super offsetTopAndBottomWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
 
-- (void)offsetLeftAndRightWithInt:(jint)offset {
+- (void)offsetLeftAndRightWithInt:(int32_t)offset {
   [super offsetLeftAndRightWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
@@ -923,13 +936,13 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
   [this$0_ setAttributeWithNSString:name withId:value withBoolean:!([value isKindOfClass:[NSString class]])];
 }
 
-- (void)setVisibilityWithInt:(jint)visibility {
+- (void)setVisibilityWithInt:(int32_t)visibility {
   [super setVisibilityWithInt:visibility];
   ASViewImpl_nativeSetVisibilityWithId_withBoolean_([this$0_ asNativeWidget], visibility != ADView_VISIBLE);
 }
 
 - (void)onLayoutChildWithADView:(ADView *)child
-                        withInt:(jint)layoutDirection {
+                        withInt:(int32_t)layoutDirection {
   [super onLayoutChildWithADView:child withInt:layoutDirection];
   if ([this$0_ isInitialised]) {
     [((ADXCoordinatorLayout *) nil_chk(this$0_->coordinatorLayout_)) onChildViewsChangedWithInt:0];

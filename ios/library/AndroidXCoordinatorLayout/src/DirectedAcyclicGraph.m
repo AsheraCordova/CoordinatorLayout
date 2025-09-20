@@ -3,18 +3,28 @@
 //  source: D:\Java\git\core-javafx-widget\AndroidXJCoordinatorLayout\src\main\java\androidx\coordinatorlayout\widget\DirectedAcyclicGraph.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "DirectedAcyclicGraph.h"
 #include "J2ObjC_source.h"
 #include "Pools.h"
 #include "SimpleArrayMap.h"
+#include "java/lang/Boolean.h"
 #include "java/lang/IllegalArgumentException.h"
+#include "java/lang/Integer.h"
 #include "java/lang/RuntimeException.h"
 #include "java/util/ArrayList.h"
 #include "java/util/HashSet.h"
 #include "java/util/List.h"
 
-@class JavaUtilArrayList;
-@class JavaUtilHashSet;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXDirectedAcyclicGraph () {
@@ -61,7 +71,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)containsWithId:(id)node {
+- (bool)containsWithId:(id)node {
   return [((ADXSimpleArrayMap *) nil_chk(mGraph_)) containsKeyWithId:node];
 }
 
@@ -94,7 +104,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 - (id<JavaUtilList>)getOutgoingEdgesWithId:(id)node {
   JavaUtilArrayList *result = nil;
-  for (jint i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
+  for (int32_t i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
     JavaUtilArrayList *edges = JreRetainedLocalValue([mGraph_ valueAtWithInt:i]);
     if (edges != nil && [edges containsWithId:node]) {
       if (result == nil) {
@@ -106,8 +116,8 @@ J2OBJC_IGNORE_DESIGNATED_END
   return result;
 }
 
-- (jboolean)hasOutgoingEdgesWithId:(id)node {
-  for (jint i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
+- (bool)hasOutgoingEdgesWithId:(id)node {
+  for (int32_t i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
     JavaUtilArrayList *edges = JreRetainedLocalValue([mGraph_ valueAtWithInt:i]);
     if (edges != nil && [edges containsWithId:node]) {
       return true;
@@ -117,7 +127,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)clear {
-  for (jint i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
+  for (int32_t i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
     JavaUtilArrayList *edges = JreRetainedLocalValue([mGraph_ valueAtWithInt:i]);
     if (edges != nil) {
       ADXDirectedAcyclicGraph_poolListWithJavaUtilArrayList_(self, edges);
@@ -129,7 +139,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (JavaUtilArrayList *)getSortedList {
   [((JavaUtilArrayList *) nil_chk(mSortResult_)) clear];
   [((JavaUtilHashSet *) nil_chk(mSortTmpMarked_)) clear];
-  for (jint i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
+  for (int32_t i = 0, size = [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size]; i < size; i++) {
     ADXDirectedAcyclicGraph_dfsWithId_withJavaUtilArrayList_withJavaUtilHashSet_(self, [mGraph_ keyAtWithInt:i], mSortResult_, mSortTmpMarked_);
   }
   return mSortResult_;
@@ -141,7 +151,7 @@ withJavaUtilHashSet:(JavaUtilHashSet *)tmpMarked {
   ADXDirectedAcyclicGraph_dfsWithId_withJavaUtilArrayList_withJavaUtilHashSet_(self, node, result, tmpMarked);
 }
 
-- (jint)size {
+- (int32_t)size {
   return [((ADXSimpleArrayMap *) nil_chk(mGraph_)) size];
 }
 
@@ -235,7 +245,7 @@ void ADXDirectedAcyclicGraph_dfsWithId_withJavaUtilArrayList_withJavaUtilHashSet
   [tmpMarked addWithId:node];
   JavaUtilArrayList *edges = [((ADXSimpleArrayMap *) nil_chk(self->mGraph_)) getWithId:node];
   if (edges != nil) {
-    for (jint i = 0, size = [edges size]; i < size; i++) {
+    for (int32_t i = 0, size = [edges size]; i < size; i++) {
       ADXDirectedAcyclicGraph_dfsWithId_withJavaUtilArrayList_withJavaUtilHashSet_(self, [edges getWithInt:i], result, tmpMarked);
     }
   }
@@ -257,3 +267,5 @@ void ADXDirectedAcyclicGraph_poolListWithJavaUtilArrayList_(ADXDirectedAcyclicGr
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXDirectedAcyclicGraph)
+
+J2OBJC_NAME_MAPPING(ADXDirectedAcyclicGraph, "androidx.coordinatorlayout.widget", "ADX")

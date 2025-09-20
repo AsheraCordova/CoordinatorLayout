@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-ios-widgets\IOSCoordinatorLayoutPlugin\src\main\java\com\ashera\coordinatorlayout\CoordinatorLayoutPlugin.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_CoordinatorLayoutPlugin")
@@ -39,6 +40,7 @@ FOUNDATION_EXPORT void ASCoordinatorLayoutPlugin_initPlugin(void);
 J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutPlugin)
 
 @compatibility_alias ComAsheraCoordinatorlayoutCoordinatorLayoutPlugin ASCoordinatorLayoutPlugin;
+
 
 #endif
 

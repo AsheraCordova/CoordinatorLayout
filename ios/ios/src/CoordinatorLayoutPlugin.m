@@ -3,12 +3,23 @@
 //  source: D:\Java\git\core-ios-widgets\IOSCoordinatorLayoutPlugin\src\main\java\com\ashera\coordinatorlayout\CoordinatorLayoutPlugin.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "CoordinatorLayoutImpl.h"
 #include "CoordinatorLayoutPlugin.h"
 #include "HideBottomViewOnScrollBehavior.h"
 #include "IBehavior.h"
 #include "J2ObjC_source.h"
 #include "WidgetFactory.h"
+
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ASCoordinatorLayoutPlugin_1 : NSObject < ASIBehavior >
@@ -26,6 +37,7 @@ __attribute__((unused)) static void ASCoordinatorLayoutPlugin_1_init(ASCoordinat
 __attribute__((unused)) static ASCoordinatorLayoutPlugin_1 *new_ASCoordinatorLayoutPlugin_1_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASCoordinatorLayoutPlugin_1 *create_ASCoordinatorLayoutPlugin_1_init(void);
+
 
 @implementation ASCoordinatorLayoutPlugin
 
@@ -77,6 +89,8 @@ void ASCoordinatorLayoutPlugin_initPlugin() {
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutPlugin)
 
+J2OBJC_NAME_MAPPING(ASCoordinatorLayoutPlugin, "com.ashera.coordinatorlayout", "AS")
+
 @implementation ASCoordinatorLayoutPlugin_1
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -102,7 +116,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[1].selector = @selector(newInstance);
   #pragma clang diagnostic pop
   static const void *ptrTable[] = { "LASCoordinatorLayoutPlugin;", "initPlugin" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutPlugin_1 = { "", "com.ashera.coordinatorlayout", ptrTable, methods, NULL, 7, 0x8018, 2, 0, 0, -1, 1, -1, -1 };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutPlugin_1 = { "", "com.ashera.coordinatorlayout", ptrTable, methods, NULL, 7, 0x8000, 2, 0, 0, -1, 1, -1, -1 };
   return &_ASCoordinatorLayoutPlugin_1;
 }
 

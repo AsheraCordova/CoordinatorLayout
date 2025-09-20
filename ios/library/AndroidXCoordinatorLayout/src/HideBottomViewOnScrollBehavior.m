@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\AndroidXJCoordinatorLayout\src\main\java\com\google\android\material\behavior\HideBottomViewOnScrollBehavior.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "Animator.h"
 #include "AnimatorListenerAdapter.h"
 #include "CoordinatorLayout.h"
@@ -16,30 +21,37 @@
 #include "View.h"
 #include "ViewCompat.h"
 #include "ViewGroup.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Integer.h"
+#include "java/lang/Long.h"
 #include "java/util/LinkedHashSet.h"
 
-@class JavaUtilLinkedHashSet;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXHideBottomViewOnScrollBehavior () {
  @public
   JavaUtilLinkedHashSet *onScrollStateChangedListeners_;
-  jint enterAnimDuration_;
-  jint exitAnimDuration_;
+  int32_t enterAnimDuration_;
+  int32_t exitAnimDuration_;
   id<ADTimeInterpolator> enterAnimInterpolator_;
   id<ADTimeInterpolator> exitAnimInterpolator_;
-  jint height_;
-  jint currentState_;
-  jint additionalHiddenOffsetY_;
+  int32_t height_;
+  int32_t currentState_;
+  int32_t additionalHiddenOffsetY_;
   ADAnimator *currentAnimator_;
 }
 
 - (void)updateCurrentStateWithADView:(ADView *)child
-                             withInt:(jint)state;
+                             withInt:(int32_t)state;
 
 - (void)animateChildToWithADView:(ADView *)child
-                         withInt:(jint)targetY
-                        withLong:(jlong)duration
+                         withInt:(int32_t)targetY
+                        withLong:(int64_t)duration
           withADTimeInterpolator:(id<ADTimeInterpolator>)interpolator;
 
 @end
@@ -49,17 +61,17 @@ J2OBJC_FIELD_SETTER(ADXHideBottomViewOnScrollBehavior, enterAnimInterpolator_, i
 J2OBJC_FIELD_SETTER(ADXHideBottomViewOnScrollBehavior, exitAnimInterpolator_, id<ADTimeInterpolator>)
 J2OBJC_FIELD_SETTER(ADXHideBottomViewOnScrollBehavior, currentAnimator_, ADAnimator *)
 
-inline jint ADXHideBottomViewOnScrollBehavior_get_DEFAULT_ENTER_ANIMATION_DURATION_MS(void);
+inline int32_t ADXHideBottomViewOnScrollBehavior_get_DEFAULT_ENTER_ANIMATION_DURATION_MS(void);
 #define ADXHideBottomViewOnScrollBehavior_DEFAULT_ENTER_ANIMATION_DURATION_MS 225
-J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, DEFAULT_ENTER_ANIMATION_DURATION_MS, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, DEFAULT_ENTER_ANIMATION_DURATION_MS, int32_t)
 
-inline jint ADXHideBottomViewOnScrollBehavior_get_DEFAULT_EXIT_ANIMATION_DURATION_MS(void);
+inline int32_t ADXHideBottomViewOnScrollBehavior_get_DEFAULT_EXIT_ANIMATION_DURATION_MS(void);
 #define ADXHideBottomViewOnScrollBehavior_DEFAULT_EXIT_ANIMATION_DURATION_MS 175
-J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, DEFAULT_EXIT_ANIMATION_DURATION_MS, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, DEFAULT_EXIT_ANIMATION_DURATION_MS, int32_t)
 
-__attribute__((unused)) static void ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, jint state);
+__attribute__((unused)) static void ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, int32_t state);
 
-__attribute__((unused)) static void ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, jint targetY, jlong duration, id<ADTimeInterpolator> interpolator);
+__attribute__((unused)) static void ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, int32_t targetY, int64_t duration, id<ADTimeInterpolator> interpolator);
 
 @interface ADXHideBottomViewOnScrollBehavior_1 : ADAnimatorListenerAdapter {
  @public
@@ -80,6 +92,7 @@ __attribute__((unused)) static ADXHideBottomViewOnScrollBehavior_1 *new_ADXHideB
 
 __attribute__((unused)) static ADXHideBottomViewOnScrollBehavior_1 *create_ADXHideBottomViewOnScrollBehavior_1_initWithADXHideBottomViewOnScrollBehavior_(ADXHideBottomViewOnScrollBehavior *outer$);
 
+
 @implementation ADXHideBottomViewOnScrollBehavior
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -89,9 +102,9 @@ J2OBJC_IGNORE_DESIGNATED_BEGIN
 }
 J2OBJC_IGNORE_DESIGNATED_END
 
-- (jboolean)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                       withADView:(ADView *)child
-                                          withInt:(jint)layoutDirection {
+- (bool)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                   withADView:(ADView *)child
+                                      withInt:(int32_t)layoutDirection {
   ADViewGroup_MarginLayoutParams *paramsCompat = (ADViewGroup_MarginLayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADViewGroup_MarginLayoutParams class]);
   height_ = [child getMeasuredHeight] + ((ADViewGroup_MarginLayoutParams *) nil_chk(paramsCompat))->bottomMargin_;
   enterAnimDuration_ = (ADXHideBottomViewOnScrollBehavior_DEFAULT_ENTER_ANIMATION_DURATION_MS);
@@ -102,30 +115,30 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)setAdditionalHiddenOffsetYWithADView:(ADView *)child
-                                     withInt:(jint)offset {
+                                     withInt:(int32_t)offset {
   additionalHiddenOffsetY_ = offset;
   if (currentState_ == ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_DOWN) {
     [((ADView *) nil_chk(child)) setTranslationYWithFloat:height_ + additionalHiddenOffsetY_];
   }
 }
 
-- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
-                                             withADView:(ADView *)child
-                                             withADView:(ADView *)directTargetChild
-                                             withADView:(ADView *)target
-                                                withInt:(jint)nestedScrollAxes
-                                                withInt:(jint)type {
+- (bool)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                         withADView:(ADView *)child
+                                         withADView:(ADView *)directTargetChild
+                                         withADView:(ADView *)target
+                                            withInt:(int32_t)nestedScrollAxes
+                                            withInt:(int32_t)type {
   return nestedScrollAxes == ADXViewCompat_SCROLL_AXIS_VERTICAL;
 }
 
 - (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                     withADView:(ADView *)child
                                     withADView:(ADView *)target
-                                       withInt:(jint)dxConsumed
-                                       withInt:(jint)dyConsumed
-                                       withInt:(jint)dxUnconsumed
-                                       withInt:(jint)dyUnconsumed
-                                       withInt:(jint)type
+                                       withInt:(int32_t)dxConsumed
+                                       withInt:(int32_t)dyConsumed
+                                       withInt:(int32_t)dxUnconsumed
+                                       withInt:(int32_t)dyUnconsumed
+                                       withInt:(int32_t)type
                                   withIntArray:(IOSIntArray *)consumed {
   if (dyConsumed > 0) {
     [self slideDownWithADView:child];
@@ -135,7 +148,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)isScrolledUp {
+- (bool)isScrolledUp {
   return currentState_ == ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_UP;
 }
 
@@ -144,7 +157,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)slideUpWithADView:(ADView *)child
-              withBoolean:(jboolean)animate {
+              withBoolean:(bool)animate {
   if ([self isScrolledUp]) {
     return;
   }
@@ -152,7 +165,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     [currentAnimator_ cancel];
   }
   ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(self, child, ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_UP);
-  jint targetTranslationY = 0;
+  int32_t targetTranslationY = 0;
   if (animate) {
     ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(self, child, targetTranslationY, enterAnimDuration_, enterAnimInterpolator_);
   }
@@ -161,7 +174,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)isScrolledDown {
+- (bool)isScrolledDown {
   return currentState_ == ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_DOWN;
 }
 
@@ -170,7 +183,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)slideDownWithADView:(ADView *)child
-                withBoolean:(jboolean)animate {
+                withBoolean:(bool)animate {
   if ([self isScrolledDown]) {
     return;
   }
@@ -178,7 +191,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     [currentAnimator_ cancel];
   }
   ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(self, child, ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_DOWN);
-  jint targetTranslationY = height_ + additionalHiddenOffsetY_;
+  int32_t targetTranslationY = height_ + additionalHiddenOffsetY_;
   if (animate) {
     ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(self, child, targetTranslationY, exitAnimDuration_, exitAnimInterpolator_);
   }
@@ -188,13 +201,13 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)updateCurrentStateWithADView:(ADView *)child
-                             withInt:(jint)state {
+                             withInt:(int32_t)state {
   ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(self, child, state);
 }
 
 - (void)animateChildToWithADView:(ADView *)child
-                         withInt:(jint)targetY
-                        withLong:(jlong)duration
+                         withInt:(int32_t)targetY
+                        withLong:(int64_t)duration
           withADTimeInterpolator:(id<ADTimeInterpolator>)interpolator {
   ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(self, child, targetY, duration, interpolator);
 }
@@ -278,15 +291,15 @@ ADXHideBottomViewOnScrollBehavior *create_ADXHideBottomViewOnScrollBehavior_init
   J2OBJC_CREATE_IMPL(ADXHideBottomViewOnScrollBehavior, init)
 }
 
-void ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, jint state) {
+void ADXHideBottomViewOnScrollBehavior_updateCurrentStateWithADView_withInt_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, int32_t state) {
   self->currentState_ = state;
   for (ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener * __strong listener in nil_chk(self->onScrollStateChangedListeners_)) {
     [((ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener *) nil_chk(listener)) onStateChangedWithId:child withInt:self->currentState_];
   }
 }
 
-void ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, jint targetY, jlong duration, id<ADTimeInterpolator> interpolator) {
-  JreStrongAssign(&self->currentAnimator_, ADObjectAnimator_ofFloatWithId_withNSString_withFloatArray_(child, @"translationY", [IOSFloatArray arrayWithFloats:(jfloat[]){ 0.0f, targetY } count:2]));
+void ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong_withADTimeInterpolator_(ADXHideBottomViewOnScrollBehavior *self, ADView *child, int32_t targetY, int64_t duration, id<ADTimeInterpolator> interpolator) {
+  JreStrongAssign(&self->currentAnimator_, ADObjectAnimator_ofFloatWithId_withNSString_withFloatArray_(child, @"translationY", [IOSFloatArray arrayWithFloats:(float[]){ 0.0f, targetY } count:2]));
   [((ADAnimator *) nil_chk(self->currentAnimator_)) setDurationWithLong:duration];
   [((ADAnimator *) nil_chk(self->currentAnimator_)) setInterpolatorWithADTimeInterpolator:interpolator];
   [((ADAnimator *) nil_chk(self->currentAnimator_)) addListenerWithADAnimator_AnimatorListener:create_ADXHideBottomViewOnScrollBehavior_1_initWithADXHideBottomViewOnScrollBehavior_(self)];
@@ -294,6 +307,8 @@ void ADXHideBottomViewOnScrollBehavior_animateChildToWithADView_withInt_withLong
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXHideBottomViewOnScrollBehavior)
+
+J2OBJC_NAME_MAPPING(ADXHideBottomViewOnScrollBehavior, "com.google.android.material.behavior", "ADX")
 
 @implementation ADXHideBottomViewOnScrollBehavior_1
 
@@ -326,7 +341,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXHideBottomViewOnScrollBehavior)
     { "this$0_", "LADXHideBottomViewOnScrollBehavior;", .constantValue.asLong = 0, 0x1012, -1, -1, 3, -1 },
   };
   static const void *ptrTable[] = { "LADXHideBottomViewOnScrollBehavior;", "onAnimationEnd", "LADAnimator;", "Lcom/google/android/material/behavior/HideBottomViewOnScrollBehavior<TV;>;", "animateChildToWithADView:withInt:withLong:withADTimeInterpolator:" };
-  static const J2ObjcClassInfo _ADXHideBottomViewOnScrollBehavior_1 = { "", "com.google.android.material.behavior", ptrTable, methods, fields, 7, 0x8010, 2, 1, 0, -1, 4, -1, -1 };
+  static const J2ObjcClassInfo _ADXHideBottomViewOnScrollBehavior_1 = { "", "com.google.android.material.behavior", ptrTable, methods, fields, 7, 0x8000, 2, 1, 0, -1, 4, -1, -1 };
   return &_ADXHideBottomViewOnScrollBehavior_1;
 }
 
@@ -355,7 +370,7 @@ J2OBJC_IGNORE_DESIGNATED_BEGIN
 J2OBJC_IGNORE_DESIGNATED_END
 
 - (void)onStateChangedWithId:(id)child
-                     withInt:(jint)currentState {
+                     withInt:(int32_t)currentState {
 }
 
 + (const J2ObjcClassInfo *)__metadata {

@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\AndroidXJCoordinatorLayout\src\main\java\androidx\coordinatorlayout\widget\DirectedAcyclicGraph.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_DirectedAcyclicGraph")
@@ -22,6 +23,8 @@
 #if !defined (ADXDirectedAcyclicGraph_) && (INCLUDE_ALL_DirectedAcyclicGraph || defined(INCLUDE_ADXDirectedAcyclicGraph))
 #define ADXDirectedAcyclicGraph_
 
+@class JavaLangBoolean;
+@class JavaLangInteger;
 @class JavaUtilArrayList;
 @protocol JavaUtilList;
 
@@ -59,7 +62,7 @@
 /*!
  @brief Returns true if the node is already present in the graph, false otherwise.
  */
-- (jboolean)containsWithId:(id)node;
+- (bool)containsWithId:(id)node;
 
 /*!
  @brief Get any incoming edges from the given node.
@@ -91,7 +94,7 @@
  @return <code>true</code> if the node has any outgoing edges, <code>false</code>
   otherwise.
  */
-- (jboolean)hasOutgoingEdgesWithId:(id)node;
+- (bool)hasOutgoingEdgesWithId:(id)node;
 
 #pragma mark Package-Private
 
@@ -104,7 +107,7 @@
 /*!
  @brief Returns the size of the graph
  */
-- (jint)size;
+- (int32_t)size;
 
 @end
 
@@ -119,6 +122,7 @@ FOUNDATION_EXPORT ADXDirectedAcyclicGraph *create_ADXDirectedAcyclicGraph_init(v
 J2OBJC_TYPE_LITERAL_HEADER(ADXDirectedAcyclicGraph)
 
 @compatibility_alias AndroidxCoordinatorlayoutWidgetDirectedAcyclicGraph ADXDirectedAcyclicGraph;
+
 
 #endif
 

@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\AndroidXJCoordinatorLayout\src\main\java\androidx\coordinatorlayout\widget\CoordinatorLayout.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "CoordinatorLayout.h"
 #include "DirectedAcyclicGraph.h"
 #include "Gravity.h"
@@ -19,14 +24,21 @@
 #include "ViewCompat.h"
 #include "ViewGroup.h"
 #include "ViewParent.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Float.h"
 #include "java/lang/IllegalArgumentException.h"
 #include "java/lang/IllegalStateException.h"
+#include "java/lang/Integer.h"
 #include "java/lang/Math.h"
 #include "java/util/ArrayList.h"
 #include "java/util/Collections.h"
 #include "java/util/List.h"
 
-@protocol JavaUtilList;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXCoordinatorLayout () {
@@ -35,13 +47,13 @@
   ADXDirectedAcyclicGraph *mChildDag_;
   IOSIntArray *mBehaviorConsumed_;
   IOSIntArray *mNestedScrollingV2ConsumedCompat_;
-  jboolean mDisallowInterceptReset_;
-  jboolean mIsAttachedToWindow_;
+  bool mDisallowInterceptReset_;
+  bool mIsAttachedToWindow_;
   IOSIntArray *mKeylines_;
   ADView *mNestedScrollingTarget_;
-  jboolean mNeedsPreDrawListener_;
+  bool mNeedsPreDrawListener_;
   ADXCoordinatorLayout_WindowInsetsCompat *mLastInsets_;
-  jboolean mDrawStatusBarBackground_;
+  bool mDrawStatusBarBackground_;
   ADXNestedScrollingParentHelper *mNestedScrollingParentHelper_;
 }
 
@@ -49,50 +61,50 @@
 
 + (void)releaseTempRectWithADRect:(ADRect *)rect;
 
-- (jint)getKeylineWithInt:(jint)index;
+- (int32_t)getKeylineWithInt:(int32_t)index;
 
 - (void)prepareChildren;
 
-- (void)getDesiredAnchoredChildRectWithoutConstraintsWithInt:(jint)layoutDirection
+- (void)getDesiredAnchoredChildRectWithoutConstraintsWithInt:(int32_t)layoutDirection
                                                   withADRect:(ADRect *)anchorRect
                                                   withADRect:(ADRect *)outArg
                        withADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)lp
-                                                     withInt:(jint)childWidth
-                                                     withInt:(jint)childHeight;
+                                                     withInt:(int32_t)childWidth
+                                                     withInt:(int32_t)childHeight;
 
 - (void)constrainChildRectWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)lp
                                                      withADRect:(ADRect *)outArg
-                                                        withInt:(jint)childWidth
-                                                        withInt:(jint)childHeight;
+                                                        withInt:(int32_t)childWidth
+                                                        withInt:(int32_t)childHeight;
 
 - (void)layoutChildWithAnchorWithADView:(ADView *)child
                              withADView:(ADView *)anchor
-                                withInt:(jint)layoutDirection;
+                                withInt:(int32_t)layoutDirection;
 
 - (void)layoutChildWithKeylineWithADView:(ADView *)child
-                                 withInt:(jint)keyline
-                                 withInt:(jint)layoutDirection;
+                                 withInt:(int32_t)keyline
+                                 withInt:(int32_t)layoutDirection;
 
 - (void)layoutChildWithADView:(ADView *)child
-                      withInt:(jint)layoutDirection;
+                      withInt:(int32_t)layoutDirection;
 
-+ (jint)resolveGravityWithInt:(jint)gravity;
++ (int32_t)resolveGravityWithInt:(int32_t)gravity;
 
-+ (jint)resolveKeylineGravityWithInt:(jint)gravity;
++ (int32_t)resolveKeylineGravityWithInt:(int32_t)gravity;
 
-+ (jint)resolveAnchoredChildGravityWithInt:(jint)gravity;
++ (int32_t)resolveAnchoredChildGravityWithInt:(int32_t)gravity;
 
 - (void)offsetChildByInsetWithADView:(ADView *)child
                           withADRect:(ADRect *)inset
-                             withInt:(jint)layoutDirection;
+                             withInt:(int32_t)layoutDirection;
 
 - (void)setInsetOffsetXWithADView:(ADView *)child
-                          withInt:(jint)offsetX;
+                          withInt:(int32_t)offsetX;
 
 - (void)setInsetOffsetYWithADView:(ADView *)child
-                          withInt:(jint)offsetY;
+                          withInt:(int32_t)offsetY;
 
-- (jboolean)hasDependenciesWithADView:(ADView *)child;
+- (bool)hasDependenciesWithADView:(ADView *)child;
 
 @end
 
@@ -105,13 +117,13 @@ J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mNestedScrollingTarget_, ADView *)
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mLastInsets_, ADXCoordinatorLayout_WindowInsetsCompat *)
 J2OBJC_FIELD_SETTER(ADXCoordinatorLayout, mNestedScrollingParentHelper_, ADXNestedScrollingParentHelper *)
 
-inline jint ADXCoordinatorLayout_get_TYPE_ON_INTERCEPT(void);
+inline int32_t ADXCoordinatorLayout_get_TYPE_ON_INTERCEPT(void);
 #define ADXCoordinatorLayout_TYPE_ON_INTERCEPT 0
-J2OBJC_STATIC_FIELD_CONSTANT(ADXCoordinatorLayout, TYPE_ON_INTERCEPT, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXCoordinatorLayout, TYPE_ON_INTERCEPT, int32_t)
 
-inline jint ADXCoordinatorLayout_get_TYPE_ON_TOUCH(void);
+inline int32_t ADXCoordinatorLayout_get_TYPE_ON_TOUCH(void);
 #define ADXCoordinatorLayout_TYPE_ON_TOUCH 1
-J2OBJC_STATIC_FIELD_CONSTANT(ADXCoordinatorLayout, TYPE_ON_TOUCH, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXCoordinatorLayout, TYPE_ON_TOUCH, int32_t)
 
 inline id<ADPools_Pool> ADXCoordinatorLayout_get_sRectPool(void);
 static id<ADPools_Pool> ADXCoordinatorLayout_sRectPool;
@@ -121,35 +133,35 @@ __attribute__((unused)) static ADRect *ADXCoordinatorLayout_acquireTempRect(void
 
 __attribute__((unused)) static void ADXCoordinatorLayout_releaseTempRectWithADRect_(ADRect *rect);
 
-__attribute__((unused)) static jint ADXCoordinatorLayout_getKeylineWithInt_(ADXCoordinatorLayout *self, jint index);
+__attribute__((unused)) static int32_t ADXCoordinatorLayout_getKeylineWithInt_(ADXCoordinatorLayout *self, int32_t index);
 
 __attribute__((unused)) static void ADXCoordinatorLayout_prepareChildren(ADXCoordinatorLayout *self);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(ADXCoordinatorLayout *self, jint layoutDirection, ADRect *anchorRect, ADRect *outArg, ADXCoordinatorLayout_LayoutParams *lp, jint childWidth, jint childHeight);
+__attribute__((unused)) static void ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(ADXCoordinatorLayout *self, int32_t layoutDirection, ADRect *anchorRect, ADRect *outArg, ADXCoordinatorLayout_LayoutParams *lp, int32_t childWidth, int32_t childHeight);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(ADXCoordinatorLayout *self, ADXCoordinatorLayout_LayoutParams *lp, ADRect *outArg, jint childWidth, jint childHeight);
+__attribute__((unused)) static void ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(ADXCoordinatorLayout *self, ADXCoordinatorLayout_LayoutParams *lp, ADRect *outArg, int32_t childWidth, int32_t childHeight);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(ADXCoordinatorLayout *self, ADView *child, ADView *anchor, jint layoutDirection);
+__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(ADXCoordinatorLayout *self, ADView *child, ADView *anchor, int32_t layoutDirection);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(ADXCoordinatorLayout *self, ADView *child, jint keyline, jint layoutDirection);
+__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t keyline, int32_t layoutDirection);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint layoutDirection);
+__attribute__((unused)) static void ADXCoordinatorLayout_layoutChildWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t layoutDirection);
 
-__attribute__((unused)) static jint ADXCoordinatorLayout_resolveGravityWithInt_(jint gravity);
+__attribute__((unused)) static int32_t ADXCoordinatorLayout_resolveGravityWithInt_(int32_t gravity);
 
-__attribute__((unused)) static jint ADXCoordinatorLayout_resolveKeylineGravityWithInt_(jint gravity);
+__attribute__((unused)) static int32_t ADXCoordinatorLayout_resolveKeylineGravityWithInt_(int32_t gravity);
 
-__attribute__((unused)) static jint ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(jint gravity);
+__attribute__((unused)) static int32_t ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(int32_t gravity);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, jint type);
+__attribute__((unused)) static void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, int32_t type);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, jint layoutDirection);
+__attribute__((unused)) static void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, int32_t layoutDirection);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetX);
+__attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t offsetX);
 
-__attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetY);
+__attribute__((unused)) static void ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t offsetY);
 
-__attribute__((unused)) static jboolean ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *self, ADView *child);
+__attribute__((unused)) static bool ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *self, ADView *child);
 
 @interface ADXCoordinatorLayout_AttachedBehavior : NSObject
 
@@ -157,28 +169,28 @@ __attribute__((unused)) static jboolean ADXCoordinatorLayout_hasDependenciesWith
 
 @interface ADXCoordinatorLayout_LayoutParams () {
  @public
-  jboolean mDidBlockInteraction_;
-  jboolean mDidAcceptNestedScrollTouch_;
-  jboolean mDidAcceptNestedScrollNonTouch_;
-  jboolean mDidChangeAfterNestedScroll_;
+  bool mDidBlockInteraction_;
+  bool mDidAcceptNestedScrollTouch_;
+  bool mDidAcceptNestedScrollNonTouch_;
+  bool mDidChangeAfterNestedScroll_;
 }
 
 - (void)resolveAnchorViewWithADView:(ADView *)forChild
            withADXCoordinatorLayout:(ADXCoordinatorLayout *)parent;
 
-- (jboolean)verifyAnchorViewWithADView:(ADView *)forChild
-              withADXCoordinatorLayout:(ADXCoordinatorLayout *)parent;
+- (bool)verifyAnchorViewWithADView:(ADView *)forChild
+          withADXCoordinatorLayout:(ADXCoordinatorLayout *)parent;
 
-- (jboolean)shouldDodgeWithADView:(ADView *)other
-                          withInt:(jint)layoutDirection;
+- (bool)shouldDodgeWithADView:(ADView *)other
+                      withInt:(int32_t)layoutDirection;
 
 @end
 
 __attribute__((unused)) static void ADXCoordinatorLayout_LayoutParams_resolveAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent);
 
-__attribute__((unused)) static jboolean ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent);
+__attribute__((unused)) static bool ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent);
 
-__attribute__((unused)) static jboolean ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(ADXCoordinatorLayout_LayoutParams *self, ADView *other, jint layoutDirection);
+__attribute__((unused)) static bool ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(ADXCoordinatorLayout_LayoutParams *self, ADView *other, int32_t layoutDirection);
 
 J2OBJC_INITIALIZED_DEFN(ADXCoordinatorLayout)
 
@@ -201,7 +213,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   ADXCoordinatorLayout_releaseTempRectWithADRect_(rect);
 }
 
-- (jint)getKeylineWithInt:(jint)index {
+- (int32_t)getKeylineWithInt:(int32_t)index {
   return ADXCoordinatorLayout_getKeylineWithInt_(self, index);
 }
 
@@ -215,44 +227,44 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)onMeasureChildWithADView:(ADView *)child
-                         withInt:(jint)parentWidthMeasureSpec
-                         withInt:(jint)widthUsed
-                         withInt:(jint)parentHeightMeasureSpec
-                         withInt:(jint)heightUsed {
+                         withInt:(int32_t)parentWidthMeasureSpec
+                         withInt:(int32_t)widthUsed
+                         withInt:(int32_t)parentHeightMeasureSpec
+                         withInt:(int32_t)heightUsed {
   [self measureChildWithMarginsWithADView:child withInt:parentWidthMeasureSpec withInt:widthUsed withInt:parentHeightMeasureSpec withInt:heightUsed];
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
   ADXCoordinatorLayout_prepareChildren(self);
   [self ensurePreDrawListener];
-  jint paddingLeft = [self getPaddingLeft];
-  jint paddingTop = [self getPaddingTop];
-  jint paddingRight = [self getPaddingRight];
-  jint paddingBottom = [self getPaddingBottom];
-  jint layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
-  jboolean isRtl = layoutDirection == ADXViewCompat_LAYOUT_DIRECTION_RTL;
-  jint widthMode = ADView_MeasureSpec_getModeWithInt_(widthMeasureSpec);
-  jint widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
-  jint heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
-  jint heightSize = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
-  jint widthPadding = paddingLeft + paddingRight;
-  jint heightPadding = paddingTop + paddingBottom;
-  jint widthUsed = [self getSuggestedMinimumWidth];
-  jint heightUsed = [self getSuggestedMinimumHeight];
-  jint childState = 0;
-  jboolean applyInsets = mLastInsets_ != nil && ADXViewCompat_getFitsSystemWindowsWithADView_(self);
-  jint childCount = [((id<JavaUtilList>) nil_chk(mDependencySortedChildren_)) size];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t paddingLeft = [self getPaddingLeft];
+  int32_t paddingTop = [self getPaddingTop];
+  int32_t paddingRight = [self getPaddingRight];
+  int32_t paddingBottom = [self getPaddingBottom];
+  int32_t layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
+  bool isRtl = layoutDirection == ADXViewCompat_LAYOUT_DIRECTION_RTL;
+  int32_t widthMode = ADView_MeasureSpec_getModeWithInt_(widthMeasureSpec);
+  int32_t widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
+  int32_t heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
+  int32_t heightSize = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
+  int32_t widthPadding = paddingLeft + paddingRight;
+  int32_t heightPadding = paddingTop + paddingBottom;
+  int32_t widthUsed = [self getSuggestedMinimumWidth];
+  int32_t heightUsed = [self getSuggestedMinimumHeight];
+  int32_t childState = 0;
+  bool applyInsets = mLastInsets_ != nil && ADXViewCompat_getFitsSystemWindowsWithADView_(self);
+  int32_t childCount = [((id<JavaUtilList>) nil_chk(mDependencySortedChildren_)) size];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [mDependencySortedChildren_ getWithInt:i];
     if ([((ADView *) nil_chk(child)) getVisibility] == ADView_GONE) {
       continue;
     }
     ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([child getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-    jint keylineWidthUsed = 0;
+    int32_t keylineWidthUsed = 0;
     if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->keyline_ >= 0 && widthMode != ADView_MeasureSpec_UNSPECIFIED) {
-      jint keylinePos = ADXCoordinatorLayout_getKeylineWithInt_(self, lp->keyline_);
-      jint keylineGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveKeylineGravityWithInt_(lp->gravity_), layoutDirection) & ADGravity_HORIZONTAL_GRAVITY_MASK;
+      int32_t keylinePos = ADXCoordinatorLayout_getKeylineWithInt_(self, lp->keyline_);
+      int32_t keylineGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveKeylineGravityWithInt_(lp->gravity_), layoutDirection) & ADGravity_HORIZONTAL_GRAVITY_MASK;
       if ((keylineGravity == ADGravity_LEFT && !isRtl) || (keylineGravity == ADGravity_RIGHT && isRtl)) {
         keylineWidthUsed = JavaLangMath_maxWithInt_withInt_(0, widthSize - paddingRight - keylinePos);
       }
@@ -260,11 +272,11 @@ J2OBJC_IGNORE_DESIGNATED_END
         keylineWidthUsed = JavaLangMath_maxWithInt_withInt_(0, keylinePos - paddingLeft);
       }
     }
-    jint childWidthMeasureSpec = widthMeasureSpec;
-    jint childHeightMeasureSpec = heightMeasureSpec;
+    int32_t childWidthMeasureSpec = widthMeasureSpec;
+    int32_t childHeightMeasureSpec = heightMeasureSpec;
     if (applyInsets && !ADXViewCompat_getFitsSystemWindowsWithADView_(child)) {
-      jint horizInsets = [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetLeft] + [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetRight];
-      jint vertInsets = [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetTop] + [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetBottom];
+      int32_t horizInsets = [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetLeft] + [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetRight];
+      int32_t vertInsets = [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetTop] + [((ADXCoordinatorLayout_WindowInsetsCompat *) nil_chk(mLastInsets_)) getSystemWindowInsetBottom];
       childWidthMeasureSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(widthSize - horizInsets, widthMode);
       childHeightMeasureSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(heightSize - vertInsets, heightMode);
     }
@@ -276,13 +288,13 @@ J2OBJC_IGNORE_DESIGNATED_END
     heightUsed = JavaLangMath_maxWithInt_withInt_(heightUsed, heightPadding + [child getMeasuredHeight] + lp->topMargin_ + lp->bottomMargin_);
     childState = ADView_combineMeasuredStatesWithInt_withInt_(childState, [child getMeasuredState]);
   }
-  jint width = ADView_resolveSizeAndStateWithInt_withInt_withInt_(widthUsed, widthMeasureSpec, childState & ADView_MEASURED_STATE_MASK);
-  jint height = ADView_resolveSizeAndStateWithInt_withInt_withInt_(heightUsed, heightMeasureSpec, JreLShift32(childState, ADView_MEASURED_HEIGHT_STATE_SHIFT));
+  int32_t width = ADView_resolveSizeAndStateWithInt_withInt_withInt_(widthUsed, widthMeasureSpec, childState & ADView_MEASURED_STATE_MASK);
+  int32_t height = ADView_resolveSizeAndStateWithInt_withInt_withInt_(heightUsed, heightMeasureSpec, JreLShift32(childState, ADView_MEASURED_HEIGHT_STATE_SHIFT));
   [self setMeasuredDimensionWithInt:width withInt:height];
 }
 
 - (void)onLayoutChildWithADView:(ADView *)child
-                        withInt:(jint)layoutDirection {
+                        withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
   if ([((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) checkAnchorChanged]) {
     @throw create_JavaLangIllegalStateException_initWithNSString_(@"An anchor may not be changed after CoordinatorLayout measurement begins before layout is complete.");
@@ -298,14 +310,14 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b {
-  jint layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
-  jint childCount = [((id<JavaUtilList>) nil_chk(mDependencySortedChildren_)) size];
-  for (jint i = 0; i < childCount; i++) {
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b {
+  int32_t layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
+  int32_t childCount = [((id<JavaUtilList>) nil_chk(mDependencySortedChildren_)) size];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [mDependencySortedChildren_ getWithInt:i];
     if ([((ADView *) nil_chk(child)) getVisibility] == ADView_GONE) {
       continue;
@@ -331,7 +343,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)getChildRectWithADView:(ADView *)child
-                   withBoolean:(jboolean)transform
+                   withBoolean:(bool)transform
                     withADRect:(ADRect *)outArg {
   if ([((ADView *) nil_chk(child)) isLayoutRequested] || [child getVisibility] == ADView_GONE) {
     [((ADRect *) nil_chk(outArg)) setEmpty];
@@ -345,86 +357,86 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (void)getDesiredAnchoredChildRectWithoutConstraintsWithInt:(jint)layoutDirection
+- (void)getDesiredAnchoredChildRectWithoutConstraintsWithInt:(int32_t)layoutDirection
                                                   withADRect:(ADRect *)anchorRect
                                                   withADRect:(ADRect *)outArg
                        withADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)lp
-                                                     withInt:(jint)childWidth
-                                                     withInt:(jint)childHeight {
+                                                     withInt:(int32_t)childWidth
+                                                     withInt:(int32_t)childHeight {
   ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(self, layoutDirection, anchorRect, outArg, lp, childWidth, childHeight);
 }
 
 - (void)constrainChildRectWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)lp
                                                      withADRect:(ADRect *)outArg
-                                                        withInt:(jint)childWidth
-                                                        withInt:(jint)childHeight {
+                                                        withInt:(int32_t)childWidth
+                                                        withInt:(int32_t)childHeight {
   ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(self, lp, outArg, childWidth, childHeight);
 }
 
 - (void)getDesiredAnchoredChildRectWithADView:(ADView *)child
-                                      withInt:(jint)layoutDirection
+                                      withInt:(int32_t)layoutDirection
                                    withADRect:(ADRect *)anchorRect
                                    withADRect:(ADRect *)outArg {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-  jint childWidth = [child getMeasuredWidth];
-  jint childHeight = [child getMeasuredHeight];
+  int32_t childWidth = [child getMeasuredWidth];
+  int32_t childHeight = [child getMeasuredHeight];
   ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(self, layoutDirection, anchorRect, outArg, lp, childWidth, childHeight);
   ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(self, lp, outArg, childWidth, childHeight);
 }
 
 - (void)layoutChildWithAnchorWithADView:(ADView *)child
                              withADView:(ADView *)anchor
-                                withInt:(jint)layoutDirection {
+                                withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(self, child, anchor, layoutDirection);
 }
 
 - (void)layoutChildWithKeylineWithADView:(ADView *)child
-                                 withInt:(jint)keyline
-                                 withInt:(jint)layoutDirection {
+                                 withInt:(int32_t)keyline
+                                 withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(self, child, keyline, layoutDirection);
 }
 
 - (void)layoutChildWithADView:(ADView *)child
-                      withInt:(jint)layoutDirection {
+                      withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_layoutChildWithADView_withInt_(self, child, layoutDirection);
 }
 
-+ (jint)resolveGravityWithInt:(jint)gravity {
++ (int32_t)resolveGravityWithInt:(int32_t)gravity {
   return ADXCoordinatorLayout_resolveGravityWithInt_(gravity);
 }
 
-+ (jint)resolveKeylineGravityWithInt:(jint)gravity {
++ (int32_t)resolveKeylineGravityWithInt:(int32_t)gravity {
   return ADXCoordinatorLayout_resolveKeylineGravityWithInt_(gravity);
 }
 
-+ (jint)resolveAnchoredChildGravityWithInt:(jint)gravity {
++ (int32_t)resolveAnchoredChildGravityWithInt:(int32_t)gravity {
   return ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(gravity);
 }
 
-- (void)onChildViewsChangedWithInt:(jint)type {
+- (void)onChildViewsChangedWithInt:(int32_t)type {
   ADXCoordinatorLayout_onChildViewsChangedWithInt_(self, type);
 }
 
 - (void)offsetChildByInsetWithADView:(ADView *)child
                           withADRect:(ADRect *)inset
-                             withInt:(jint)layoutDirection {
+                             withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(self, child, inset, layoutDirection);
 }
 
 - (void)setInsetOffsetXWithADView:(ADView *)child
-                          withInt:(jint)offsetX {
+                          withInt:(int32_t)offsetX {
   ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(self, child, offsetX);
 }
 
 - (void)setInsetOffsetYWithADView:(ADView *)child
-                          withInt:(jint)offsetY {
+                          withInt:(int32_t)offsetY {
   ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(self, child, offsetY);
 }
 
 - (void)dispatchDependentViewsChangedWithADView:(ADView *)view {
   id<JavaUtilList> dependents = [((ADXDirectedAcyclicGraph *) nil_chk(mChildDag_)) getIncomingEdgesInternalWithId:view];
   if (dependents != nil && ![dependents isEmpty]) {
-    for (jint i = 0; i < [dependents size]; i++) {
+    for (int32_t i = 0; i < [dependents size]; i++) {
       ADView *child = [dependents getWithInt:i];
       ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
       ADXCoordinatorLayout_Behavior *b = JreRetainedLocalValue([((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) getBehavior]);
@@ -441,9 +453,9 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)ensurePreDrawListener {
-  jboolean hasDependencies = false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  bool hasDependencies = false;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [self getChildAtWithInt:i];
     if (ADXCoordinatorLayout_hasDependenciesWithADView_(self, child)) {
       hasDependencies = true;
@@ -460,12 +472,12 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)hasDependenciesWithADView:(ADView *)child {
+- (bool)hasDependenciesWithADView:(ADView *)child {
   return ADXCoordinatorLayout_hasDependenciesWithADView_(self, child);
 }
 
 - (void)offsetChildToAnchorWithADView:(ADView *)child
-                              withInt:(jint)layoutDirection {
+                              withInt:(int32_t)layoutDirection {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
   if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mAnchorView_ != nil) {
     ADRect *anchorRect = ADXCoordinatorLayout_acquireTempRect();
@@ -473,13 +485,13 @@ J2OBJC_IGNORE_DESIGNATED_END
     ADRect *desiredChildRect = ADXCoordinatorLayout_acquireTempRect();
     [self getDescendantRectWithADView:lp->mAnchorView_ withADRect:anchorRect];
     [self getChildRectWithADView:child withBoolean:false withADRect:childRect];
-    jint childWidth = [child getMeasuredWidth];
-    jint childHeight = [child getMeasuredHeight];
+    int32_t childWidth = [child getMeasuredWidth];
+    int32_t childHeight = [child getMeasuredHeight];
     ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(self, layoutDirection, anchorRect, desiredChildRect, lp, childWidth, childHeight);
-    jboolean changed = ((ADRect *) nil_chk(desiredChildRect))->left_ != ((ADRect *) nil_chk(childRect))->left_ || desiredChildRect->top_ != childRect->top_;
+    bool changed = ((ADRect *) nil_chk(desiredChildRect))->left_ != ((ADRect *) nil_chk(childRect))->left_ || desiredChildRect->top_ != childRect->top_;
     ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(self, lp, desiredChildRect, childWidth, childHeight);
-    jint dx = desiredChildRect->left_ - childRect->left_;
-    jint dy = desiredChildRect->top_ - childRect->top_;
+    int32_t dx = desiredChildRect->left_ - childRect->left_;
+    int32_t dy = desiredChildRect->top_ - childRect->top_;
     if (dx != 0) {
       ADXViewCompat_offsetLeftAndRightWithADView_withInt_(child, dx);
     }
@@ -498,19 +510,19 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)onStartNestedScrollWithADView:(ADView *)child
-                               withADView:(ADView *)target
-                                  withInt:(jint)nestedScrollAxes {
+- (bool)onStartNestedScrollWithADView:(ADView *)child
+                           withADView:(ADView *)target
+                              withInt:(int32_t)nestedScrollAxes {
   return [self onStartNestedScrollWithADView:child withADView:target withInt:nestedScrollAxes withInt:ADXViewCompat_TYPE_TOUCH];
 }
 
-- (jboolean)onStartNestedScrollWithADView:(ADView *)child
-                               withADView:(ADView *)target
-                                  withInt:(jint)axes
-                                  withInt:(jint)type {
-  jboolean handled = false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+- (bool)onStartNestedScrollWithADView:(ADView *)child
+                           withADView:(ADView *)target
+                              withInt:(int32_t)axes
+                              withInt:(int32_t)type {
+  bool handled = false;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
       continue;
@@ -518,7 +530,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([view getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
     ADXCoordinatorLayout_Behavior *viewBehavior = [((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) getBehavior];
     if (viewBehavior != nil) {
-      jboolean accepted = [viewBehavior onStartNestedScrollWithADXCoordinatorLayout:self withADView:view withADView:child withADView:target withInt:axes withInt:type];
+      bool accepted = [viewBehavior onStartNestedScrollWithADXCoordinatorLayout:self withADView:view withADView:child withADView:target withInt:axes withInt:type];
       handled |= accepted;
       [lp setNestedScrollAcceptedWithInt:type withBoolean:accepted];
     }
@@ -531,18 +543,18 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 - (void)onNestedScrollAcceptedWithADView:(ADView *)child
                               withADView:(ADView *)target
-                                 withInt:(jint)axes {
+                                 withInt:(int32_t)axes {
   [self onNestedScrollAcceptedWithADView:child withADView:target withInt:axes withInt:ADXViewCompat_TYPE_TOUCH];
 }
 
 - (void)onNestedScrollAcceptedWithADView:(ADView *)child
                               withADView:(ADView *)target
-                                 withInt:(jint)axes
-                                 withInt:(jint)type {
+                                 withInt:(int32_t)axes
+                                 withInt:(int32_t)type {
   [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) onNestedScrollAcceptedWithADView:child withADView:target withInt:axes withInt:type];
   JreStrongAssign(&mNestedScrollingTarget_, target);
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(view)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
     if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
@@ -560,10 +572,10 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)onStopNestedScrollWithADView:(ADView *)target
-                             withInt:(jint)type {
+                             withInt:(int32_t)type {
   [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) onStopNestedScrollWithADView:target withInt:type];
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(view)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
     if (![((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) isNestedScrollAcceptedWithInt:type]) {
@@ -580,34 +592,34 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)onNestedScrollWithADView:(ADView *)target
-                         withInt:(jint)dxConsumed
-                         withInt:(jint)dyConsumed
-                         withInt:(jint)dxUnconsumed
-                         withInt:(jint)dyUnconsumed {
+                         withInt:(int32_t)dxConsumed
+                         withInt:(int32_t)dyConsumed
+                         withInt:(int32_t)dxUnconsumed
+                         withInt:(int32_t)dyUnconsumed {
   [self onNestedScrollWithADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:ADXViewCompat_TYPE_TOUCH];
 }
 
 - (void)onNestedScrollWithADView:(ADView *)target
-                         withInt:(jint)dxConsumed
-                         withInt:(jint)dyConsumed
-                         withInt:(jint)dxUnconsumed
-                         withInt:(jint)dyUnconsumed
-                         withInt:(jint)type {
+                         withInt:(int32_t)dxConsumed
+                         withInt:(int32_t)dyConsumed
+                         withInt:(int32_t)dxUnconsumed
+                         withInt:(int32_t)dyUnconsumed
+                         withInt:(int32_t)type {
   [self onNestedScrollWithADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed withInt:ADXViewCompat_TYPE_TOUCH withIntArray:mNestedScrollingV2ConsumedCompat_];
 }
 
 - (void)onNestedScrollWithADView:(ADView *)target
-                         withInt:(jint)dxConsumed
-                         withInt:(jint)dyConsumed
-                         withInt:(jint)dxUnconsumed
-                         withInt:(jint)dyUnconsumed
-                         withInt:(jint)type
+                         withInt:(int32_t)dxConsumed
+                         withInt:(int32_t)dyConsumed
+                         withInt:(int32_t)dxUnconsumed
+                         withInt:(int32_t)dyUnconsumed
+                         withInt:(int32_t)type
                     withIntArray:(IOSIntArray *)consumed {
-  jint childCount = [self getChildCount];
-  jboolean accepted = false;
-  jint xConsumed = 0;
-  jint yConsumed = 0;
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  bool accepted = false;
+  int32_t xConsumed = 0;
+  int32_t yConsumed = 0;
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
       continue;
@@ -634,22 +646,22 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)onNestedPreScrollWithADView:(ADView *)target
-                            withInt:(jint)dx
-                            withInt:(jint)dy
+                            withInt:(int32_t)dx
+                            withInt:(int32_t)dy
                        withIntArray:(IOSIntArray *)consumed {
   [self onNestedPreScrollWithADView:target withInt:dx withInt:dy withIntArray:consumed withInt:ADXViewCompat_TYPE_TOUCH];
 }
 
 - (void)onNestedPreScrollWithADView:(ADView *)target
-                            withInt:(jint)dx
-                            withInt:(jint)dy
+                            withInt:(int32_t)dx
+                            withInt:(int32_t)dy
                        withIntArray:(IOSIntArray *)consumed
-                            withInt:(jint)type {
-  jint xConsumed = 0;
-  jint yConsumed = 0;
-  jboolean accepted = false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+                            withInt:(int32_t)type {
+  int32_t xConsumed = 0;
+  int32_t yConsumed = 0;
+  bool accepted = false;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
       continue;
@@ -675,13 +687,13 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (jboolean)onNestedFlingWithADView:(ADView *)target
-                          withFloat:(jfloat)velocityX
-                          withFloat:(jfloat)velocityY
-                        withBoolean:(jboolean)consumed {
-  jboolean handled = false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+- (bool)onNestedFlingWithADView:(ADView *)target
+                      withFloat:(float)velocityX
+                      withFloat:(float)velocityY
+                    withBoolean:(bool)consumed {
+  bool handled = false;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
       continue;
@@ -701,12 +713,12 @@ J2OBJC_IGNORE_DESIGNATED_END
   return handled;
 }
 
-- (jboolean)onNestedPreFlingWithADView:(ADView *)target
-                             withFloat:(jfloat)velocityX
-                             withFloat:(jfloat)velocityY {
-  jboolean handled = false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+- (bool)onNestedPreFlingWithADView:(ADView *)target
+                         withFloat:(float)velocityX
+                         withFloat:(float)velocityY {
+  bool handled = false;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *view = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(view)) getVisibility] == ADView_GONE) {
       continue;
@@ -723,7 +735,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   return handled;
 }
 
-- (jint)getNestedScrollAxes {
+- (int32_t)getNestedScrollAxes {
   return [((ADXNestedScrollingParentHelper *) nil_chk(mNestedScrollingParentHelper_)) getNestedScrollAxes];
 }
 
@@ -937,7 +949,7 @@ void ADXCoordinatorLayout_releaseTempRectWithADRect_(ADRect *rect) {
   [((id<ADPools_Pool>) nil_chk(ADXCoordinatorLayout_sRectPool)) release__WithId:rect];
 }
 
-jint ADXCoordinatorLayout_getKeylineWithInt_(ADXCoordinatorLayout *self, jint index) {
+int32_t ADXCoordinatorLayout_getKeylineWithInt_(ADXCoordinatorLayout *self, int32_t index) {
   if (self->mKeylines_ == nil) {
     ADLog_eWithNSString_withNSString_(ADXCoordinatorLayout_TAG, JreStrcat("$@$I", @"No keylines defined for ", self, @" - attempted index lookup ", index));
     return 0;
@@ -952,12 +964,12 @@ jint ADXCoordinatorLayout_getKeylineWithInt_(ADXCoordinatorLayout *self, jint in
 void ADXCoordinatorLayout_prepareChildren(ADXCoordinatorLayout *self) {
   [((id<JavaUtilList>) nil_chk(self->mDependencySortedChildren_)) clear];
   [((ADXDirectedAcyclicGraph *) nil_chk(self->mChildDag_)) clear];
-  for (jint i = 0, count = [self getChildCount]; i < count; i++) {
+  for (int32_t i = 0, count = [self getChildCount]; i < count; i++) {
     ADView *view = [self getChildAtWithInt:i];
     ADXCoordinatorLayout_LayoutParams *lp = [self getResolvedLayoutParamsWithADView:view];
     [((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp)) findAnchorViewWithADXCoordinatorLayout:self withADView:view];
     [self->mChildDag_ addNodeWithId:view];
-    for (jint j = 0; j < count; j++) {
+    for (int32_t j = 0; j < count; j++) {
       if (j == i) {
         continue;
       }
@@ -974,15 +986,15 @@ void ADXCoordinatorLayout_prepareChildren(ADXCoordinatorLayout *self) {
   JavaUtilCollections_reverseWithJavaUtilList_(self->mDependencySortedChildren_);
 }
 
-void ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(ADXCoordinatorLayout *self, jint layoutDirection, ADRect *anchorRect, ADRect *outArg, ADXCoordinatorLayout_LayoutParams *lp, jint childWidth, jint childHeight) {
-  jint absGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->gravity_), layoutDirection);
-  jint absAnchorGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveGravityWithInt_(lp->anchorGravity_), layoutDirection);
-  jint hgrav = absGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
-  jint vgrav = absGravity & ADGravity_VERTICAL_GRAVITY_MASK;
-  jint anchorHgrav = absAnchorGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
-  jint anchorVgrav = absAnchorGravity & ADGravity_VERTICAL_GRAVITY_MASK;
-  jint left;
-  jint top;
+void ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_withADRect_withADRect_withADXCoordinatorLayout_LayoutParams_withInt_withInt_(ADXCoordinatorLayout *self, int32_t layoutDirection, ADRect *anchorRect, ADRect *outArg, ADXCoordinatorLayout_LayoutParams *lp, int32_t childWidth, int32_t childHeight) {
+  int32_t absGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->gravity_), layoutDirection);
+  int32_t absAnchorGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveGravityWithInt_(lp->anchorGravity_), layoutDirection);
+  int32_t hgrav = absGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
+  int32_t vgrav = absGravity & ADGravity_VERTICAL_GRAVITY_MASK;
+  int32_t anchorHgrav = absAnchorGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
+  int32_t anchorVgrav = absAnchorGravity & ADGravity_VERTICAL_GRAVITY_MASK;
+  int32_t left;
+  int32_t top;
   switch (anchorHgrav) {
     default:
     case ADGravity_LEFT:
@@ -1032,15 +1044,15 @@ void ADXCoordinatorLayout_getDesiredAnchoredChildRectWithoutConstraintsWithInt_w
   [((ADRect *) nil_chk(outArg)) setWithInt:left withInt:top withInt:left + childWidth withInt:top + childHeight];
 }
 
-void ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(ADXCoordinatorLayout *self, ADXCoordinatorLayout_LayoutParams *lp, ADRect *outArg, jint childWidth, jint childHeight) {
-  jint width = [self getWidth];
-  jint height = [self getHeight];
-  jint left = JavaLangMath_maxWithInt_withInt_([self getPaddingLeft] + ((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->leftMargin_, JavaLangMath_minWithInt_withInt_(((ADRect *) nil_chk(outArg))->left_, width - [self getPaddingRight] - childWidth - lp->rightMargin_));
-  jint top = JavaLangMath_maxWithInt_withInt_([self getPaddingTop] + lp->topMargin_, JavaLangMath_minWithInt_withInt_(outArg->top_, height - [self getPaddingBottom] - childHeight - lp->bottomMargin_));
+void ADXCoordinatorLayout_constrainChildRectWithADXCoordinatorLayout_LayoutParams_withADRect_withInt_withInt_(ADXCoordinatorLayout *self, ADXCoordinatorLayout_LayoutParams *lp, ADRect *outArg, int32_t childWidth, int32_t childHeight) {
+  int32_t width = [self getWidth];
+  int32_t height = [self getHeight];
+  int32_t left = JavaLangMath_maxWithInt_withInt_([self getPaddingLeft] + ((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->leftMargin_, JavaLangMath_minWithInt_withInt_(((ADRect *) nil_chk(outArg))->left_, width - [self getPaddingRight] - childWidth - lp->rightMargin_));
+  int32_t top = JavaLangMath_maxWithInt_withInt_([self getPaddingTop] + lp->topMargin_, JavaLangMath_minWithInt_withInt_(outArg->top_, height - [self getPaddingBottom] - childHeight - lp->bottomMargin_));
   [outArg setWithInt:left withInt:top withInt:left + childWidth withInt:top + childHeight];
 }
 
-void ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(ADXCoordinatorLayout *self, ADView *child, ADView *anchor, jint layoutDirection) {
+void ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(ADXCoordinatorLayout *self, ADView *child, ADView *anchor, int32_t layoutDirection) {
   ADRect *anchorRect = ADXCoordinatorLayout_acquireTempRect();
   ADRect *childRect = ADXCoordinatorLayout_acquireTempRect();
   @try {
@@ -1054,20 +1066,20 @@ void ADXCoordinatorLayout_layoutChildWithAnchorWithADView_withADView_withInt_(AD
   }
 }
 
-void ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(ADXCoordinatorLayout *self, ADView *child, jint keyline, jint layoutDirection) {
+void ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t keyline, int32_t layoutDirection) {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-  jint absGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveKeylineGravityWithInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->gravity_), layoutDirection);
-  jint hgrav = absGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
-  jint vgrav = absGravity & ADGravity_VERTICAL_GRAVITY_MASK;
-  jint width = [self getWidth];
-  jint height = [self getHeight];
-  jint childWidth = [child getMeasuredWidth];
-  jint childHeight = [child getMeasuredHeight];
+  int32_t absGravity = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(ADXCoordinatorLayout_resolveKeylineGravityWithInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->gravity_), layoutDirection);
+  int32_t hgrav = absGravity & ADGravity_HORIZONTAL_GRAVITY_MASK;
+  int32_t vgrav = absGravity & ADGravity_VERTICAL_GRAVITY_MASK;
+  int32_t width = [self getWidth];
+  int32_t height = [self getHeight];
+  int32_t childWidth = [child getMeasuredWidth];
+  int32_t childHeight = [child getMeasuredHeight];
   if (layoutDirection == ADXViewCompat_LAYOUT_DIRECTION_RTL) {
     keyline = width - keyline;
   }
-  jint left = ADXCoordinatorLayout_getKeylineWithInt_(self, keyline) - childWidth;
-  jint top = 0;
+  int32_t left = ADXCoordinatorLayout_getKeylineWithInt_(self, keyline) - childWidth;
+  int32_t top = 0;
   switch (hgrav) {
     default:
     case ADGravity_LEFT:
@@ -1095,7 +1107,7 @@ void ADXCoordinatorLayout_layoutChildWithKeylineWithADView_withInt_withInt_(ADXC
   [child layoutWithInt:left withInt:top withInt:left + childWidth withInt:top + childHeight];
 }
 
-void ADXCoordinatorLayout_layoutChildWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint layoutDirection) {
+void ADXCoordinatorLayout_layoutChildWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t layoutDirection) {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
   ADRect *parent = ADXCoordinatorLayout_acquireTempRect();
   [((ADRect *) nil_chk(parent)) setWithInt:[self getPaddingLeft] + ((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->leftMargin_ withInt:[self getPaddingTop] + lp->topMargin_ withInt:[self getWidth] - [self getPaddingRight] - lp->rightMargin_ withInt:[self getHeight] - [self getPaddingBottom] - lp->bottomMargin_];
@@ -1112,7 +1124,7 @@ void ADXCoordinatorLayout_layoutChildWithADView_withInt_(ADXCoordinatorLayout *s
   ADXCoordinatorLayout_releaseTempRectWithADRect_(out);
 }
 
-jint ADXCoordinatorLayout_resolveGravityWithInt_(jint gravity) {
+int32_t ADXCoordinatorLayout_resolveGravityWithInt_(int32_t gravity) {
   ADXCoordinatorLayout_initialize();
   if ((gravity & ADGravity_HORIZONTAL_GRAVITY_MASK) == ADGravity_NO_GRAVITY) {
     gravity |= ADXGravityCompat_START;
@@ -1123,37 +1135,37 @@ jint ADXCoordinatorLayout_resolveGravityWithInt_(jint gravity) {
   return gravity;
 }
 
-jint ADXCoordinatorLayout_resolveKeylineGravityWithInt_(jint gravity) {
+int32_t ADXCoordinatorLayout_resolveKeylineGravityWithInt_(int32_t gravity) {
   ADXCoordinatorLayout_initialize();
   return gravity == ADGravity_NO_GRAVITY ? ADXGravityCompat_END | ADGravity_TOP : gravity;
 }
 
-jint ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(jint gravity) {
+int32_t ADXCoordinatorLayout_resolveAnchoredChildGravityWithInt_(int32_t gravity) {
   ADXCoordinatorLayout_initialize();
   return gravity == ADGravity_NO_GRAVITY ? ADGravity_CENTER : gravity;
 }
 
-void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, jint type) {
-  jint layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
-  jint childCount = [((id<JavaUtilList>) nil_chk(self->mDependencySortedChildren_)) size];
+void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self, int32_t type) {
+  int32_t layoutDirection = ADXViewCompat_getLayoutDirectionWithADView_(self);
+  int32_t childCount = [((id<JavaUtilList>) nil_chk(self->mDependencySortedChildren_)) size];
   ADRect *inset = ADXCoordinatorLayout_acquireTempRect();
   ADRect *drawRect = ADXCoordinatorLayout_acquireTempRect();
   ADRect *lastDrawRect = ADXCoordinatorLayout_acquireTempRect();
-  for (jint i = 0; i < childCount; i++) {
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [self->mDependencySortedChildren_ getWithInt:i];
     ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
     if (type == ADXCoordinatorLayout_EVENT_PRE_DRAW && [child getVisibility] == ADView_GONE) {
       continue;
     }
-    for (jint j = 0; j < i; j++) {
+    for (int32_t j = 0; j < i; j++) {
       ADView *checkChild = [self->mDependencySortedChildren_ getWithInt:j];
-      if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mAnchorDirectChild_ == checkChild) {
+      if (JreObjectEqualsEquals(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mAnchorDirectChild_, checkChild)) {
         [self offsetChildToAnchorWithADView:child withInt:layoutDirection];
       }
     }
     [self getChildRectWithADView:child withBoolean:true withADRect:drawRect];
     if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->insetEdge_ != ADGravity_NO_GRAVITY && ![((ADRect *) nil_chk(drawRect)) isEmpty]) {
-      jint absInsetEdge = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->insetEdge_, layoutDirection);
+      int32_t absInsetEdge = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->insetEdge_, layoutDirection);
       switch (absInsetEdge & ADGravity_VERTICAL_GRAVITY_MASK) {
         case ADGravity_TOP:
         ((ADRect *) nil_chk(inset))->top_ = JavaLangMath_maxWithInt_withInt_(inset->top_, ((ADRect *) nil_chk(drawRect))->bottom_);
@@ -1181,7 +1193,7 @@ void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self
       }
       [self recordLastChildRectWithADView:child withADRect:drawRect];
     }
-    for (jint j = i + 1; j < childCount; j++) {
+    for (int32_t j = i + 1; j < childCount; j++) {
       ADView *checkChild = [self->mDependencySortedChildren_ getWithInt:j];
       ADXCoordinatorLayout_LayoutParams *checkLp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(checkChild)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
       ADXCoordinatorLayout_Behavior *b = [((ADXCoordinatorLayout_LayoutParams *) nil_chk(checkLp)) getBehavior];
@@ -1190,7 +1202,7 @@ void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self
           [checkLp resetChangedAfterNestedScroll];
           continue;
         }
-        jboolean handled;
+        bool handled;
         switch (type) {
           case ADXCoordinatorLayout_EVENT_VIEW_REMOVED:
           [b onDependentViewRemovedWithADXCoordinatorLayout:self withADView:checkChild withADView:child];
@@ -1211,7 +1223,7 @@ void ADXCoordinatorLayout_onChildViewsChangedWithInt_(ADXCoordinatorLayout *self
   ADXCoordinatorLayout_releaseTempRectWithADRect_(lastDrawRect);
 }
 
-void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, jint layoutDirection) {
+void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCoordinatorLayout *self, ADView *child, ADRect *inset, int32_t layoutDirection) {
   if (!ADXViewCompat_isLaidOutWithADView_(child)) {
     return;
   }
@@ -1236,17 +1248,17 @@ void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCo
     ADXCoordinatorLayout_releaseTempRectWithADRect_(dodgeRect);
     return;
   }
-  jint absDodgeInsetEdges = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->dodgeInsetEdges_, layoutDirection);
-  jboolean offsetY = false;
+  int32_t absDodgeInsetEdges = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(lp->dodgeInsetEdges_, layoutDirection);
+  bool offsetY = false;
   if ((absDodgeInsetEdges & ADGravity_TOP) == ADGravity_TOP) {
-    jint distance = dodgeRect->top_ - lp->topMargin_ - lp->mInsetOffsetY_;
+    int32_t distance = dodgeRect->top_ - lp->topMargin_ - lp->mInsetOffsetY_;
     if (distance < ((ADRect *) nil_chk(inset))->top_) {
       ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(self, child, inset->top_ - distance);
       offsetY = true;
     }
   }
   if ((absDodgeInsetEdges & ADGravity_BOTTOM) == ADGravity_BOTTOM) {
-    jint distance = [self getHeight] - dodgeRect->bottom_ - lp->bottomMargin_ + lp->mInsetOffsetY_;
+    int32_t distance = [self getHeight] - dodgeRect->bottom_ - lp->bottomMargin_ + lp->mInsetOffsetY_;
     if (distance < ((ADRect *) nil_chk(inset))->bottom_) {
       ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(self, child, distance - inset->bottom_);
       offsetY = true;
@@ -1255,16 +1267,16 @@ void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCo
   if (!offsetY) {
     ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(self, child, 0);
   }
-  jboolean offsetX = false;
+  bool offsetX = false;
   if ((absDodgeInsetEdges & ADGravity_LEFT) == ADGravity_LEFT) {
-    jint distance = dodgeRect->left_ - lp->leftMargin_ - lp->mInsetOffsetX_;
+    int32_t distance = dodgeRect->left_ - lp->leftMargin_ - lp->mInsetOffsetX_;
     if (distance < ((ADRect *) nil_chk(inset))->left_) {
       ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(self, child, inset->left_ - distance);
       offsetX = true;
     }
   }
   if ((absDodgeInsetEdges & ADGravity_RIGHT) == ADGravity_RIGHT) {
-    jint distance = [self getWidth] - dodgeRect->right_ - lp->rightMargin_ + lp->mInsetOffsetX_;
+    int32_t distance = [self getWidth] - dodgeRect->right_ - lp->rightMargin_ + lp->mInsetOffsetX_;
     if (distance < ((ADRect *) nil_chk(inset))->right_) {
       ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(self, child, distance - inset->right_);
       offsetX = true;
@@ -1276,29 +1288,31 @@ void ADXCoordinatorLayout_offsetChildByInsetWithADView_withADRect_withInt_(ADXCo
   ADXCoordinatorLayout_releaseTempRectWithADRect_(dodgeRect);
 }
 
-void ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetX) {
+void ADXCoordinatorLayout_setInsetOffsetXWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t offsetX) {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
   if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mInsetOffsetX_ != offsetX) {
-    jint dx = offsetX - lp->mInsetOffsetX_;
+    int32_t dx = offsetX - lp->mInsetOffsetX_;
     ADXViewCompat_offsetLeftAndRightWithADView_withInt_(child, dx);
     lp->mInsetOffsetX_ = offsetX;
   }
 }
 
-void ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, jint offsetY) {
+void ADXCoordinatorLayout_setInsetOffsetYWithADView_withInt_(ADXCoordinatorLayout *self, ADView *child, int32_t offsetY) {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
   if (((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->mInsetOffsetY_ != offsetY) {
-    jint dy = offsetY - lp->mInsetOffsetY_;
+    int32_t dy = offsetY - lp->mInsetOffsetY_;
     ADXViewCompat_offsetTopAndBottomWithADView_withInt_(child, dy);
     lp->mInsetOffsetY_ = offsetY;
   }
 }
 
-jboolean ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *self, ADView *child) {
+bool ADXCoordinatorLayout_hasDependenciesWithADView_(ADXCoordinatorLayout *self, ADView *child) {
   return [((ADXDirectedAcyclicGraph *) nil_chk(self->mChildDag_)) hasOutgoingEdgesWithId:child];
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout)
+
+J2OBJC_NAME_MAPPING(ADXCoordinatorLayout, "androidx.coordinatorlayout.widget", "ADX")
 
 @implementation ADXCoordinatorLayout_AttachedBehavior
 
@@ -1335,15 +1349,15 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)onDetachedFromLayoutParams {
 }
 
-- (jboolean)layoutDependsOnWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                         withADView:(ADView *)child
-                                         withADView:(ADView *)dependency {
+- (bool)layoutDependsOnWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                     withADView:(ADView *)child
+                                     withADView:(ADView *)dependency {
   return false;
 }
 
-- (jboolean)onDependentViewChangedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                                withADView:(ADView *)child
-                                                withADView:(ADView *)dependency {
+- (bool)onDependentViewChangedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                            withADView:(ADView *)child
+                                            withADView:(ADView *)dependency {
   return false;
 }
 
@@ -1352,35 +1366,35 @@ J2OBJC_IGNORE_DESIGNATED_END
                                             withADView:(ADView *)dependency {
 }
 
-- (jboolean)onMeasureChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                        withADView:(ADView *)child
-                                           withInt:(jint)parentWidthMeasureSpec
-                                           withInt:(jint)widthUsed
-                                           withInt:(jint)parentHeightMeasureSpec
-                                           withInt:(jint)heightUsed {
+- (bool)onMeasureChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                    withADView:(ADView *)child
+                                       withInt:(int32_t)parentWidthMeasureSpec
+                                       withInt:(int32_t)widthUsed
+                                       withInt:(int32_t)parentHeightMeasureSpec
+                                       withInt:(int32_t)heightUsed {
   return false;
 }
 
-- (jboolean)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                       withADView:(ADView *)child
-                                          withInt:(jint)layoutDirection {
+- (bool)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                   withADView:(ADView *)child
+                                      withInt:(int32_t)layoutDirection {
   return false;
 }
 
-- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
-                                             withADView:(ADView *)child
-                                             withADView:(ADView *)directTargetChild
-                                             withADView:(ADView *)target
-                                                withInt:(jint)axes {
+- (bool)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                         withADView:(ADView *)child
+                                         withADView:(ADView *)directTargetChild
+                                         withADView:(ADView *)target
+                                            withInt:(int32_t)axes {
   return false;
 }
 
-- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
-                                             withADView:(ADView *)child
-                                             withADView:(ADView *)directTargetChild
-                                             withADView:(ADView *)target
-                                                withInt:(jint)axes
-                                                withInt:(jint)type {
+- (bool)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                         withADView:(ADView *)child
+                                         withADView:(ADView *)directTargetChild
+                                         withADView:(ADView *)target
+                                            withInt:(int32_t)axes
+                                            withInt:(int32_t)type {
   if (type == ADXViewCompat_TYPE_TOUCH) {
     return [self onStartNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:directTargetChild withADView:target withInt:axes];
   }
@@ -1391,15 +1405,15 @@ J2OBJC_IGNORE_DESIGNATED_END
                                             withADView:(ADView *)child
                                             withADView:(ADView *)directTargetChild
                                             withADView:(ADView *)target
-                                               withInt:(jint)axes {
+                                               withInt:(int32_t)axes {
 }
 
 - (void)onNestedScrollAcceptedWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                             withADView:(ADView *)child
                                             withADView:(ADView *)directTargetChild
                                             withADView:(ADView *)target
-                                               withInt:(jint)axes
-                                               withInt:(jint)type {
+                                               withInt:(int32_t)axes
+                                               withInt:(int32_t)type {
   if (type == ADXViewCompat_TYPE_TOUCH) {
     [self onNestedScrollAcceptedWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:directTargetChild withADView:target withInt:axes];
   }
@@ -1413,7 +1427,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)onStopNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                         withADView:(ADView *)child
                                         withADView:(ADView *)target
-                                           withInt:(jint)type {
+                                           withInt:(int32_t)type {
   if (type == ADXViewCompat_TYPE_TOUCH) {
     [self onStopNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target];
   }
@@ -1422,20 +1436,20 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                     withADView:(ADView *)child
                                     withADView:(ADView *)target
-                                       withInt:(jint)dxConsumed
-                                       withInt:(jint)dyConsumed
-                                       withInt:(jint)dxUnconsumed
-                                       withInt:(jint)dyUnconsumed {
+                                       withInt:(int32_t)dxConsumed
+                                       withInt:(int32_t)dyConsumed
+                                       withInt:(int32_t)dxUnconsumed
+                                       withInt:(int32_t)dyUnconsumed {
 }
 
 - (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                     withADView:(ADView *)child
                                     withADView:(ADView *)target
-                                       withInt:(jint)dxConsumed
-                                       withInt:(jint)dyConsumed
-                                       withInt:(jint)dxUnconsumed
-                                       withInt:(jint)dyUnconsumed
-                                       withInt:(jint)type {
+                                       withInt:(int32_t)dxConsumed
+                                       withInt:(int32_t)dyConsumed
+                                       withInt:(int32_t)dxUnconsumed
+                                       withInt:(int32_t)dyUnconsumed
+                                       withInt:(int32_t)type {
   if (type == ADXViewCompat_TYPE_TOUCH) {
     [self onNestedScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target withInt:dxConsumed withInt:dyConsumed withInt:dxUnconsumed withInt:dyUnconsumed];
   }
@@ -1444,11 +1458,11 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                     withADView:(ADView *)child
                                     withADView:(ADView *)target
-                                       withInt:(jint)dxConsumed
-                                       withInt:(jint)dyConsumed
-                                       withInt:(jint)dxUnconsumed
-                                       withInt:(jint)dyUnconsumed
-                                       withInt:(jint)type
+                                       withInt:(int32_t)dxConsumed
+                                       withInt:(int32_t)dyConsumed
+                                       withInt:(int32_t)dxUnconsumed
+                                       withInt:(int32_t)dyUnconsumed
+                                       withInt:(int32_t)type
                                   withIntArray:(IOSIntArray *)consumed {
   *IOSIntArray_GetRef(nil_chk(consumed), 0) += dxUnconsumed;
   *IOSIntArray_GetRef(consumed, 1) += dyUnconsumed;
@@ -1458,43 +1472,43 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                        withADView:(ADView *)child
                                        withADView:(ADView *)target
-                                          withInt:(jint)dx
-                                          withInt:(jint)dy
+                                          withInt:(int32_t)dx
+                                          withInt:(int32_t)dy
                                      withIntArray:(IOSIntArray *)consumed {
 }
 
 - (void)onNestedPreScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                        withADView:(ADView *)child
                                        withADView:(ADView *)target
-                                          withInt:(jint)dx
-                                          withInt:(jint)dy
+                                          withInt:(int32_t)dx
+                                          withInt:(int32_t)dy
                                      withIntArray:(IOSIntArray *)consumed
-                                          withInt:(jint)type {
+                                          withInt:(int32_t)type {
   if (type == ADXViewCompat_TYPE_TOUCH) {
     [self onNestedPreScrollWithADXCoordinatorLayout:coordinatorLayout withADView:child withADView:target withInt:dx withInt:dy withIntArray:consumed];
   }
 }
 
-- (jboolean)onNestedFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+- (bool)onNestedFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                   withADView:(ADView *)child
+                                   withADView:(ADView *)target
+                                    withFloat:(float)velocityX
+                                    withFloat:(float)velocityY
+                                  withBoolean:(bool)consumed {
+  return false;
+}
+
+- (bool)onNestedPreFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                      withADView:(ADView *)child
+                                      withADView:(ADView *)target
+                                       withFloat:(float)velocityX
+                                       withFloat:(float)velocityY {
+  return false;
+}
+
+- (bool)getInsetDodgeRectWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
                                        withADView:(ADView *)child
-                                       withADView:(ADView *)target
-                                        withFloat:(jfloat)velocityX
-                                        withFloat:(jfloat)velocityY
-                                      withBoolean:(jboolean)consumed {
-  return false;
-}
-
-- (jboolean)onNestedPreFlingWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
-                                          withADView:(ADView *)child
-                                          withADView:(ADView *)target
-                                           withFloat:(jfloat)velocityX
-                                           withFloat:(jfloat)velocityY {
-  return false;
-}
-
-- (jboolean)getInsetDodgeRectWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                           withADView:(ADView *)child
-                                           withADRect:(ADRect *)rect {
+                                       withADRect:(ADRect *)rect {
   return false;
 }
 
@@ -1564,8 +1578,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
 
 @implementation ADXCoordinatorLayout_LayoutParams
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height {
   ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(self, width, height);
   return self;
 }
@@ -1580,11 +1594,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   return self;
 }
 
-- (jint)getAnchorId {
+- (int32_t)getAnchorId {
   return mAnchorId_;
 }
 
-- (void)setAnchorIdWithInt:(jint)id_ {
+- (void)setAnchorIdWithInt:(int32_t)id_ {
   [self invalidateAnchor];
   mAnchorId_ = id_;
 }
@@ -1594,7 +1608,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
 }
 
 - (void)setBehaviorWithADXCoordinatorLayout_Behavior:(ADXCoordinatorLayout_Behavior *)behavior {
-  if (mBehavior_ != behavior) {
+  if (!JreObjectEqualsEquals(mBehavior_, behavior)) {
     if (mBehavior_ != nil) {
       [mBehavior_ onDetachedFromLayoutParams];
     }
@@ -1615,16 +1629,16 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   return mLastChildRect_;
 }
 
-- (jboolean)checkAnchorChanged {
+- (bool)checkAnchorChanged {
   return mAnchorView_ == nil && mAnchorId_ != ADView_NO_ID;
 }
 
-- (void)resetNestedScrollWithInt:(jint)type {
+- (void)resetNestedScrollWithInt:(int32_t)type {
   [self setNestedScrollAcceptedWithInt:type withBoolean:false];
 }
 
-- (void)setNestedScrollAcceptedWithInt:(jint)type
-                           withBoolean:(jboolean)accept {
+- (void)setNestedScrollAcceptedWithInt:(int32_t)type
+                           withBoolean:(bool)accept {
   switch (type) {
     case ADXViewCompat_TYPE_TOUCH:
     mDidAcceptNestedScrollTouch_ = accept;
@@ -1635,7 +1649,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   }
 }
 
-- (jboolean)isNestedScrollAcceptedWithInt:(jint)type {
+- (bool)isNestedScrollAcceptedWithInt:(int32_t)type {
   switch (type) {
     case ADXViewCompat_TYPE_TOUCH:
     return mDidAcceptNestedScrollTouch_;
@@ -1645,11 +1659,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   return false;
 }
 
-- (jboolean)getChangedAfterNestedScroll {
+- (bool)getChangedAfterNestedScroll {
   return mDidChangeAfterNestedScroll_;
 }
 
-- (void)setChangedAfterNestedScrollWithBoolean:(jboolean)changed {
+- (void)setChangedAfterNestedScrollWithBoolean:(bool)changed {
   mDidChangeAfterNestedScroll_ = changed;
 }
 
@@ -1657,10 +1671,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   mDidChangeAfterNestedScroll_ = false;
 }
 
-- (jboolean)dependsOnWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                   withADView:(ADView *)child
-                                   withADView:(ADView *)dependency {
-  return dependency == mAnchorDirectChild_ || ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(self, dependency, ADXViewCompat_getLayoutDirectionWithADView_(parent)) || (mBehavior_ != nil && [mBehavior_ layoutDependsOnWithADXCoordinatorLayout:parent withADView:child withADView:dependency]);
+- (bool)dependsOnWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                               withADView:(ADView *)child
+                               withADView:(ADView *)dependency {
+  return JreObjectEqualsEquals(dependency, mAnchorDirectChild_) || ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(self, dependency, ADXViewCompat_getLayoutDirectionWithADView_(parent)) || (mBehavior_ != nil && [mBehavior_ layoutDependsOnWithADXCoordinatorLayout:parent withADView:child withADView:dependency]);
 }
 
 - (void)invalidateAnchor {
@@ -1684,13 +1698,13 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
   ADXCoordinatorLayout_LayoutParams_resolveAnchorViewWithADView_withADXCoordinatorLayout_(self, forChild, parent);
 }
 
-- (jboolean)verifyAnchorViewWithADView:(ADView *)forChild
-              withADXCoordinatorLayout:(ADXCoordinatorLayout *)parent {
+- (bool)verifyAnchorViewWithADView:(ADView *)forChild
+          withADXCoordinatorLayout:(ADXCoordinatorLayout *)parent {
   return ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoordinatorLayout_(self, forChild, parent);
 }
 
-- (jboolean)shouldDodgeWithADView:(ADView *)other
-                          withInt:(jint)layoutDirection {
+- (bool)shouldDodgeWithADView:(ADView *)other
+                      withInt:(int32_t)layoutDirection {
   return ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(self, other, layoutDirection);
 }
 
@@ -1781,7 +1795,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_Behavior)
 
 @end
 
-void ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(ADXCoordinatorLayout_LayoutParams *self, jint width, jint height) {
+void ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(ADXCoordinatorLayout_LayoutParams *self, int32_t width, int32_t height) {
   ADViewGroup_MarginLayoutParams_initWithInt_withInt_(self, width, height);
   self->mBehaviorResolved_ = false;
   self->gravity_ = ADGravity_NO_GRAVITY;
@@ -1793,11 +1807,11 @@ void ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(ADXCoordinatorLayout
   JreStrongAssignAndConsume(&self->mLastChildRect_, new_ADRect_init());
 }
 
-ADXCoordinatorLayout_LayoutParams *new_ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXCoordinatorLayout_LayoutParams *new_ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_NEW_IMPL(ADXCoordinatorLayout_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-ADXCoordinatorLayout_LayoutParams *create_ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXCoordinatorLayout_LayoutParams *create_ADXCoordinatorLayout_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_CREATE_IMPL(ADXCoordinatorLayout_LayoutParams, initWithInt_withInt_, width, height)
 }
 
@@ -1844,7 +1858,7 @@ ADXCoordinatorLayout_LayoutParams *create_ADXCoordinatorLayout_LayoutParams_init
 void ADXCoordinatorLayout_LayoutParams_resolveAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent) {
   JreStrongAssign(&self->mAnchorView_, [((ADXCoordinatorLayout *) nil_chk(parent)) findViewByIdWithInt:self->mAnchorId_]);
   if (self->mAnchorView_ != nil) {
-    if (self->mAnchorView_ == parent) {
+    if (JreObjectEqualsEquals(self->mAnchorView_, parent)) {
       if ([parent isInEditMode]) {
         JreStrongAssign(&self->mAnchorView_, JreStrongAssign(&self->mAnchorDirectChild_, nil));
         return;
@@ -1852,8 +1866,8 @@ void ADXCoordinatorLayout_LayoutParams_resolveAnchorViewWithADView_withADXCoordi
       @throw create_JavaLangIllegalStateException_initWithNSString_(@"View can not be anchored to the the parent CoordinatorLayout");
     }
     ADView *directChild = JreRetainedLocalValue(self->mAnchorView_);
-    for (id<ADViewParent> p = JreRetainedLocalValue([self->mAnchorView_ getParent]); p != parent && p != nil; p = [p getParent]) {
-      if (p == (id) forChild) {
+    for (id<ADViewParent> p = JreRetainedLocalValue([self->mAnchorView_ getParent]); !JreObjectEqualsEquals(p, parent) && p != nil; p = [p getParent]) {
+      if (JreObjectEqualsEquals(p, forChild)) {
         if ([parent isInEditMode]) {
           JreStrongAssign(&self->mAnchorView_, JreStrongAssign(&self->mAnchorDirectChild_, nil));
           return;
@@ -1875,13 +1889,13 @@ void ADXCoordinatorLayout_LayoutParams_resolveAnchorViewWithADView_withADXCoordi
   }
 }
 
-jboolean ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent) {
+bool ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoordinatorLayout_(ADXCoordinatorLayout_LayoutParams *self, ADView *forChild, ADXCoordinatorLayout *parent) {
   if ([((ADView *) nil_chk(self->mAnchorView_)) getId] != self->mAnchorId_) {
     return false;
   }
   ADView *directChild = JreRetainedLocalValue(self->mAnchorView_);
-  for (id<ADViewParent> p = JreRetainedLocalValue([((ADView *) nil_chk(self->mAnchorView_)) getParent]); p != parent; p = [p getParent]) {
-    if (p == nil || p == (id) forChild) {
+  for (id<ADViewParent> p = JreRetainedLocalValue([((ADView *) nil_chk(self->mAnchorView_)) getParent]); !JreObjectEqualsEquals(p, parent); p = [p getParent]) {
+    if (p == nil || JreObjectEqualsEquals(p, forChild)) {
       JreStrongAssign(&self->mAnchorView_, JreStrongAssign(&self->mAnchorDirectChild_, nil));
       return false;
     }
@@ -1893,9 +1907,9 @@ jboolean ADXCoordinatorLayout_LayoutParams_verifyAnchorViewWithADView_withADXCoo
   return true;
 }
 
-jboolean ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(ADXCoordinatorLayout_LayoutParams *self, ADView *other, jint layoutDirection) {
+bool ADXCoordinatorLayout_LayoutParams_shouldDodgeWithADView_withInt_(ADXCoordinatorLayout_LayoutParams *self, ADView *other, int32_t layoutDirection) {
   ADXCoordinatorLayout_LayoutParams *lp = (ADXCoordinatorLayout_LayoutParams *) cast_chk([((ADView *) nil_chk(other)) getLayoutParams], [ADXCoordinatorLayout_LayoutParams class]);
-  jint absInset = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->insetEdge_, layoutDirection);
+  int32_t absInset = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(((ADXCoordinatorLayout_LayoutParams *) nil_chk(lp))->insetEdge_, layoutDirection);
   return absInset != ADGravity_NO_GRAVITY && (absInset & ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(self->dodgeInsetEdges_, layoutDirection)) == absInset;
 }
 
@@ -1908,19 +1922,19 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXCoordinatorLayout_LayoutParams)
   return self;
 }
 
-- (jint)getSystemWindowInsetLeft {
+- (int32_t)getSystemWindowInsetLeft {
   return 0;
 }
 
-- (jint)getSystemWindowInsetBottom {
+- (int32_t)getSystemWindowInsetBottom {
   return 0;
 }
 
-- (jint)getSystemWindowInsetTop {
+- (int32_t)getSystemWindowInsetTop {
   return 0;
 }
 
-- (jint)getSystemWindowInsetRight {
+- (int32_t)getSystemWindowInsetRight {
   return 0;
 }
 

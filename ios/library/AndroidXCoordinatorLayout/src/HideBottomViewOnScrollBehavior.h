@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\AndroidXJCoordinatorLayout\src\main\java\com\google\android\material\behavior\HideBottomViewOnScrollBehavior.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_HideBottomViewOnScrollBehavior")
@@ -23,6 +24,8 @@
 @class ADView;
 @class ADXCoordinatorLayout;
 @class IOSIntArray;
+@class JavaLangBoolean;
+@class JavaLangInteger;
 
 @interface ADXHideBottomViewOnScrollBehavior : ADXCoordinatorLayout_Behavior
 
@@ -30,55 +33,55 @@
 
 - (instancetype)init;
 
-- (jboolean)isScrolledDown;
+- (bool)isScrolledDown;
 
-- (jboolean)isScrolledUp;
+- (bool)isScrolledUp;
 
-- (jboolean)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
-                                       withADView:(ADView *)child
-                                          withInt:(jint)layoutDirection;
+- (bool)onLayoutChildWithADXCoordinatorLayout:(ADXCoordinatorLayout *)parent
+                                   withADView:(ADView *)child
+                                      withInt:(int32_t)layoutDirection;
 
 - (void)onNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
                                     withADView:(ADView *)child
                                     withADView:(ADView *)target
-                                       withInt:(jint)dxConsumed
-                                       withInt:(jint)dyConsumed
-                                       withInt:(jint)dxUnconsumed
-                                       withInt:(jint)dyUnconsumed
-                                       withInt:(jint)type
+                                       withInt:(int32_t)dxConsumed
+                                       withInt:(int32_t)dyConsumed
+                                       withInt:(int32_t)dxUnconsumed
+                                       withInt:(int32_t)dyUnconsumed
+                                       withInt:(int32_t)type
                                   withIntArray:(IOSIntArray *)consumed;
 
-- (jboolean)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
-                                             withADView:(ADView *)child
-                                             withADView:(ADView *)directTargetChild
-                                             withADView:(ADView *)target
-                                                withInt:(jint)nestedScrollAxes
-                                                withInt:(jint)type;
+- (bool)onStartNestedScrollWithADXCoordinatorLayout:(ADXCoordinatorLayout *)coordinatorLayout
+                                         withADView:(ADView *)child
+                                         withADView:(ADView *)directTargetChild
+                                         withADView:(ADView *)target
+                                            withInt:(int32_t)nestedScrollAxes
+                                            withInt:(int32_t)type;
 
 - (void)setAdditionalHiddenOffsetYWithADView:(ADView *)child
-                                     withInt:(jint)offset;
+                                     withInt:(int32_t)offset;
 
 - (void)slideDownWithADView:(ADView *)child;
 
 - (void)slideDownWithADView:(ADView *)child
-                withBoolean:(jboolean)animate;
+                withBoolean:(bool)animate;
 
 - (void)slideUpWithADView:(ADView *)child;
 
 - (void)slideUpWithADView:(ADView *)child
-              withBoolean:(jboolean)animate;
+              withBoolean:(bool)animate;
 
 @end
 
 J2OBJC_EMPTY_STATIC_INIT(ADXHideBottomViewOnScrollBehavior)
 
-inline jint ADXHideBottomViewOnScrollBehavior_get_STATE_SCROLLED_DOWN(void);
+inline int32_t ADXHideBottomViewOnScrollBehavior_get_STATE_SCROLLED_DOWN(void);
 #define ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_DOWN 1
-J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, STATE_SCROLLED_DOWN, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, STATE_SCROLLED_DOWN, int32_t)
 
-inline jint ADXHideBottomViewOnScrollBehavior_get_STATE_SCROLLED_UP(void);
+inline int32_t ADXHideBottomViewOnScrollBehavior_get_STATE_SCROLLED_UP(void);
 #define ADXHideBottomViewOnScrollBehavior_STATE_SCROLLED_UP 2
-J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, STATE_SCROLLED_UP, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXHideBottomViewOnScrollBehavior, STATE_SCROLLED_UP, int32_t)
 
 FOUNDATION_EXPORT void ADXHideBottomViewOnScrollBehavior_init(ADXHideBottomViewOnScrollBehavior *self);
 
@@ -90,17 +93,20 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXHideBottomViewOnScrollBehavior)
 
 @compatibility_alias ComGoogleAndroidMaterialBehaviorHideBottomViewOnScrollBehavior ADXHideBottomViewOnScrollBehavior;
 
+
 #endif
 
 #if !defined (ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener_) && (INCLUDE_ALL_HideBottomViewOnScrollBehavior || defined(INCLUDE_ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener))
 #define ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener_
+
+@class JavaLangInteger;
 
 @interface ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener : NSObject
 
 #pragma mark Public
 
 - (void)onStateChangedWithId:(id)child
-                     withInt:(jint)currentState;
+                     withInt:(int32_t)currentState;
 
 #pragma mark Package-Private
 
@@ -117,6 +123,7 @@ FOUNDATION_EXPORT ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener
 FOUNDATION_EXPORT ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener *create_ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener_init(void);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXHideBottomViewOnScrollBehavior_OnScrollStateChangedListener)
+
 
 #endif
 
