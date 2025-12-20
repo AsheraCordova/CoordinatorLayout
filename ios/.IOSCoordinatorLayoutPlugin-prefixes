@@ -146,6 +146,7 @@ com.applidium.shutterbug.downloader=AP
 com.applidium.shutterbug.utils=AP
 com.ashera.shutterbug=AS
 com.ashera.viewpager=AS
+com.ashera.actionsheet=AS
 com.ashera.appbarlayout=AS
 com.google.android.material.appbar=AS
 com.ashera.drawerlayout=AS

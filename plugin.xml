@@ -31,7 +31,7 @@
   </platform>
   <platform name="ios">
     <config-file target="config.xml" parent="/widget">
-      <feature name="com.ashera.coordinatorlayout.ios">
+      <feature name="CordovaCoordinatorLayoutPlugin">
         	<param name="ios-package" value="CordovaCoordinatorLayoutPlugin" />
          	<param name="onload" value="true" />
       </feature>
