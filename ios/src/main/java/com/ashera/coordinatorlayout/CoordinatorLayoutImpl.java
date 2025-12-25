@@ -46,7 +46,7 @@ import androidx.core.view.*;
 
 import static com.ashera.widget.IWidget.*;
 //end - imports
-
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class CoordinatorLayoutImpl extends BaseHasWidgets {
 	//start - body
 	private @Property Object uiView;
@@ -101,6 +101,28 @@ public class CoordinatorLayoutImpl extends BaseHasWidgets {
 				return 0;
 				}
 				}
+		@SuppressLint("NewApi")
+		final static class BehaviorState extends AbstractEnumToIntConverter{
+		private Map<String, Integer> mapping = new HashMap<>();
+				{
+				mapping.put("state_none",  0x0);
+				mapping.put("state_dragging",  0x1);
+				mapping.put("state_settling",  0x2);
+				mapping.put("state_expanded",  0x3);
+				mapping.put("state_collapsed",  0x4);
+				mapping.put("state_hidden",  0x5);
+				mapping.put("state_half_expanded",  0x6);
+				}
+		@Override
+		public Map<String, Integer> getMapping() {
+				return mapping;
+				}
+
+		@Override
+		public Integer getDefault() {
+				return 0;
+				}
+				}
 	@Override
 	public void loadAttributes(String localName) {
 		ViewGroupImpl.register(localName);
@@ -117,6 +139,18 @@ public class CoordinatorLayoutImpl extends BaseHasWidgets {
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_insetEdge").withType("androidx.coordinatorlayout.widget.CoordinatorLayout.insetEdge").forChild());
 				ConverterFactory.register("androidx.coordinatorlayout.widget.CoordinatorLayout.dodgeInsetEdge", new DodgeInsetEdge());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_dodgeInsetEdges").withType("androidx.coordinatorlayout.widget.CoordinatorLayout.dodgeInsetEdge").forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_fitToContents").withType("boolean").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_peekHeight").withType("dimension").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_hideable").withType("boolean").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_skipCollapsed").withType("boolean").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_draggable").withType("boolean").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_halfExpandedRatio").withType("float").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_expandedOffset").withType("dimension").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_significantVelocityThreshold").withType("dimension").withOrder(200).forChild());
+				ConverterFactory.register("androidx.coordinatorlayout.widget.CoordinatorLayout.behaviorState", new BehaviorState());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_state").withType("androidx.coordinatorlayout.widget.CoordinatorLayout.behaviorState").withOrder(200).forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_onStateChanged").withType("string").forChild());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_behavior_onSlide").withType("string").forChild());
 	}
 	
 	public CoordinatorLayoutImpl() {
@@ -277,6 +311,72 @@ public class CoordinatorLayoutImpl extends BaseHasWidgets {
 				
 			}
 			break;
+			case "layout_behavior_fitToContents": {
+				
+							 setBehaviorFitToContents(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_peekHeight": {
+				
+							 setBehaviorPeekHeight(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_hideable": {
+				
+							 setBehaviorHideable(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_skipCollapsed": {
+				
+							 setBehaviorSkipCollapsed(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_draggable": {
+				
+							 setBehaviorDraggable(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_halfExpandedRatio": {
+				
+							 setBehaviorHalfExpandedRatio(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_expandedOffset": {
+				
+							 setBehaviorExpandedOffset(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_significantVelocityThreshold": {
+				
+							 setBehaviorSignificantVelocityThreshold(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_state": {
+				
+							setBehaviorState(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_onStateChanged": {
+				
+							 setOnStateChanged(layoutParams,objValue);
+				
+			}
+			break;
+			case "layout_behavior_onSlide": {
+				
+							 setOnSlide(layoutParams,objValue);
+				
+			}
+			break;
 		default:
 			break;
 		}
@@ -318,6 +418,17 @@ return layoutParams.insetEdge;			}
 
 			case "layout_dodgeInsetEdges": {
 return layoutParams.dodgeInsetEdges;			}
+
+
+
+
+
+
+
+
+
+
+
 
 		}
 		
@@ -683,6 +794,99 @@ return layoutParams.dodgeInsetEdges;			}
 	}
 	
 
+	private void setBehaviorSignificantVelocityThreshold(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setSignificantVelocityThreshold((int) objValue);
+        }
+    }
+
+    private void setBehaviorExpandedOffset(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setExpandedOffset((int) objValue);
+        }
+    }
+
+    private void setBehaviorHalfExpandedRatio(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setHalfExpandedRatio((float) objValue);
+        }
+    }
+
+    private void setBehaviorDraggable(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setDraggable((boolean) objValue);
+        }
+
+    }
+
+    private void setBehaviorSkipCollapsed(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setSkipCollapsed((boolean) objValue);
+        }
+    }
+
+    private void setBehaviorHideable(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setHideable((boolean) objValue);
+        }
+    }
+
+    private void setBehaviorFitToContents(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setFitToContents((boolean) objValue);
+        }
+    }
+
+    private void setBehaviorPeekHeight(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setPeekHeight((int) objValue);
+        }
+    }
+    
+	
+    private BottomSheetBehavior.BottomSheetCallback onSlideCallBack;
+    private void setOnSlide(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            BottomSheetBehavior<?> behavior = (BottomSheetBehavior<?>) layoutParams.getBehavior();
+            if (this.onSlideCallBack != null) {
+                behavior.removeBottomSheetCallback(this.onSlideCallBack);
+            }
+            if (objValue instanceof String) {
+                this.onSlideCallBack = new BottomSheetCallback(this, (String) objValue, "onSlide");
+                behavior.addBottomSheetCallback(this.onSlideCallBack);
+            } else {
+            	this.onSlideCallBack = (BottomSheetBehavior.BottomSheetCallback) objValue;
+                behavior.addBottomSheetCallback(this.onSlideCallBack);
+            }
+        }
+    }
+    private BottomSheetBehavior.BottomSheetCallback onStateChangeCallBack;
+    private void setOnStateChanged(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            BottomSheetBehavior<?> behavior = (BottomSheetBehavior<?>) layoutParams.getBehavior();
+            if (this.onStateChangeCallBack != null) {
+                behavior.removeBottomSheetCallback(this.onStateChangeCallBack);
+            }
+            if (objValue instanceof String) {
+                this.onStateChangeCallBack = new BottomSheetCallback(this, (String) objValue, "onStateChanged");
+                behavior.addBottomSheetCallback(this.onStateChangeCallBack);
+            } else {
+            	this.onStateChangeCallBack = (BottomSheetBehavior.BottomSheetCallback) objValue;
+                behavior.addBottomSheetCallback(this.onStateChangeCallBack);
+            }
+        }
+
+    }
+
+
+    private void setBehaviorState(androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams layoutParams, Object objValue) {
+        if (layoutParams.getBehavior() instanceof com.google.android.material.bottomsheet.BottomSheetBehavior) {
+            ((com.google.android.material.bottomsheet.BottomSheetBehavior<?>) layoutParams.getBehavior()).setState((int) objValue);
+        }
+
+    }
+	
+
 
 	private void setMyKeyLines(int[] keyLines) {
 		coordinatorLayout.setKeyLines(keyLines);
@@ -692,6 +896,139 @@ return layoutParams.dodgeInsetEdges;			}
 		coordinatorLayout.onChildViewsChanged(0); 
 	}
 	
+
+	@SuppressLint("NewApi")
+private static class BottomSheetCallback extends BottomSheetBehavior.BottomSheetCallback implements com.ashera.widget.IListener{
+private IWidget w; private View view; private String strValue; private String action;
+public String getAction() {return action;}
+public BottomSheetCallback(IWidget w, String strValue)  {
+this.w = w; this.strValue = strValue;
+}
+public BottomSheetCallback(IWidget w, String strValue, String action)  {
+this.w = w; this.strValue = strValue;this.action=action;
+}
+public void onStateChanged(View bottomSheet, int newState){
+    
+	if (action == null || action.equals("onStateChanged")) {
+		// populate the data from ui to pojo
+		w.syncModelFromUiToPojo("onStateChanged");
+	    java.util.Map<String, Object> obj = getOnStateChangedEventObj(bottomSheet,newState);
+	    String commandName =  (String) obj.get(EventExpressionParser.KEY_COMMAND_NAME);
+	    
+	    // execute command based on command type
+	    String commandType = (String)obj.get(EventExpressionParser.KEY_COMMAND_TYPE);
+		switch (commandType) {
+		case "+":
+		    if (EventCommandFactory.hasCommand(commandName)) {
+		    	 EventCommandFactory.getCommand(commandName).executeCommand(w, obj, bottomSheet,newState);
+		    }
+
+			break;
+		default:
+			break;
+		}
+		
+		if (obj.containsKey("refreshUiFromModel")) {
+			Object widgets = obj.remove("refreshUiFromModel");
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, widgets, true);
+		}
+		if (w.getModelUiToPojoEventIds() != null) {
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, w.getModelUiToPojoEventIds(), true);
+		}
+		if (strValue != null && !strValue.isEmpty() && !strValue.trim().startsWith("+")) {
+		    com.ashera.core.IActivity activity = (com.ashera.core.IActivity)w.getFragment().getRootActivity();
+		    if (activity != null) {
+		    	activity.sendEventMessage(obj);
+		    }
+		}
+	}
+    return;
+}//#####
+
+public java.util.Map<String, Object> getOnStateChangedEventObj(View bottomSheet,int newState) {
+	java.util.Map<String, Object> obj = com.ashera.widget.PluginInvoker.getJSONCompatMap();
+    obj.put("action", "action");
+    obj.put("eventType", "statechanged");
+    obj.put("fragmentId", w.getFragment().getFragmentId());
+    obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
+    
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
+    
+    PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
+     
+        PluginInvoker.putJSONSafeObjectIntoMap(obj, "newState", newState);
+    
+    // parse event info into the map
+    EventExpressionParser.parseEventExpression(strValue, obj);
+    
+    // update model data into map
+    w.updateModelToEventMap(obj, "onStateChanged", (String)obj.get(EventExpressionParser.KEY_EVENT_ARGS));
+    return obj;
+}public void onSlide(View bottomSheet, float slideOffset){
+    
+	if (action == null || action.equals("onSlide")) {
+		// populate the data from ui to pojo
+		w.syncModelFromUiToPojo("onSlide");
+	    java.util.Map<String, Object> obj = getOnSlideEventObj(bottomSheet,slideOffset);
+	    String commandName =  (String) obj.get(EventExpressionParser.KEY_COMMAND_NAME);
+	    
+	    // execute command based on command type
+	    String commandType = (String)obj.get(EventExpressionParser.KEY_COMMAND_TYPE);
+		switch (commandType) {
+		case "+":
+		    if (EventCommandFactory.hasCommand(commandName)) {
+		    	 EventCommandFactory.getCommand(commandName).executeCommand(w, obj, bottomSheet,slideOffset);
+		    }
+
+			break;
+		default:
+			break;
+		}
+		
+		if (obj.containsKey("refreshUiFromModel")) {
+			Object widgets = obj.remove("refreshUiFromModel");
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, widgets, true);
+		}
+		if (w.getModelUiToPojoEventIds() != null) {
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, w.getModelUiToPojoEventIds(), true);
+		}
+		if (strValue != null && !strValue.isEmpty() && !strValue.trim().startsWith("+")) {
+		    com.ashera.core.IActivity activity = (com.ashera.core.IActivity)w.getFragment().getRootActivity();
+		    if (activity != null) {
+		    	activity.sendEventMessage(obj);
+		    }
+		}
+	}
+    return;
+}//#####
+
+public java.util.Map<String, Object> getOnSlideEventObj(View bottomSheet,float slideOffset) {
+	java.util.Map<String, Object> obj = com.ashera.widget.PluginInvoker.getJSONCompatMap();
+    obj.put("action", "action");
+    obj.put("eventType", "slide");
+    obj.put("fragmentId", w.getFragment().getFragmentId());
+    obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
+    
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
+    
+    PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
+     
+        PluginInvoker.putJSONSafeObjectIntoMap(obj, "slideOffset", slideOffset);
+    
+    // parse event info into the map
+    EventExpressionParser.parseEventExpression(strValue, obj);
+    
+    // update model data into map
+    w.updateModelToEventMap(obj, "onSlide", (String)obj.get(EventExpressionParser.KEY_EVENT_ARGS));
+    return obj;
+}
+}
 
 
 	@Override

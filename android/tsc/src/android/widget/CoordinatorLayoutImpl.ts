@@ -18,6 +18,15 @@ right = "right",
 start = "start",
 end = "end",
 all = "all",
+}
+export const enum BehaviorState {
+state_none = "state_none",
+state_dragging = "state_dragging",
+state_settling = "state_settling",
+state_expanded = "state_expanded",
+state_collapsed = "state_collapsed",
+state_hidden = "state_hidden",
+state_half_expanded = "state_half_expanded",
 }	
 import CommandAttr from '../../widget/CommandAttr';
 import IWidget from '../../widget/IWidget';
@@ -82,6 +91,17 @@ export class DodgeInsetEdgeTransformer implements ITranform {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 import {ViewGroupImpl_LayoutParams} from './ViewGroupImpl';
 
 // end - imports
@@ -167,6 +187,39 @@ export abstract class CoordinatorLayoutImpl_LayoutParams<T> extends ViewGroupImp
 	@decorate(Type(() => CommandAttr))
 	@decorate(Expose({ name: "layout_dodgeInsetEdges" }))
 	layout_dodgeInsetEdges!:CommandAttr<DodgeInsetEdge[]>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_fitToContents" }))
+	layout_behavior_fitToContents!:CommandAttr<boolean>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_peekHeight" }))
+	layout_behavior_peekHeight!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_hideable" }))
+	layout_behavior_hideable!:CommandAttr<boolean>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_skipCollapsed" }))
+	layout_behavior_skipCollapsed!:CommandAttr<boolean>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_draggable" }))
+	layout_behavior_draggable!:CommandAttr<boolean>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_halfExpandedRatio" }))
+	layout_behavior_halfExpandedRatio!:CommandAttr<number>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_expandedOffset" }))
+	layout_behavior_expandedOffset!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_significantVelocityThreshold" }))
+	layout_behavior_significantVelocityThreshold!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_state" }))
+	layout_behavior_state!:CommandAttr<BehaviorState>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_onStateChanged" }))
+	layout_behavior_onStateChanged!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_behavior_onSlide" }))
+	layout_behavior_onSlide!:CommandAttr<string>| undefined;
 	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
@@ -179,6 +232,17 @@ export abstract class CoordinatorLayoutImpl_LayoutParams<T> extends ViewGroupImp
 		this.layout_anchorGravity = undefined;
 		this.layout_insetEdge = undefined;
 		this.layout_dodgeInsetEdges = undefined;
+		this.layout_behavior_fitToContents = undefined;
+		this.layout_behavior_peekHeight = undefined;
+		this.layout_behavior_hideable = undefined;
+		this.layout_behavior_skipCollapsed = undefined;
+		this.layout_behavior_draggable = undefined;
+		this.layout_behavior_halfExpandedRatio = undefined;
+		this.layout_behavior_expandedOffset = undefined;
+		this.layout_behavior_significantVelocityThreshold = undefined;
+		this.layout_behavior_state = undefined;
+		this.layout_behavior_onStateChanged = undefined;
+		this.layout_behavior_onSlide = undefined;
 		return this.thisPointer;
 	}
 	constructor() {
@@ -358,6 +422,116 @@ this.layout_dodgeInsetEdges.setTransformer('dodgeInsetEdge');		return this.layou
 		this.layout_dodgeInsetEdges.setOrderSet(this.orderSet);
 this.layout_dodgeInsetEdges.setTransformer('dodgeInsetEdge');		return this.thisPointer;
 	}
+	public setLayoutBehavior_fitToContents(value : boolean) : T {
+		if (this.layout_behavior_fitToContents == null || this.layout_behavior_fitToContents == undefined) {
+			this.layout_behavior_fitToContents = new CommandAttr<boolean>();
+		}
+		this.layout_behavior_fitToContents.setSetter(true);
+		this.layout_behavior_fitToContents.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_fitToContents.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_peekHeight(value : string) : T {
+		if (this.layout_behavior_peekHeight == null || this.layout_behavior_peekHeight == undefined) {
+			this.layout_behavior_peekHeight = new CommandAttr<string>();
+		}
+		this.layout_behavior_peekHeight.setSetter(true);
+		this.layout_behavior_peekHeight.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_peekHeight.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_hideable(value : boolean) : T {
+		if (this.layout_behavior_hideable == null || this.layout_behavior_hideable == undefined) {
+			this.layout_behavior_hideable = new CommandAttr<boolean>();
+		}
+		this.layout_behavior_hideable.setSetter(true);
+		this.layout_behavior_hideable.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_hideable.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_skipCollapsed(value : boolean) : T {
+		if (this.layout_behavior_skipCollapsed == null || this.layout_behavior_skipCollapsed == undefined) {
+			this.layout_behavior_skipCollapsed = new CommandAttr<boolean>();
+		}
+		this.layout_behavior_skipCollapsed.setSetter(true);
+		this.layout_behavior_skipCollapsed.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_skipCollapsed.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_draggable(value : boolean) : T {
+		if (this.layout_behavior_draggable == null || this.layout_behavior_draggable == undefined) {
+			this.layout_behavior_draggable = new CommandAttr<boolean>();
+		}
+		this.layout_behavior_draggable.setSetter(true);
+		this.layout_behavior_draggable.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_draggable.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_halfExpandedRatio(value : number) : T {
+		if (this.layout_behavior_halfExpandedRatio == null || this.layout_behavior_halfExpandedRatio == undefined) {
+			this.layout_behavior_halfExpandedRatio = new CommandAttr<number>();
+		}
+		this.layout_behavior_halfExpandedRatio.setSetter(true);
+		this.layout_behavior_halfExpandedRatio.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_halfExpandedRatio.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_expandedOffset(value : string) : T {
+		if (this.layout_behavior_expandedOffset == null || this.layout_behavior_expandedOffset == undefined) {
+			this.layout_behavior_expandedOffset = new CommandAttr<string>();
+		}
+		this.layout_behavior_expandedOffset.setSetter(true);
+		this.layout_behavior_expandedOffset.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_expandedOffset.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_significantVelocityThreshold(value : string) : T {
+		if (this.layout_behavior_significantVelocityThreshold == null || this.layout_behavior_significantVelocityThreshold == undefined) {
+			this.layout_behavior_significantVelocityThreshold = new CommandAttr<string>();
+		}
+		this.layout_behavior_significantVelocityThreshold.setSetter(true);
+		this.layout_behavior_significantVelocityThreshold.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_significantVelocityThreshold.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_state(value : BehaviorState) : T {
+		if (this.layout_behavior_state == null || this.layout_behavior_state == undefined) {
+			this.layout_behavior_state = new CommandAttr<BehaviorState>();
+		}
+		this.layout_behavior_state.setSetter(true);
+		this.layout_behavior_state.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_state.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_onStateChanged(value : string) : T {
+		if (this.layout_behavior_onStateChanged == null || this.layout_behavior_onStateChanged == undefined) {
+			this.layout_behavior_onStateChanged = new CommandAttr<string>();
+		}
+		this.layout_behavior_onStateChanged.setSetter(true);
+		this.layout_behavior_onStateChanged.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_onStateChanged.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+	public setLayoutBehavior_onSlide(value : string) : T {
+		if (this.layout_behavior_onSlide == null || this.layout_behavior_onSlide == undefined) {
+			this.layout_behavior_onSlide = new CommandAttr<string>();
+		}
+		this.layout_behavior_onSlide.setSetter(true);
+		this.layout_behavior_onSlide.setValue(value);
+		this.orderSet++;
+		this.layout_behavior_onSlide.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
 }
 
 export class CoordinatorLayout_LayoutParams extends CoordinatorLayoutImpl_LayoutParams<CoordinatorLayout_LayoutParams> implements ILayoutParam {
@@ -385,5 +559,29 @@ export class CoordinatorLayout extends CoordinatorLayoutImpl<CoordinatorLayout> 
 }
 
 CoordinatorLayoutImpl.initialize();
+export interface OnStateChangedEvent extends Event{
+        //bottomSheet:View;
+
+	        newState:number;
+
+}
+export interface OnSlideEvent extends Event{
+        //bottomSheet:View;
+
+	        slideOffset:number;
+
+}
+export interface OnStateChangedEvent extends Event{
+        //bottomSheet:View;
+
+	        newState:number;
+
+}
+export interface OnSlideEvent extends Event{
+        //bottomSheet:View;
+
+	        slideOffset:number;
+
+}
 
 //end - staticinit

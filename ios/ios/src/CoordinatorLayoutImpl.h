@@ -204,6 +204,43 @@ J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_DodgeInsetEdge)
 
 #endif
 
+#if !defined (ASCoordinatorLayoutImpl_BehaviorState_) && (INCLUDE_ALL_CoordinatorLayoutImpl || defined(INCLUDE_ASCoordinatorLayoutImpl_BehaviorState))
+#define ASCoordinatorLayoutImpl_BehaviorState_
+
+#define RESTRICT_AbstractEnumToIntConverter 1
+#define INCLUDE_ASAbstractEnumToIntConverter 1
+#include "AbstractEnumToIntConverter.h"
+
+@class JavaLangInteger;
+@protocol JavaUtilMap;
+
+@interface ASCoordinatorLayoutImpl_BehaviorState : ASAbstractEnumToIntConverter
+
+#pragma mark Public
+
+- (JavaLangInteger *)getDefault;
+
+- (id<JavaUtilMap>)getMapping;
+
+#pragma mark Package-Private
+
+- (instancetype)init;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASCoordinatorLayoutImpl_BehaviorState)
+
+FOUNDATION_EXPORT void ASCoordinatorLayoutImpl_BehaviorState_init(ASCoordinatorLayoutImpl_BehaviorState *self);
+
+FOUNDATION_EXPORT ASCoordinatorLayoutImpl_BehaviorState *new_ASCoordinatorLayoutImpl_BehaviorState_init(void) NS_RETURNS_RETAINED;
+
+FOUNDATION_EXPORT ASCoordinatorLayoutImpl_BehaviorState *create_ASCoordinatorLayoutImpl_BehaviorState_init(void);
+
+J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_BehaviorState)
+
+
+#endif
+
 #if !defined (ASCoordinatorLayoutImpl_CoordinatorLayoutExt_) && (INCLUDE_ALL_CoordinatorLayoutImpl || defined(INCLUDE_ASCoordinatorLayoutImpl_CoordinatorLayoutExt))
 #define ASCoordinatorLayoutImpl_CoordinatorLayoutExt_
 

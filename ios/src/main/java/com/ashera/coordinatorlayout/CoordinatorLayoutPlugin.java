@@ -31,5 +31,13 @@ public class CoordinatorLayoutPlugin  {
                         return new com.google.android.material.behavior.HideBottomViewOnScrollBehavior();
                     }
                 });
+        
+        WidgetFactory.registerBehavior("com.google.android.material.bottomsheet.BottomSheetBehavior",
+                new IBehavior() {
+                    @Override
+                    public Object newInstance() {
+                        return new com.google.android.material.bottomsheet.BottomSheetBehavior();
+                    }
+                });
     }
 }

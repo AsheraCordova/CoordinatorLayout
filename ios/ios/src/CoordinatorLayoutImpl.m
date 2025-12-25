@@ -11,14 +11,20 @@
 #include "AbstractBitFlagConverter.h"
 #include "AbstractEnumToIntConverter.h"
 #include "BaseHasWidgets.h"
+#include "BottomSheetBehavior.h"
 #include "Context.h"
 #include "ConverterFactory.h"
 #include "CoordinatorLayout.h"
 #include "CoordinatorLayoutImpl.h"
 #include "DisplayMetrics.h"
+#include "EventCommand.h"
+#include "EventCommandFactory.h"
+#include "EventExpressionParser.h"
 #include "HasWidgets.h"
+#include "IActivity.h"
 #include "IFragment.h"
 #include "ILifeCycleDecorator.h"
+#include "IListener.h"
 #include "IOSClass.h"
 #include "IOSObjectArray.h"
 #include "IOSPrimitiveArray.h"
@@ -28,6 +34,7 @@
 #include "LayoutTransition.h"
 #include "MeasureEvent.h"
 #include "OnLayoutEvent.h"
+#include "PluginInvoker.h"
 #include "Rect.h"
 #include "Resources.h"
 #include "View.h"
@@ -51,6 +58,7 @@
 #include "HasLifeCycleDecorators.h"
 
 
+@class NSString;
 
 
 #pragma clang diagnostic error "-Wreturn-type"
@@ -63,6 +71,8 @@
  @public
   id uiView_;
   ADXCoordinatorLayout *coordinatorLayout_;
+  ADXBottomSheetBehavior_BottomSheetCallback *onSlideCallBack_;
+  ADXBottomSheetBehavior_BottomSheetCallback *onStateChangeCallBack_;
 }
 
 - (void)setWidgetOnNativeClass;
@@ -78,6 +88,39 @@
 
 - (void)setKeyLinesWithId:(id)objValue;
 
+- (void)setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                              withId:(id)objValue;
+
+- (void)setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                withId:(id)objValue;
+
+- (void)setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                   withId:(id)objValue;
+
+- (void)setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                           withId:(id)objValue;
+
+- (void)setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                               withId:(id)objValue;
+
+- (void)setBehaviorHideableWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                          withId:(id)objValue;
+
+- (void)setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                               withId:(id)objValue;
+
+- (void)setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                            withId:(id)objValue;
+
+- (void)setOnSlideWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                 withId:(id)objValue;
+
+- (void)setOnStateChangedWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                        withId:(id)objValue;
+
+- (void)setBehaviorStateWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                       withId:(id)objValue;
+
 - (void)setMyKeyLinesWithIntArray:(IOSIntArray *)keyLines;
 
 - (void)onChildViewsChanged;
@@ -86,6 +129,8 @@
 
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, uiView_, id)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, coordinatorLayout_, ADXCoordinatorLayout *)
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, onSlideCallBack_, ADXBottomSheetBehavior_BottomSheetCallback *)
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl, onStateChangeCallBack_, ADXBottomSheetBehavior_BottomSheetCallback *)
 
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setWidgetOnNativeClass(ASCoordinatorLayoutImpl *self);
 
@@ -98,6 +143,28 @@ __attribute__((unused)) static ADXCoordinatorLayout_LayoutParams *ASCoordinatorL
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
 
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setKeyLinesWithId_(ASCoordinatorLayoutImpl *self, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorHideableWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setOnSlideWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setOnStateChangedWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_setBehaviorStateWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue);
 
 __attribute__((unused)) static void ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(ASCoordinatorLayoutImpl *self, IOSIntArray *keyLines);
 
@@ -121,6 +188,15 @@ J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_InsetEdge, mapping_, id<JavaUtilMap>
 
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_DodgeInsetEdge, mapping_, id<JavaUtilMap>)
 
+@interface ASCoordinatorLayoutImpl_BehaviorState () {
+ @public
+  id<JavaUtilMap> mapping_;
+}
+
+@end
+
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_BehaviorState, mapping_, id<JavaUtilMap>)
+
 @interface ASCoordinatorLayoutImpl_CoordinatorLayoutExt () {
  @public
   WEAK_ ASCoordinatorLayoutImpl *this$0_;
@@ -138,6 +214,59 @@ J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, measureFinishe
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, onLayoutEvent_, ASOnLayoutEvent *)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, overlays_, id<JavaUtilList>)
 J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_CoordinatorLayoutExt, templates_, id<JavaUtilMap>)
+
+@interface ASCoordinatorLayoutImpl_BottomSheetCallback : ADXBottomSheetBehavior_BottomSheetCallback < ASIListener > {
+ @public
+  id<ASIWidget> w_;
+  ADView *view_;
+  NSString *strValue_;
+  NSString *action_;
+}
+
+- (NSString *)getAction;
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue;
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue
+                     withNSString:(NSString *)action;
+
+- (void)onStateChangedWithADView:(ADView *)bottomSheet
+                         withInt:(int32_t)newState;
+
+- (id<JavaUtilMap>)getOnStateChangedEventObjWithADView:(ADView *)bottomSheet
+                                               withInt:(int32_t)newState;
+
+- (void)onSlideWithADView:(ADView *)bottomSheet
+                withFloat:(float)slideOffset;
+
+- (id<JavaUtilMap>)getOnSlideEventObjWithADView:(ADView *)bottomSheet
+                                      withFloat:(float)slideOffset;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASCoordinatorLayoutImpl_BottomSheetCallback)
+
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_BottomSheetCallback, w_, id<ASIWidget>)
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_BottomSheetCallback, view_, ADView *)
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_BottomSheetCallback, strValue_, NSString *)
+J2OBJC_FIELD_SETTER(ASCoordinatorLayoutImpl_BottomSheetCallback, action_, NSString *)
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(ASCoordinatorLayoutImpl_BottomSheetCallback *self, id<ASIWidget> w, NSString *strValue);
+
+__attribute__((unused)) static ASCoordinatorLayoutImpl_BottomSheetCallback *new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASCoordinatorLayoutImpl_BottomSheetCallback *create_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue);
+
+__attribute__((unused)) static void ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(ASCoordinatorLayoutImpl_BottomSheetCallback *self, id<ASIWidget> w, NSString *strValue, NSString *action);
+
+__attribute__((unused)) static ASCoordinatorLayoutImpl_BottomSheetCallback *new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASCoordinatorLayoutImpl_BottomSheetCallback *create_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action);
+
+J2OBJC_TYPE_LITERAL_HEADER(ASCoordinatorLayoutImpl_BottomSheetCallback)
+
 
 @interface ASCoordinatorLayoutImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
  @public
@@ -177,6 +306,18 @@ NSString *ASCoordinatorLayoutImpl_GROUP_NAME = @"androidx.coordinatorlayout.widg
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_insetEdge"])) withTypeWithNSString:@"androidx.coordinatorlayout.widget.CoordinatorLayout.insetEdge"])) forChild]);
   ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.coordinatorlayout.widget.CoordinatorLayout.dodgeInsetEdge", new_ASCoordinatorLayoutImpl_DodgeInsetEdge_init());
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_dodgeInsetEdges"])) withTypeWithNSString:@"androidx.coordinatorlayout.widget.CoordinatorLayout.dodgeInsetEdge"])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_fitToContents"])) withTypeWithNSString:@"boolean"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_peekHeight"])) withTypeWithNSString:@"dimension"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_hideable"])) withTypeWithNSString:@"boolean"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_skipCollapsed"])) withTypeWithNSString:@"boolean"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_draggable"])) withTypeWithNSString:@"boolean"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_halfExpandedRatio"])) withTypeWithNSString:@"float"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_expandedOffset"])) withTypeWithNSString:@"dimension"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_significantVelocityThreshold"])) withTypeWithNSString:@"dimension"])) withOrderWithInt:200])) forChild]);
+  ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.coordinatorlayout.widget.CoordinatorLayout.behaviorState", new_ASCoordinatorLayoutImpl_BehaviorState_init());
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_state"])) withTypeWithNSString:@"androidx.coordinatorlayout.widget.CoordinatorLayout.behaviorState"])) withOrderWithInt:200])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_onStateChanged"])) withTypeWithNSString:@"string"])) forChild]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_behavior_onSlide"])) withTypeWithNSString:@"string"])) forChild]);
 }
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -270,7 +411,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   ADView *view = (ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class]);
   ADXCoordinatorLayout_LayoutParams *layoutParams = ASCoordinatorLayoutImpl_getLayoutParamsWithADView_(self, view);
   ASViewGroupImpl_setChildAttributeWithASIWidget_withASWidgetAttribute_withId_withId_(w, key, objValue, layoutParams);
-  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"layout_width", @"layout_height", @"layout_gravity", @"layout_behavior", @"layout_anchor", @"layout_keyline", @"layout_anchorGravity", @"layout_insetEdge", @"layout_dodgeInsetEdges" }, 9)) {
+  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"layout_width", @"layout_height", @"layout_gravity", @"layout_behavior", @"layout_anchor", @"layout_keyline", @"layout_anchorGravity", @"layout_insetEdge", @"layout_dodgeInsetEdges", @"layout_behavior_fitToContents", @"layout_behavior_peekHeight", @"layout_behavior_hideable", @"layout_behavior_skipCollapsed", @"layout_behavior_draggable", @"layout_behavior_halfExpandedRatio", @"layout_behavior_expandedOffset", @"layout_behavior_significantVelocityThreshold", @"layout_behavior_state", @"layout_behavior_onStateChanged", @"layout_behavior_onSlide" }, 20)) {
     case 0:
     ((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams))->width_ = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue];
     break;
@@ -310,6 +451,61 @@ J2OBJC_IGNORE_DESIGNATED_END
     case 8:
     {
       ((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams))->dodgeInsetEdges_ = [((JavaLangInteger *) nil_chk(((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class])))) intValue];
+    }
+    break;
+    case 9:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 10:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 11:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorHideableWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 12:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 13:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 14:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 15:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 16:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 17:
+    {
+      ASCoordinatorLayoutImpl_setBehaviorStateWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 18:
+    {
+      ASCoordinatorLayoutImpl_setOnStateChangedWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+    }
+    break;
+    case 19:
+    {
+      ASCoordinatorLayoutImpl_setOnSlideWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
     }
     break;
     default:
@@ -432,6 +628,61 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASCoordinatorLayoutImpl_setKeyLinesWithId_(self, objValue);
 }
 
+- (void)setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                              withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                                   withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                           withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                               withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorHideableWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                          withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorHideableWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                               withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                            withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setOnSlideWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                 withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setOnSlideWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setOnStateChangedWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                        withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setOnStateChangedWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
+- (void)setBehaviorStateWithADXCoordinatorLayout_LayoutParams:(ADXCoordinatorLayout_LayoutParams *)layoutParams
+                                                       withId:(id)objValue {
+  ASCoordinatorLayoutImpl_setBehaviorStateWithADXCoordinatorLayout_LayoutParams_withId_(self, layoutParams, objValue);
+}
+
 - (void)setMyKeyLinesWithIntArray:(IOSIntArray *)keyLines {
   ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(self, keyLines);
 }
@@ -479,10 +730,21 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 27, 28, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 29, 30, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 31, 32, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 31, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 32, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 33, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 34, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 35, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 36, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 37, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 38, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 39, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 40, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 41, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 42, 43, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 33, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 34, 35, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 44, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 45, 46, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -513,19 +775,32 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[23].selector = @selector(invalidate);
   methods[24].selector = @selector(setBehaviorWithADXCoordinatorLayout_LayoutParams:withId:);
   methods[25].selector = @selector(setKeyLinesWithId:);
-  methods[26].selector = @selector(setMyKeyLinesWithIntArray:);
-  methods[27].selector = @selector(onChildViewsChanged);
-  methods[28].selector = @selector(setIdWithNSString:);
-  methods[29].selector = @selector(setVisibleWithBoolean:);
+  methods[26].selector = @selector(setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[27].selector = @selector(setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[28].selector = @selector(setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[29].selector = @selector(setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[30].selector = @selector(setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[31].selector = @selector(setBehaviorHideableWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[32].selector = @selector(setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[33].selector = @selector(setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[34].selector = @selector(setOnSlideWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[35].selector = @selector(setOnStateChangedWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[36].selector = @selector(setBehaviorStateWithADXCoordinatorLayout_LayoutParams:withId:);
+  methods[37].selector = @selector(setMyKeyLinesWithIntArray:);
+  methods[38].selector = @selector(onChildViewsChanged);
+  methods[39].selector = @selector(setIdWithNSString:);
+  methods[40].selector = @selector(setVisibleWithBoolean:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 36, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 37, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 47, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 48, -1, -1 },
     { "coordinatorLayout_", "LADXCoordinatorLayout;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "onSlideCallBack_", "LADXBottomSheetBehavior_BottomSheetCallback;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "onStateChangeCallBack_", "LADXBottomSheetBehavior_BottomSheetCallback;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setBehavior", "LADXCoordinatorLayout_LayoutParams;LNSObject;", "setKeyLines", "LNSObject;", "setMyKeyLines", "[I", "setId", "setVisible", "Z", &ASCoordinatorLayoutImpl_LOCAL_NAME, &ASCoordinatorLayoutImpl_GROUP_NAME, "LASCoordinatorLayoutImpl_InsetEdge;LASCoordinatorLayoutImpl_DodgeInsetEdge;LASCoordinatorLayoutImpl_CoordinatorLayoutExt;" };
-  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 30, 4, -1, 38, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setBehavior", "LADXCoordinatorLayout_LayoutParams;LNSObject;", "setKeyLines", "LNSObject;", "setBehaviorSignificantVelocityThreshold", "setBehaviorExpandedOffset", "setBehaviorHalfExpandedRatio", "setBehaviorDraggable", "setBehaviorSkipCollapsed", "setBehaviorHideable", "setBehaviorFitToContents", "setBehaviorPeekHeight", "setOnSlide", "setOnStateChanged", "setBehaviorState", "setMyKeyLines", "[I", "setId", "setVisible", "Z", &ASCoordinatorLayoutImpl_LOCAL_NAME, &ASCoordinatorLayoutImpl_GROUP_NAME, "LASCoordinatorLayoutImpl_InsetEdge;LASCoordinatorLayoutImpl_DodgeInsetEdge;LASCoordinatorLayoutImpl_BehaviorState;LASCoordinatorLayoutImpl_CoordinatorLayoutExt;LASCoordinatorLayoutImpl_BottomSheetCallback;" };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl = { "CoordinatorLayoutImpl", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x1, 41, 6, -1, 49, -1, -1, -1 };
   return &_ASCoordinatorLayoutImpl;
 }
 
@@ -614,6 +889,94 @@ void ASCoordinatorLayoutImpl_setKeyLinesWithId_(ASCoordinatorLayoutImpl *self, i
     *IOSIntArray_GetRef(keyLines, i) = JreFpToInt((obj * ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([((ADContext *) nil_chk([((ADXCoordinatorLayout *) nil_chk(self->coordinatorLayout_)) getContext])) getResources])) getDisplayMetrics]))->density_));
   }
   ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(self, keyLines);
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorSignificantVelocityThresholdWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setSignificantVelocityThresholdWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorExpandedOffsetWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setExpandedOffsetWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorHalfExpandedRatioWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setHalfExpandedRatioWithFloat:[((JavaLangFloat *) nil_chk((JavaLangFloat *) cast_chk(objValue, [JavaLangFloat class]))) floatValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorDraggableWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setDraggableWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorSkipCollapsedWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setSkipCollapsedWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorHideableWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setHideableWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorFitToContentsWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setFitToContentsWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorPeekHeightWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setPeekHeightWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
+  }
+}
+
+void ASCoordinatorLayoutImpl_setOnSlideWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    ADXBottomSheetBehavior *behavior = (ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class]);
+    if (self->onSlideCallBack_ != nil) {
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) removeBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onSlideCallBack_];
+    }
+    if ([objValue isKindOfClass:[NSString class]]) {
+      self->onSlideCallBack_ = new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(self, (NSString *) objValue, @"onSlide");
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) addBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onSlideCallBack_];
+    }
+    else {
+      self->onSlideCallBack_ = (ADXBottomSheetBehavior_BottomSheetCallback *) cast_chk(objValue, [ADXBottomSheetBehavior_BottomSheetCallback class]);
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) addBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onSlideCallBack_];
+    }
+  }
+}
+
+void ASCoordinatorLayoutImpl_setOnStateChangedWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    ADXBottomSheetBehavior *behavior = (ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class]);
+    if (self->onStateChangeCallBack_ != nil) {
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) removeBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onStateChangeCallBack_];
+    }
+    if ([objValue isKindOfClass:[NSString class]]) {
+      self->onStateChangeCallBack_ = new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(self, (NSString *) objValue, @"onStateChanged");
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) addBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onStateChangeCallBack_];
+    }
+    else {
+      self->onStateChangeCallBack_ = (ADXBottomSheetBehavior_BottomSheetCallback *) cast_chk(objValue, [ADXBottomSheetBehavior_BottomSheetCallback class]);
+      [((ADXBottomSheetBehavior *) nil_chk(behavior)) addBottomSheetCallbackWithADXBottomSheetBehavior_BottomSheetCallback:self->onStateChangeCallBack_];
+    }
+  }
+}
+
+void ASCoordinatorLayoutImpl_setBehaviorStateWithADXCoordinatorLayout_LayoutParams_withId_(ASCoordinatorLayoutImpl *self, ADXCoordinatorLayout_LayoutParams *layoutParams, id objValue) {
+  if ([[((ADXCoordinatorLayout_LayoutParams *) nil_chk(layoutParams)) getBehavior] isKindOfClass:[ADXBottomSheetBehavior class]]) {
+    [((ADXBottomSheetBehavior *) nil_chk(((ADXBottomSheetBehavior *) cast_chk([layoutParams getBehavior], [ADXBottomSheetBehavior class])))) setStateWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
+  }
 }
 
 void ASCoordinatorLayoutImpl_setMyKeyLinesWithIntArray_(ASCoordinatorLayoutImpl *self, IOSIntArray *keyLines) {
@@ -756,6 +1119,70 @@ ASCoordinatorLayoutImpl_DodgeInsetEdge *create_ASCoordinatorLayoutImpl_DodgeInse
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_DodgeInsetEdge)
+
+@implementation ASCoordinatorLayoutImpl_BehaviorState
+
+J2OBJC_IGNORE_DESIGNATED_BEGIN
+- (instancetype)init {
+  ASCoordinatorLayoutImpl_BehaviorState_init(self);
+  return self;
+}
+J2OBJC_IGNORE_DESIGNATED_END
+
+- (id<JavaUtilMap>)getMapping {
+  return mapping_;
+}
+
+- (JavaLangInteger *)getDefault {
+  return JavaLangInteger_valueOfWithInt_(0);
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, NULL, 0x0, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, -1, -1, -1, 0, -1, -1 },
+    { NULL, "LJavaLangInteger;", 0x1, -1, -1, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(init);
+  methods[1].selector = @selector(getMapping);
+  methods[2].selector = @selector(getDefault);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "mapping_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 1, -1 },
+  };
+  static const void *ptrTable[] = { "()Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "LASCoordinatorLayoutImpl;" };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_BehaviorState = { "BehaviorState", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0x18, 3, 1, 2, -1, -1, -1, -1 };
+  return &_ASCoordinatorLayoutImpl_BehaviorState;
+}
+
+@end
+
+void ASCoordinatorLayoutImpl_BehaviorState_init(ASCoordinatorLayoutImpl_BehaviorState *self) {
+  ASAbstractEnumToIntConverter_init(self);
+  self->mapping_ = new_JavaUtilHashMap_init();
+  {
+    (void) [self->mapping_ putWithId:@"state_none" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_dragging" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x1)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_settling" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x2)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_expanded" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x3)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_collapsed" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x4)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_hidden" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x5)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"state_half_expanded" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x6)];
+  }
+}
+
+ASCoordinatorLayoutImpl_BehaviorState *new_ASCoordinatorLayoutImpl_BehaviorState_init() {
+  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_BehaviorState, init)
+}
+
+ASCoordinatorLayoutImpl_BehaviorState *create_ASCoordinatorLayoutImpl_BehaviorState_init() {
+  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_BehaviorState, init)
+}
+
+J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_BehaviorState)
 
 @implementation ASCoordinatorLayoutImpl_CoordinatorLayoutExt
 
@@ -1126,6 +1553,192 @@ ASCoordinatorLayoutImpl_CoordinatorLayoutExt *create_ASCoordinatorLayoutImpl_Coo
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_CoordinatorLayoutExt)
+
+@implementation ASCoordinatorLayoutImpl_BottomSheetCallback
+
+- (NSString *)getAction {
+  return action_;
+}
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue {
+  ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(self, w, strValue);
+  return self;
+}
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue
+                     withNSString:(NSString *)action {
+  ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(self, w, strValue, action);
+  return self;
+}
+
+- (void)onStateChangedWithADView:(ADView *)bottomSheet
+                         withInt:(int32_t)newState {
+  if (action_ == nil || [action_ isEqual:@"onStateChanged"]) {
+    [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onStateChanged"];
+    id<JavaUtilMap> obj = [self getOnStateChangedEventObjWithADView:bottomSheet withInt:newState];
+    NSString *commandName = (NSString *) cast_chk([((id<JavaUtilMap>) nil_chk(obj)) getWithId:ASEventExpressionParser_KEY_COMMAND_NAME], [NSString class]);
+    NSString *commandType = (NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_COMMAND_TYPE], [NSString class]);
+    switch (JreIndexOfStr(commandType, (id[]){ @"+" }, 1)) {
+      case 0:
+      if (ASEventCommandFactory_hasCommandWithNSString_(commandName)) {
+        (void) [((id<ASEventCommand>) nil_chk(ASEventCommandFactory_getCommandWithNSString_(commandName))) executeCommandWithASIWidget:w_ withJavaUtilMap:obj withNSObjectArray:[IOSObjectArray newArrayWithObjects:(id[]){ bottomSheet, JavaLangInteger_valueOfWithInt_(newState) } count:2 type:NSObject_class_()]];
+      }
+      break;
+      default:
+      break;
+    }
+    if ([obj containsKeyWithId:@"refreshUiFromModel"]) {
+      id widgets = [obj removeWithId:@"refreshUiFromModel"];
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, widgets, true);
+    }
+    if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
+    }
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+      id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
+      if (activity != nil) {
+        [activity sendEventMessageWithJavaUtilMap:obj];
+      }
+    }
+  }
+  return;
+}
+
+- (id<JavaUtilMap>)getOnStateChangedEventObjWithADView:(ADView *)bottomSheet
+                                               withInt:(int32_t)newState {
+  id<JavaUtilMap> obj = ASPluginInvoker_getJSONCompatMap();
+  (void) [((id<JavaUtilMap>) nil_chk(obj)) putWithId:@"action" withId:@"action"];
+  (void) [obj putWithId:@"eventType" withId:@"statechanged"];
+  (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
+  (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
+  if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
+    (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
+  }
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"id", [((id<ASIWidget>) nil_chk(w_)) getId]);
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"newState", JavaLangInteger_valueOfWithInt_(newState));
+  (void) ASEventExpressionParser_parseEventExpressionWithNSString_withJavaUtilMap_(strValue_, obj);
+  [((id<ASIWidget>) nil_chk(w_)) updateModelToEventMapWithJavaUtilMap:obj withNSString:@"onStateChanged" withNSString:(NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_EVENT_ARGS], [NSString class])];
+  return obj;
+}
+
+- (void)onSlideWithADView:(ADView *)bottomSheet
+                withFloat:(float)slideOffset {
+  if (action_ == nil || [action_ isEqual:@"onSlide"]) {
+    [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onSlide"];
+    id<JavaUtilMap> obj = [self getOnSlideEventObjWithADView:bottomSheet withFloat:slideOffset];
+    NSString *commandName = (NSString *) cast_chk([((id<JavaUtilMap>) nil_chk(obj)) getWithId:ASEventExpressionParser_KEY_COMMAND_NAME], [NSString class]);
+    NSString *commandType = (NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_COMMAND_TYPE], [NSString class]);
+    switch (JreIndexOfStr(commandType, (id[]){ @"+" }, 1)) {
+      case 0:
+      if (ASEventCommandFactory_hasCommandWithNSString_(commandName)) {
+        (void) [((id<ASEventCommand>) nil_chk(ASEventCommandFactory_getCommandWithNSString_(commandName))) executeCommandWithASIWidget:w_ withJavaUtilMap:obj withNSObjectArray:[IOSObjectArray newArrayWithObjects:(id[]){ bottomSheet, JavaLangFloat_valueOfWithFloat_(slideOffset) } count:2 type:NSObject_class_()]];
+      }
+      break;
+      default:
+      break;
+    }
+    if ([obj containsKeyWithId:@"refreshUiFromModel"]) {
+      id widgets = [obj removeWithId:@"refreshUiFromModel"];
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, widgets, true);
+    }
+    if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
+    }
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+      id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
+      if (activity != nil) {
+        [activity sendEventMessageWithJavaUtilMap:obj];
+      }
+    }
+  }
+  return;
+}
+
+- (id<JavaUtilMap>)getOnSlideEventObjWithADView:(ADView *)bottomSheet
+                                      withFloat:(float)slideOffset {
+  id<JavaUtilMap> obj = ASPluginInvoker_getJSONCompatMap();
+  (void) [((id<JavaUtilMap>) nil_chk(obj)) putWithId:@"action" withId:@"action"];
+  (void) [obj putWithId:@"eventType" withId:@"slide"];
+  (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
+  (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
+  if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
+    (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
+  }
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"id", [((id<ASIWidget>) nil_chk(w_)) getId]);
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"slideOffset", JavaLangFloat_valueOfWithFloat_(slideOffset));
+  (void) ASEventExpressionParser_parseEventExpressionWithNSString_withJavaUtilMap_(strValue_, obj);
+  [((id<ASIWidget>) nil_chk(w_)) updateModelToEventMapWithJavaUtilMap:obj withNSString:@"onSlide" withNSString:(NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_EVENT_ARGS], [NSString class])];
+  return obj;
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, "LNSString;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
+    { NULL, NULL, 0x1, -1, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 2, 3, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, 4, 3, -1, 5, -1, -1 },
+    { NULL, "V", 0x1, 6, 7, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, 8, 7, -1, 9, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(getAction);
+  methods[1].selector = @selector(initWithASIWidget:withNSString:);
+  methods[2].selector = @selector(initWithASIWidget:withNSString:withNSString:);
+  methods[3].selector = @selector(onStateChangedWithADView:withInt:);
+  methods[4].selector = @selector(getOnStateChangedEventObjWithADView:withInt:);
+  methods[5].selector = @selector(onSlideWithADView:withFloat:);
+  methods[6].selector = @selector(getOnSlideEventObjWithADView:withFloat:);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "w_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "view_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "strValue_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "action_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+  };
+  static const void *ptrTable[] = { "LASIWidget;LNSString;", "LASIWidget;LNSString;LNSString;", "onStateChanged", "LADView;I", "getOnStateChangedEventObj", "(Lr/android/view/View;I)Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "onSlide", "LADView;F", "getOnSlideEventObj", "(Lr/android/view/View;F)Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "LASCoordinatorLayoutImpl;" };
+  static const J2ObjcClassInfo _ASCoordinatorLayoutImpl_BottomSheetCallback = { "BottomSheetCallback", "com.ashera.coordinatorlayout", ptrTable, methods, fields, 7, 0xa, 7, 4, 10, -1, -1, -1, -1 };
+  return &_ASCoordinatorLayoutImpl_BottomSheetCallback;
+}
+
+@end
+
+void ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(ASCoordinatorLayoutImpl_BottomSheetCallback *self, id<ASIWidget> w, NSString *strValue) {
+  ADXBottomSheetBehavior_BottomSheetCallback_init(self);
+  self->w_ = w;
+  self->strValue_ = strValue;
+}
+
+ASCoordinatorLayoutImpl_BottomSheetCallback *new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) {
+  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_BottomSheetCallback, initWithASIWidget_withNSString_, w, strValue)
+}
+
+ASCoordinatorLayoutImpl_BottomSheetCallback *create_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) {
+  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_BottomSheetCallback, initWithASIWidget_withNSString_, w, strValue)
+}
+
+void ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(ASCoordinatorLayoutImpl_BottomSheetCallback *self, id<ASIWidget> w, NSString *strValue, NSString *action) {
+  ADXBottomSheetBehavior_BottomSheetCallback_init(self);
+  self->w_ = w;
+  self->strValue_ = strValue;
+  self->action_ = action;
+}
+
+ASCoordinatorLayoutImpl_BottomSheetCallback *new_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) {
+  J2OBJC_NEW_IMPL(ASCoordinatorLayoutImpl_BottomSheetCallback, initWithASIWidget_withNSString_withNSString_, w, strValue, action)
+}
+
+ASCoordinatorLayoutImpl_BottomSheetCallback *create_ASCoordinatorLayoutImpl_BottomSheetCallback_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) {
+  J2OBJC_CREATE_IMPL(ASCoordinatorLayoutImpl_BottomSheetCallback, initWithASIWidget_withNSString_withNSString_, w, strValue, action)
+}
+
+J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASCoordinatorLayoutImpl_BottomSheetCallback)
 
 @implementation ASCoordinatorLayoutImpl_$Lambda$1
 
